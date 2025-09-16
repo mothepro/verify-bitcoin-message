@@ -7,5 +7,9 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "ecpair": "^3.0.0",
+    "tiny-secp256k1": "^2.2.4"
   }
 }
