@@ -1,4 +1,4 @@
-import type { Payload } from './verify';
+import { fail, type Payload } from './verify';
 
 const defaultLocalConnection = {
   url: "http://127.0.0.1:8332/",
@@ -22,8 +22,8 @@ export async function verify({ address, signature, message }: Payload, { url, us
     },
   });
 
-  const json = await response.json();
-  return json.result;
+  const { result, error } = await response.json();
+  return result ?? fail(error)
 }
 
 

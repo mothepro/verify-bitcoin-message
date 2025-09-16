@@ -1,7 +1,24 @@
+/**
+ * Bitcoin Message Signature Verifier
+ *
+ * A complete dependency-free implementation of Bitcoin message signature verification
+ * that works in modern browsers using only Web APIs.
+ *
+ * Includes full secp256k1 elliptic curve operations and RIPEMD-160 implementation.
+ */
+
 export interface Payload {
   message: string
   address: string
   signature: string
+}
+
+export function fail(error: unknown) {
+  throw error instanceof Error ? error : new Error(error as string)
+}
+
+export function assert(condition: unknown, error: unknown = 'Assertion failed'): asserts condition {
+  if (!condition) fail(error)
 }
 
 // Base58 alphabet used by Bitcoin
@@ -40,15 +57,13 @@ function base58Decode(s: string): Uint8Array {
 }
 
 // SHA-256 implementation
-async function sha256(data: Uint8Array): Promise<Uint8Array> {
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-  return new Uint8Array(hashBuffer)
+async function sha256(data: ArrayBuffer): Promise<ArrayBuffer> {
+  return crypto.subtle.digest('SHA-256', data)
 }
 
 // Double SHA-256 (used in Bitcoin)
-async function doubleSha256(data: Uint8Array): Promise<Uint8Array> {
-  const hash1 = await sha256(data)
-  return await sha256(hash1)
+async function doubleSha256(data: ArrayBuffer): Promise<ArrayBuffer> {
+  return sha256(data).then(sha256)
 }
 
 // Convert string to UTF-8 bytes
@@ -235,14 +250,146 @@ function modPow(base: bigint, exp: bigint, mod: bigint): bigint {
   return result
 }
 
-// RIPEMD-160 implementation (simplified for Bitcoin address verification)
-async function ripemd160(data: Uint8Array): Promise<Uint8Array> {
-  // For browser compatibility, we'll use a simplified approach
-  // In a real implementation, you'd want a full RIPEMD-160
-  // For now, we'll use SHA-256 as a placeholder since we're focusing on the signature verification
-  const hash = await sha256(data)
-  // Return only first 20 bytes to match RIPEMD-160 output size
-  return hash.slice(0, 20)
+// RIPEMD-160 implementation - complete implementation
+function ripemd160(data: Uint8Array): Uint8Array {
+  // RIPEMD-160 constants
+  const h0 = 0x67452301
+  const h1 = 0xEFCDAB89
+  const h2 = 0x98BADCFE
+  const h3 = 0x10325476
+  const h4 = 0xC3D2E1F0
+
+  // Helper functions
+  const f = (j: number, x: number, y: number, z: number): number => {
+    if (j < 16) return x ^ y ^ z
+    if (j < 32) return (x & y) | (~x & z)
+    if (j < 48) return (x | ~y) ^ z
+    if (j < 64) return (x & z) | (y & ~z)
+    return x ^ (y | ~z)
+  }
+
+  const K = (j: number): number => {
+    if (j < 16) return 0x00000000
+    if (j < 32) return 0x5A827999
+    if (j < 48) return 0x6ED9EBA1
+    if (j < 64) return 0x8F1BBCDC
+    return 0xA953FD4E
+  }
+
+  const Kh = (j: number): number => {
+    if (j < 16) return 0x50A28BE6
+    if (j < 32) return 0x5C4DD124
+    if (j < 48) return 0x6D703EF3
+    if (j < 64) return 0x7A6D76E9
+    return 0x00000000
+  }
+
+  const rotateLeft = (n: number, b: number): number => {
+    return ((n << b) | (n >>> (32 - b))) >>> 0
+  }
+
+  // Selection of message word for left line
+  const r = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+             7, 4, 13, 1, 10, 6, 15, 3, 12, 0, 9, 5, 2, 14, 11, 8,
+             3, 10, 14, 4, 9, 15, 8, 1, 2, 7, 0, 6, 13, 11, 5, 12,
+             1, 9, 11, 10, 0, 8, 12, 4, 13, 3, 7, 15, 14, 5, 6, 2,
+             4, 0, 5, 9, 7, 12, 2, 10, 14, 1, 3, 8, 11, 6, 15, 13]
+
+  // Selection of message word for right line
+  const rh = [5, 14, 7, 0, 9, 2, 11, 4, 13, 6, 15, 8, 1, 10, 3, 12,
+              6, 11, 3, 7, 0, 13, 5, 10, 14, 15, 8, 12, 4, 9, 1, 2,
+              15, 5, 1, 3, 7, 14, 6, 9, 11, 8, 12, 2, 10, 0, 4, 13,
+              8, 6, 4, 1, 3, 11, 15, 0, 5, 12, 2, 13, 9, 7, 10, 14,
+              12, 15, 10, 4, 1, 5, 8, 7, 6, 2, 13, 14, 0, 3, 9, 11]
+
+  // Amount for left rotate for left line
+  const s = [11, 14, 15, 12, 5, 8, 7, 9, 11, 13, 14, 15, 6, 7, 9, 8,
+             7, 6, 8, 13, 11, 9, 7, 15, 7, 12, 15, 9, 11, 7, 13, 12,
+             11, 13, 6, 7, 14, 9, 13, 15, 14, 8, 13, 6, 5, 12, 7, 5,
+             11, 12, 14, 15, 14, 15, 9, 8, 9, 14, 5, 6, 8, 6, 5, 12,
+             9, 15, 5, 11, 6, 8, 13, 12, 5, 12, 13, 14, 11, 8, 5, 6]
+
+  // Amount for left rotate for right line
+  const sh = [8, 9, 9, 11, 13, 15, 15, 5, 7, 7, 8, 11, 14, 14, 12, 6,
+              9, 13, 15, 7, 12, 8, 9, 11, 7, 7, 12, 7, 6, 15, 13, 11,
+              9, 7, 15, 11, 8, 6, 6, 14, 12, 13, 5, 14, 13, 13, 7, 5,
+              15, 5, 8, 11, 14, 14, 6, 14, 6, 9, 12, 9, 12, 5, 15, 8,
+              8, 5, 12, 9, 12, 5, 14, 6, 8, 13, 6, 5, 15, 13, 11, 11]
+
+  // Pad message
+  const msgLen = data.length
+  const padLen = msgLen % 64 < 56 ? 56 - (msgLen % 64) : 120 - (msgLen % 64)
+  const padded = new Uint8Array(msgLen + padLen + 8)
+  padded.set(data)
+  padded[msgLen] = 0x80
+
+  // Append length in bits as 64-bit little-endian
+  const bitLen = msgLen * 8
+  for (let i = 0; i < 8; i++) {
+    padded[msgLen + padLen + i] = (bitLen >>> (i * 8)) & 0xFF
+  }
+
+  // Process message in 512-bit chunks
+  let A = h0, B = h1, C = h2, D = h3, E = h4
+
+  for (let chunk = 0; chunk < padded.length; chunk += 64) {
+    const X = new Uint32Array(16)
+    for (let i = 0; i < 16; i++) {
+      X[i] = (padded[chunk + i * 4]) |
+             (padded[chunk + i * 4 + 1] << 8) |
+             (padded[chunk + i * 4 + 2] << 16) |
+             (padded[chunk + i * 4 + 3] << 24)
+    }
+
+    let AL = A, BL = B, CL = C, DL = D, EL = E
+    let AR = A, BR = B, CR = C, DR = D, ER = E
+
+    // Left line
+    for (let j = 0; j < 80; j++) {
+      let T = (AL + f(j, BL, CL, DL) + X[r[j]] + K(j)) >>> 0
+      T = (rotateLeft(T, s[j]) + EL) >>> 0
+      AL = EL; EL = DL; DL = rotateLeft(CL, 10); CL = BL; BL = T
+    }
+
+    // Right line
+    for (let j = 0; j < 80; j++) {
+      let T = (AR + f(79 - j, BR, CR, DR) + X[rh[j]] + Kh(j)) >>> 0
+      T = (rotateLeft(T, sh[j]) + ER) >>> 0
+      AR = ER; ER = DR; DR = rotateLeft(CR, 10); CR = BR; BR = T
+    }
+
+    // Combine results
+    const T = (B + CL + DR) >>> 0
+    B = (C + DL + ER) >>> 0
+    C = (D + EL + AR) >>> 0
+    D = (E + AL + BR) >>> 0
+    E = (A + BL + CR) >>> 0
+    A = T
+  }
+
+  // Produce final hash value as little-endian
+  const result = new Uint8Array(20)
+  const words = [A, B, C, D, E]
+  for (let i = 0; i < 5; i++) {
+    for (let j = 0; j < 4; j++) {
+      result[i * 4 + j] = (words[i] >>> (j * 8)) & 0xFF
+    }
+  }
+
+  return result
+}
+
+// Encode varint (variable-length integer)
+function encodeVarint(n: number): Uint8Array {
+  if (n < 0xfd) {
+    return new Uint8Array([n])
+  } else if (n <= 0xffff) {
+    return new Uint8Array([0xfd, n & 0xff, (n >> 8) & 0xff])
+  } else if (n <= 0xffffffff) {
+    return new Uint8Array([0xfe, n & 0xff, (n >> 8) & 0xff, (n >> 16) & 0xff, (n >> 24) & 0xff])
+  } else {
+    throw new Error('Number too large for varint encoding')
+  }
 }
 
 // Create Bitcoin message hash
@@ -251,11 +398,11 @@ async function createMessageHash(message: string): Promise<Uint8Array> {
   const prefixBytes = stringToBytes(prefix)
   const messageBytes = stringToBytes(message)
 
-  // Create the message with length prefixes (Bitcoin's format)
-  const prefixLength = new Uint8Array([prefixBytes.length])
-  const messageLength = new Uint8Array([messageBytes.length])
+  // Create the message with varint length prefixes (Bitcoin's format)
+  const prefixLength = encodeVarint(prefixBytes.length)
+  const messageLength = encodeVarint(messageBytes.length)
 
-  // Concatenate: length_prefix + prefix + length_message + message
+  // Concatenate: varint_prefix_length + prefix + varint_message_length + message
   const fullMessage = new Uint8Array(
     prefixLength.length + prefixBytes.length + messageLength.length + messageBytes.length
   )
@@ -270,24 +417,45 @@ async function createMessageHash(message: string): Promise<Uint8Array> {
   fullMessage.set(messageBytes, offset)
 
   // Double SHA-256 hash
-  return await doubleSha256(fullMessage)
+  const hashBuffer = await doubleSha256(fullMessage.buffer)
+  return new Uint8Array(hashBuffer)
 }
 
 // Convert public key point to Bitcoin address
-async function publicKeyToAddress(publicKey: Point): Promise<string> {
-  // Compress public key (use compressed format)
-  const compressed = new Uint8Array(33)
-  compressed[0] = publicKey.y % 2n === 0n ? 0x02 : 0x03
+async function publicKeyToAddress(publicKey: Point, compressed: boolean = true): Promise<string> {
+  let publicKeyBytes: Uint8Array
 
-  // Convert x coordinate to bytes (32 bytes, big-endian)
-  const xBytes = publicKey.x.toString(16).padStart(64, '0')
-  for (let i = 0; i < 32; i++) {
-    compressed[i + 1] = parseInt(xBytes.substring(i * 2, i * 2 + 2), 16)
+  if (compressed) {
+    // Compressed format: 33 bytes (0x02/0x03 + x coordinate)
+    publicKeyBytes = new Uint8Array(33)
+    publicKeyBytes[0] = publicKey.y % 2n === 0n ? 0x02 : 0x03
+
+    // Convert x coordinate to bytes (32 bytes, big-endian)
+    const xBytes = publicKey.x.toString(16).padStart(64, '0')
+    for (let i = 0; i < 32; i++) {
+      publicKeyBytes[i + 1] = parseInt(xBytes.substring(i * 2, i * 2 + 2), 16)
+    }
+  } else {
+    // Uncompressed format: 65 bytes (0x04 + x coordinate + y coordinate)
+    publicKeyBytes = new Uint8Array(65)
+    publicKeyBytes[0] = 0x04
+
+    // Convert x coordinate to bytes (32 bytes, big-endian)
+    const xBytes = publicKey.x.toString(16).padStart(64, '0')
+    for (let i = 0; i < 32; i++) {
+      publicKeyBytes[i + 1] = parseInt(xBytes.substring(i * 2, i * 2 + 2), 16)
+    }
+
+    // Convert y coordinate to bytes (32 bytes, big-endian)
+    const yBytes = publicKey.y.toString(16).padStart(64, '0')
+    for (let i = 0; i < 32; i++) {
+      publicKeyBytes[i + 33] = parseInt(yBytes.substring(i * 2, i * 2 + 2), 16)
+    }
   }
 
-  // Hash the compressed public key
-  const sha256Hash = await sha256(compressed)
-  const ripemd160Hash = await ripemd160(sha256Hash)
+  // Hash the public key
+  const sha256Hash = await sha256(publicKeyBytes.buffer as ArrayBuffer)
+  const ripemd160Hash = ripemd160(new Uint8Array(sha256Hash))
 
   // Add version byte (0x00 for mainnet P2PKH)
   const versioned = new Uint8Array(21)
@@ -295,7 +463,8 @@ async function publicKeyToAddress(publicKey: Point): Promise<string> {
   versioned.set(ripemd160Hash.slice(0, 20), 1)
 
   // Calculate checksum (first 4 bytes of double SHA-256)
-  const checksum = await doubleSha256(versioned)
+  const checksumBuffer = await doubleSha256(versioned.buffer)
+  const checksum = new Uint8Array(checksumBuffer)
 
   // Combine version + hash + checksum
   const fullAddress = new Uint8Array(25)
@@ -333,64 +502,43 @@ function base58Encode(bytes: Uint8Array): string {
   return result
 }
 
-// Main verification function
-export default async function verify({message, address, signature}: Payload): Promise<boolean> {
-  try {
-    // For demonstration purposes, let's implement a basic structure
-    // A full implementation would require proper secp256k1 and RIPEMD-160
+export async function verify({message, address, signature}: Payload) {
 
-    // Basic validation
-    if (!message || !address || !signature) {
-      return false
+    // Decode the signature from base64
+  const sigBytes = base64ToBytes(signature)
+  assert(sigBytes.length === 65, 'Invalid signature length')
+
+    // Extract recovery ID and signature components
+    const recoveryFlag = sigBytes[0]
+
+  // Bitcoin message signatures use recovery flags 27-34
+  assert(recoveryFlag >= 27, 'Invalid recovery flag')
+  assert(recoveryFlag <= 34, 'Invalid recovery flag')
+    // Adjust recovery ID for compressed/uncompressed
+    let recoveryId = recoveryFlag - 27
+    const isCompressed = recoveryId >= 4
+    if (isCompressed) {
+      recoveryId -= 4
     }
 
-    // Check if signature is base64 encoded and has reasonable length
-    try {
-      const sigBytes = base64ToBytes(signature)
-      if (sigBytes.length !== 65) {
-        return false
-      }
+    const signatureData = sigBytes.slice(1)
 
-      // Extract recovery ID
-      const recoveryId = sigBytes[0] - 27
-      if (recoveryId < 0 || recoveryId > 3) {
-        return false
-      }
-    } catch {
-      return false
-    }
+    // Create message hash using Bitcoin's message signing format
+    const messageHash = await createMessageHash(message)
 
-    // Check if address looks like a valid Bitcoin address
-    if (!address.match(/^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/)) {
-      return false
-    }
+    // Try to recover public key from signature
+  const publicKey = recoverPublicKey(messageHash, signatureData, recoveryId)
+  assert(publicKey, 'Failed to recover public key')
 
-    // For now, return false for invalid test cases and true for specific known cases
-    // This is a placeholder until a full cryptographic implementation is added
+    // Convert recovered public key to Bitcoin address
+    const recoveredAddressCompressed = await publicKeyToAddress(publicKey, true)
+    const recoveredAddressUncompressed = await publicKeyToAddress(publicKey, false)
 
-    // Known test case that should be valid (you would replace this with real verification)
-    if (address === "1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV" &&
-        message === "This is an example of a signed message." &&
-        signature === "H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk=") {
-      return true
-    }
-
-    // Known invalid test case (different address with same message/signature)
-    if (address === "1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XX" &&
-        message === "my message" &&
-        signature === "H8Ct16y33oi5pHq/Ye6u3j/4H0DA52eGYIg5Xu1Y0jS9bWFo04uTeVeXozu9RVEIr3kWm2rm9SWlLgjXE33dHg==") {
-      return false
-    }
-
-    // For demonstration, return false for other cases
-    return false
-
-  } catch (error) {
-    return false
-  }
+    // Compare with provided address (try both compressed and uncompressed)
+    return [recoveredAddressCompressed, recoveredAddressUncompressed].includes(address)
 }
 
-export async function verifySafe(params: Payload): Promise<boolean> {
+export default async function verifySafe(params: Payload): Promise<boolean> {
   try {
     return await verify(params)
   } catch (error) {
