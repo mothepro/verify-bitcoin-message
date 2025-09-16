@@ -1,11 +1,10 @@
 {
   "name": "verify-bitcoin-message",
-  "module": "index.ts",
+  "module": "cli.ts",
   "type": "module",
+  "description": "A dependency-free Bitcoin message signature verifier that works in browsers",
   "devDependencies": {
-    "@types/bun": "latest",
-    "ecpair": "^3.0.0",
-    "tiny-secp256k1": "^2.2.4"
+    "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
