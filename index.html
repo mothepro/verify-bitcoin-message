@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta
+                                                                                          name="viewport"
+                                                                                          content="width=device-width, initial-scale=1.0"
+  >
+  <title>Bitcoin Signature Verifier</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    label,
+    input,
+    textarea,
+    button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      height: 100px;
+    }
+
+    #result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Bitcoin Signature Verifier</h1>
+  <p>Verify a message signed with a Bitcoin private key.</p>
+  <form
+                                                                                          method="get"
+                                                                                          action="/"
+  >
+    <label for="address">Bitcoin Address:
+
+    <input
+                                                                                            type="text"
+                                                                                            name="address"
+
+    >
+    </label>
+
+    <label for="message">Message:
+    <textarea
+                                                                                            name="message"
+
+    ></textarea></label>
+
+    <label for="signature">Signature:
+    <input
+                                                                                            type="text"
+                                                                                            name="signature"
+
+    ></label>
+
+    <button type="submit">Verify Signature</button>
+  </form>
+  <div id="result"></div>
+
+  <script src="verify.ts"
+  <script>
+    const form = document.getElementById('verifyForm')
+      const addressInput = document.getElementById('address')
+      const messageInput = document.getElementById('message')
+      const signatureInput = document.getElementById('signature')
+      const resultDiv = document.getElementById('result')
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const address = addressInput.value.trim();
+        const message = messageInput.value.trim();
+        const signature = signatureInput.value.trim();
+
+        // Clear previous result
+        resultDiv.textContent = 'Verifying...';
+        resultDiv.className = '';
+
+        try {
+          const isValid = verifyMessage(message, address, signature);
+          if (isValid) {
+            resultDiv.textContent = '✅ Signature is valid!';
+            resultDiv.className = 'success';
+          } else {
+            resultDiv.textContent = '❌ Signature is invalid.';
+            resultDiv.className = 'error';
+          }
+        } catch (error) {
+          resultDiv.textContent = `❌ Error: ${error.message}`;
+          resultDiv.className = 'error';
+        }
+      });
+
+      </script>
+</body>
+
+</html>
