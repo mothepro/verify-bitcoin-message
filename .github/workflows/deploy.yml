@@ -16,10 +16,10 @@ concurrency:
 
 jobs:
   build-and-deploy:
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
-      
-    runs-on: ubuntu-latest
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
     - name: Checkout
@@ -31,7 +31,7 @@ jobs:
         bun-version: latest
 
     - name: Run tests (No RPC node)
-      run: bun test verify-safe
+      run: bun test tests/verify-safe.test.ts
 
     - name: Build for browser
       run: bun run build:browser
