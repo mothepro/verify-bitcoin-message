@@ -8,5 +8,8 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@bitcoinerlab/secp256k1": "^1.2.0"
   }
 }
