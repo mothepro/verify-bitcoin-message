@@ -2,10 +2,16 @@
   "name": "verify-bitcoin-message",
   "module": "cli.ts",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "gh-pages": "^6.3.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "build:browser": "bun build ./verify.ts --outdir dist",
+    "predeploy": "bun test && bun run build:browser",
+    "deploy": "gh-pages -d ."
   },
   "description": "A dependency-free Bitcoin message signature verifier that works in browsers",
   "type": "module"
