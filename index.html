@@ -57,7 +57,13 @@
     method="get"
     id="verifyForm"
   >
-    <label for="address">Bitcoin Address:
+    <label for="address">
+      Bitcoin Address:
+      <a
+        id="mempoolLink"
+        class="hidden"
+        target="_blank"
+      >🌐↗️</a>
       <input
         type="text"
         id="address"
@@ -95,6 +101,23 @@
     <summary>Reason</summary>
     <div id="more-info"></div>
   </details>
+
+  Check out valid examples:
+  <ul>
+    <li>
+
+      <a
+        href="/?address=1LibQo7teQYdcKetdeiWtM4RxrP1Ma6iKs&message=pootis%0D%0A&signature=IHYkFzb%2BorDSwiy9E0Pw4VRk4K8kdsD8btl%2B92YJvzhFDG3ktifdbRr1OE2GPtdXEce53wEgfuOYHeo0%2B8U0lR0%3D">
+        pootis
+      </a>
+    </li>
+    <li>
+      <a
+        href="/?address=1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV&message=This+is+an+example+of+a+signed+message.%0D%0A&signature=H9L5yLFjti0QTHhPyFrZCT1V%2FMMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk%3D">
+        This is an example of a signed message.
+      </a>
+    </li>
+  </ul>
   <script
     type="text/javascript"
     src="/cdn/crypto-js.min.js"
@@ -119,11 +142,17 @@
     const resultDiv = document.getElementById('result');
     const moreInfoContainer = document.getElementById('more-info-container');
     const moreInfoDiv = document.getElementById('more-info');
+    const mempoolLink = document.getElementById('mempoolLink');
 
     // Set default values
     addressInput.value = defaultAddress;
     messageInput.value = defaultMessage;
     signatureInput.value = defaultSignature;
+
+    if (defaultAddress) {
+      mempoolLink.classList.remove('hidden');
+      mempoolLink.href = `https://mempool.space/address/${defaultAddress}`;
+    }
 
     // Auto verify if all fields are filled
     if (defaultAddress && defaultMessage && defaultSignature)
