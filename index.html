@@ -129,13 +129,6 @@
     if (defaultAddress && defaultMessage && defaultSignature)
       verifySignature()
 
-    // Handle form submission without page reload
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      void verifySignature();
-    });
-
-
     async function verifySignature() {
       const address = addressInput.value.trim();
       const message = messageInput.value.trim();
