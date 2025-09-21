@@ -506,7 +506,7 @@ export async function verify({message, address, signature}: Payload) {
 
     // Decode the signature from base64
   const sigBytes = base64ToBytes(signature)
-  assert(sigBytes.length === 65, 'Invalid signature length')
+  assert(sigBytes.length === 65, `Invalid signature length: ${sigBytes.length}, expected 65`)
 
     // Extract recovery ID and signature components
     const recoveryFlag = sigBytes[0]

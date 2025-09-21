@@ -42,13 +42,21 @@
     .error {
       color: red;
     }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 
 <body>
   <h1>Bitcoin Signature Verifier</h1>
   <p>Verify a message signed with a Bitcoin private key.</p>
-  <form id="verifyForm">
+  <form
+    action="/"
+    method="get"
+    id="verifyForm"
+  >
     <label for="address">Bitcoin Address:
       <input
         type="text"
@@ -77,50 +85,71 @@
 
     <button type="submit">Verify Signature</button>
   </form>
-  <div id="result"></div>
+  <div id="result">
+
+    <details
+      class="hidden"
+      id="more-info-container"
+    >
+      <summary>Reason</summary>
+      <div id="more-info"></div>
+    </details>
+  </div>
 
   <script type="module">
-    import verify from './verify.ts';
+    import { verify, assert } from './dist/verify.js';
+
+    const params = new URLSearchParams(location.search);
+    const defaultAddress = params.get('address') ?? '';
+    const defaultMessage = params.get('message') ?? '';
+    const defaultSignature = params.get('signature') ?? '';
 
     const form = document.getElementById('verifyForm');
     const addressInput = document.getElementById('address');
     const messageInput = document.getElementById('message');
     const signatureInput = document.getElementById('signature');
     const resultDiv = document.getElementById('result');
+    const moreInfoContainer = document.getElementById('more-info-container');
+    const moreInfoDiv = document.getElementById('more-info');
 
-    form.addEventListener('submit', async (e) => {
+    // Set default values
+    addressInput.value = defaultAddress;
+    messageInput.value = defaultMessage;
+    signatureInput.value = defaultSignature;
+
+    // Auto verify if all fields are filled
+    if (defaultAddress && defaultMessage && defaultSignature)
+      verifySignature()
+
+    // Handle form submission without page reload
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
+      void verifySignature();
+    });
 
+
+    async function verifySignature() {
       const address = addressInput.value.trim();
       const message = messageInput.value.trim();
       const signature = signatureInput.value.trim();
 
       // Clear previous result
+      moreInfoContainer.classList.add('hidden');
       resultDiv.textContent = 'Verifying...';
       resultDiv.className = '';
 
       try {
         const isValid = await verify({ message, address, signature });
-        if (isValid) {
-          resultDiv.textContent = '✅ Signature is valid!';
-          resultDiv.className = 'success';
-        } else {
-          resultDiv.textContent = '❌ Signature is invalid.';
-          resultDiv.className = 'error';
-        }
+        assert(isValid, 'Signature is invalid');
+        resultDiv.textContent = '✅ Signature is valid!';
+        resultDiv.className = 'success';
       } catch (error) {
-        resultDiv.textContent = `❌ Error: ${error.message}`;
+        resultDiv.textContent = '❌ Signature is invalid.';
         resultDiv.className = 'error';
+        moreInfoDiv.textContent = error.message;
+        moreInfoContainer.classList.remove('hidden');
       }
-    });
-
-    const defaultAddress = document.location.searchParams.get('address') ?? '';
-    const defaultMessage = document.location.searchParams.get('message') ?? '';
-    const defaultSignature = document.location.searchParams.get('signature') ?? '';
-
-    addressInput.value = defaultAddress;
-    messageInput.value = defaultMessage;
-    signatureInput.value = defaultSignature;
+    }
   </script>
 </body>
 
