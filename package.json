@@ -10,7 +10,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@bitcoinerlab/secp256k1": "^1.2.0",
+    "@noble/secp256k1": "^3.0.0",
     "crypto-js": "^4.2.0"
   }
 }
