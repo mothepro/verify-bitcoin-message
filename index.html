@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Bitcoin Signature Verifier</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    label,
+    input,
+    textarea,
+    button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      height: 100px;
+    }
+
+    #result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Bitcoin Signature Verifier</h1>
+  <p>Verify a message signed with a Bitcoin private key.</p>
+  <form
+    action="/"
+    method="get"
+    id="verifyForm"
+  >
+    <label for="address">
+      Bitcoin Address:
+      <a
+        id="mempoolLink"
+        class="hidden"
+        target="_blank"
+      >🌐↗️</a>
+      <input
+        type="text"
+        id="address"
+        name="address"
+        required
+      >
+    </label>
+
+    <label for="message">Message:
+      <textarea
+        id="message"
+        name="message"
+        required
+      ></textarea>
+    </label>
+
+    <label for="signature">Signature:
+      <input
+        type="text"
+        id="signature"
+        name="signature"
+        required
+      >
+    </label>
+
+    <button type="submit">Verify Signature</button>
+  </form>
+  <div id="result">
+  </div>
+
+  <details
+    class="hidden"
+    id="more-info-container"
+  >
+    <summary>Reason</summary>
+    <div id="more-info"></div>
+  </details>
+
+  Check out valid examples:
+  <ul>
+    <li>
+
+      <a
+        href="/?address=1LibQo7teQYdcKetdeiWtM4RxrP1Ma6iKs&message=pootis%0D%0A&signature=IHYkFzb%2BorDSwiy9E0Pw4VRk4K8kdsD8btl%2B92YJvzhFDG3ktifdbRr1OE2GPtdXEce53wEgfuOYHeo0%2B8U0lR0%3D">
+        pootis
+      </a>
+    </li>
+    <li>
+      <a
+        href="/?address=1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV&message=This+is+an+example+of+a+signed+message.%0D%0A&signature=H9L5yLFjti0QTHhPyFrZCT1V%2FMMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk%3D">
+        This is an example of a signed message.
+      </a>
+    </li>
+  </ul>
+  <script
+    type="text/javascript"
+    src="/cdn/crypto-js.min.js"
+  ></script>
+  <script
+    type="module"
+    src="/cdn/noble-secp256k1.js"
+  ></script>
+
+  <script type="module">
+    import { verify, assert } from './dist/verify.js';
+
+    const params = new URLSearchParams(location.search);
+    const defaultAddress = params.get('address') ?? '';
+    const defaultMessage = params.get('message') ?? '';
+    const defaultSignature = params.get('signature') ?? '';
+
+    const form = document.getElementById('verifyForm');
+    const addressInput = document.getElementById('address');
+    const messageInput = document.getElementById('message');
+    const signatureInput = document.getElementById('signature');
+    const resultDiv = document.getElementById('result');
+    const moreInfoContainer = document.getElementById('more-info-container');
+    const moreInfoDiv = document.getElementById('more-info');
+    const mempoolLink = document.getElementById('mempoolLink');
+
+    // Set default values
+    addressInput.value = defaultAddress;
+    messageInput.value = defaultMessage;
+    signatureInput.value = defaultSignature;
+
+    if (defaultAddress) {
+      mempoolLink.classList.remove('hidden');
+      mempoolLink.href = `https://mempool.space/address/${defaultAddress}`;
+    }
+
+    // Auto verify if all fields are filled
+    if (defaultAddress && defaultMessage && defaultSignature)
+      verifySignature()
+
+    async function verifySignature() {
+      const address = addressInput.value.trim();
+      const message = messageInput.value.trim();
+      const signature = signatureInput.value.trim();
+
+      // Clear previous result
+      moreInfoContainer.classList.add('hidden');
+      resultDiv.textContent = 'Verifying...';
+      resultDiv.className = '';
+
+      try {
+        const isValid = await verify({ message, address, signature });
+        assert(isValid, 'Signature is invalid');
+        resultDiv.textContent = '✅ Signature is valid!';
+        resultDiv.className = 'success';
+      } catch (error) {
+        resultDiv.textContent = '❌ Signature is invalid.';
+        resultDiv.className = 'error';
+        moreInfoDiv.textContent = error.message;
+        moreInfoContainer.classList.remove('hidden');
+      }
+    }
+  </script>
+</body>
+
+</html>
