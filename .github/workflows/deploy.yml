@@ -41,7 +41,10 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # This specifies the directory with your built website files
-          path: './dist'
+          path: |
+            ./dist
+            ./cdn
+            ./index.html
 
   deploy:
     environment:
