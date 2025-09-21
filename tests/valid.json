@@ -3,5 +3,10 @@
     "address": "1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV",
     "message": "This is an example of a signed message.",
     "signature": "H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk="
+  },
+  {
+    "address": "1LibQo7teQYdcKetdeiWtM4RxrP1Ma6iKs",
+    "message": "pootis",
+    "signature": "IHYkFzb+orDSwiy9E0Pw4VRk4K8kdsD8btl+92YJvzhFDG3ktifdbRr1OE2GPtdXEce53wEgfuOYHeo0+8U0lR0="
   }
 ]

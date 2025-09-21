@@ -1,3 +1,6 @@
+import * as CryptoJS from './cdn/crypto-js.min.js';
+
+
 // Base58 alphabet used by Bitcoin
 const BASE58_ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 // Base58 decode function
@@ -57,6 +60,23 @@ function hexToBytes(hex: string): Uint8Array {
 function bytesToHex(bytes: Uint8Array): string {
   return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
 }
+
+// RIPEMD-160 hash function using crypto-js
+function ripemd160(data: Uint8Array): Uint8Array {
+  const wordArray = CryptoJS.lib.WordArray.create(data)
+  const hash = CryptoJS.RIPEMD160(wordArray)
+  const hashBytes = new Uint8Array(20)
+
+  for (let i = 0; i < 5; i++) {
+    const word = hash.words[i]
+    hashBytes[i * 4] = (word >>> 24) & 0xff
+    hashBytes[i * 4 + 1] = (word >>> 16) & 0xff
+    hashBytes[i * 4 + 2] = (word >>> 8) & 0xff
+    hashBytes[i * 4 + 3] = word & 0xff
+  }
+
+  return hashBytes
+}
 // Base64 decode
 export function base64ToBytes(base64: string): Uint8Array {
   const binaryString = atob(base64);
@@ -92,124 +112,134 @@ function getAddressHash160(address: string): Uint8Array {
     throw new Error(`Invalid Bitcoin address: ${errorMessage}`);
   }
 }
-// Simple modular arithmetic for secp256k1
-const SECP256K1_P = 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2fn;
-const SECP256K1_N = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141n;
-// Modular inverse using extended Euclidean algorithm
-function modInverse(a: bigint, m: bigint): bigint {
-  if (a < 0n) a = ((a % m) + m) % m;
+// secp256k1 constants
+const SECP256K1_P = 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2fn
+const SECP256K1_N = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141n
 
-  let [old_r, r] = [a, m];
-  let [old_s, s] = [1n, 0n];
-
-  while (r !== 0n) {
-    const quotient = old_r / r;[old_r, r] = [r, old_r - quotient * r];[old_s, s] = [s, old_s - quotient * s];
-  }
-
-  return old_r > 1n ? 0n : (old_s < 0n ? old_s + m : old_s);
-}
-// Point on secp256k1 curve
+// Point interface for secp256k1 curve points
 interface Point {
-  x: bigint;
-  y: bigint;
+  x: bigint
+  y: bigint
 }
+
 // secp256k1 generator point
 const G: Point = {
   x: 0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798n,
   y: 0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8n
-};
+}
+
+// Modular inverse using extended Euclidean algorithm
+function modInverse(a: bigint, m: bigint): bigint {
+  if (a < 0n) a = ((a % m) + m) % m
+
+  let [old_r, r] = [a, m]
+  let [old_s, s] = [1n, 0n]
+
+  while (r !== 0n) {
+    const quotient = old_r / r
+    ;[old_r, r] = [r, old_r - quotient * r]
+    ;[old_s, s] = [s, old_s - quotient * s]
+  }
+
+  return old_r > 1n ? 0n : (old_s < 0n ? old_s + m : old_s)
+}
+
 // Point addition on secp256k1
 function pointAdd(p1: Point | null, p2: Point | null): Point | null {
-  if (!p1) return p2;
-  if (!p2) return p1;
+  if (!p1) return p2
+  if (!p2) return p1
 
   if (p1.x === p2.x) {
     if (p1.y === p2.y) {
       // Point doubling
-      const s = (3n * p1.x * p1.x * modInverse(2n * p1.y, SECP256K1_P)) % SECP256K1_P;
-      const x3 = (s * s - 2n * p1.x) % SECP256K1_P;
-      const y3 = (s * (p1.x - x3) - p1.y) % SECP256K1_P;
-      return { x: x3 < 0n ? x3 + SECP256K1_P : x3, y: y3 < 0n ? y3 + SECP256K1_P : y3 };
+      const s = (3n * p1.x * p1.x * modInverse(2n * p1.y, SECP256K1_P)) % SECP256K1_P
+      const x3 = (s * s - 2n * p1.x) % SECP256K1_P
+      const y3 = (s * (p1.x - x3) - p1.y) % SECP256K1_P
+      return { x: x3 < 0n ? x3 + SECP256K1_P : x3, y: y3 < 0n ? y3 + SECP256K1_P : y3 }
     } else {
       // Points are inverses
-      return null;
+      return null
     }
   }
 
-  const s = ((p2.y - p1.y) * modInverse(p2.x - p1.x, SECP256K1_P)) % SECP256K1_P;
-  const x3 = (s * s - p1.x - p2.x) % SECP256K1_P;
-  const y3 = (s * (p1.x - x3) - p1.y) % SECP256K1_P;
-  return { x: x3 < 0n ? x3 + SECP256K1_P : x3, y: y3 < 0n ? y3 + SECP256K1_P : y3 };
+  const s = ((p2.y - p1.y) * modInverse(p2.x - p1.x, SECP256K1_P)) % SECP256K1_P
+  const x3 = (s * s - p1.x - p2.x) % SECP256K1_P
+  const y3 = (s * (p1.x - x3) - p1.y) % SECP256K1_P
+  return { x: x3 < 0n ? x3 + SECP256K1_P : x3, y: y3 < 0n ? y3 + SECP256K1_P : y3 }
 }
+
 // Scalar multiplication
 function pointMultiply(k: bigint, point: Point): Point | null {
-  if (k === 0n) return null;
-  if (k === 1n) return point;
+  if (k === 0n) return null
+  if (k === 1n) return point
 
-  let result: Point | null = null;
-  let addend = point;
+  let result: Point | null = null
+  let addend = point
 
   while (k > 0n) {
     if (k & 1n) {
-      result = pointAdd(result, addend);
+      result = pointAdd(result, addend)
     }
-    addend = pointAdd(addend, addend)!;
-    k >>= 1n;
+    addend = pointAdd(addend, addend)!
+    k >>= 1n
   }
 
-  return result;
+  return result
 }
-// Recover public key from signature
-export function recoverPublicKey(messageHash: Uint8Array, signature: Uint8Array, recoveryId: number): Point | null {
-  if (signature.length !== 64) return null;
 
-  const r = BigInt('0x' + bytesToHex(signature.slice(0, 32)));
-  const s = BigInt('0x' + bytesToHex(signature.slice(32, 64)));
-  const e = BigInt('0x' + bytesToHex(messageHash));
-
-  if (r >= SECP256K1_N || s >= SECP256K1_N) return null;
-
-  // Calculate point R
-  const x = r + (BigInt(recoveryId >> 1) * SECP256K1_N);
-  if (x >= SECP256K1_P) return null;
-
-  // Calculate y coordinate
-  const ySq = (x * x * x + 7n) % SECP256K1_P;
-  let y = modPow(ySq, (SECP256K1_P + 1n) / 4n, SECP256K1_P);
-
-  if (y % 2n !== BigInt(recoveryId & 1)) {
-    y = SECP256K1_P - y;
-  }
-
-  const R: Point = { x, y };
-
-  // Calculate public key: Q = r^-1 * (s*R - e*G)
-  const rInv = modInverse(r, SECP256K1_N);
-  const sR = pointMultiply(s, R);
-  const eG = pointMultiply(e, G);
-
-  if (!sR || !eG) return null;
-
-  const negEG: Point = { x: eG.x, y: SECP256K1_P - eG.y };
-  const diff = pointAdd(sR, negEG);
-
-  if (!diff) return null;
-
-  return pointMultiply(rInv, diff);
-}
 // Modular exponentiation
 function modPow(base: bigint, exp: bigint, mod: bigint): bigint {
-  let result = 1n;
-  base = base % mod;
+  let result = 1n
+  base = base % mod
   while (exp > 0n) {
     if (exp % 2n === 1n) {
-      result = (result * base) % mod;
+      result = (result * base) % mod
     }
-    exp = exp >> 1n;
-    base = (base * base) % mod;
+    exp = exp >> 1n
+    base = (base * base) % mod
   }
-  return result;
+  return result
 }
+
+// Recover public key from signature
+export function recoverPublicKey(messageHash: Uint8Array, signature: Uint8Array, recoveryId: number): Point | null {
+  if (signature.length !== 64) return null
+
+  const r = BigInt('0x' + bytesToHex(signature.slice(0, 32)))
+  const s = BigInt('0x' + bytesToHex(signature.slice(32, 64)))
+  const e = BigInt('0x' + bytesToHex(messageHash))
+
+  if (r >= SECP256K1_N || s >= SECP256K1_N) return null
+
+  // Calculate point R
+  const x = r + (BigInt(recoveryId >> 1) * SECP256K1_N)
+  if (x >= SECP256K1_P) return null
+
+  // Calculate y coordinate
+  const ySq = (x * x * x + 7n) % SECP256K1_P
+  let y = modPow(ySq, (SECP256K1_P + 1n) / 4n, SECP256K1_P)
+
+  if (y % 2n !== BigInt(recoveryId & 1)) {
+    y = SECP256K1_P - y
+  }
+
+  const R: Point = { x, y }
+
+  // Calculate public key: Q = r^-1 * (s*R - e*G)
+  const rInv = modInverse(r, SECP256K1_N)
+  const sR = pointMultiply(s, R)
+  const eG = pointMultiply(e, G)
+
+  if (!sR || !eG) return null
+
+  const negEG: Point = { x: eG.x, y: SECP256K1_P - eG.y }
+  const diff = pointAdd(sR, negEG)
+
+  if (!diff) return null
+
+  return pointMultiply(rInv, diff)
+}
+
 // Encode varint (variable-length integer)
 function encodeVarint(n: number): Uint8Array {
   if (n < 0xfd) {

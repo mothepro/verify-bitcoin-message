@@ -7,8 +7,6 @@
  * Includes full secp256k1 elliptic curve operations and RIPEMD-160 implementation.
  */
 
-import * as secp256k1 from 'https://unpkg.com/tiny-secp256k1@2.2.4/lib/index.js';
-import * as CryptoJS from 'https://unpkg.com/crypto-js@4.2.0/index.js';
 
 import { base64ToBytes, createMessageHash, publicKeyToAddress, recoverPublicKey } from './utils';
 
@@ -37,25 +35,27 @@ export async function verify({message, address, signature}: Payload) {
   assert(recoveryFlag >= 27, 'Invalid recovery flag')
   assert(recoveryFlag <= 34, 'Invalid recovery flag')
 
-  // Adjust recovery ID for compressed/uncompressed
-  const isCompressed = recoveryFlag >= 4
-  const recoveryId = recoveryFlag - (isCompressed ? 27 + 4 : 27)
-
+  // Extract signature data (skip recovery flag)
   const signatureData = sigBytes.slice(1)
 
   // Create message hash using Bitcoin's message signing format
   const messageHash = await createMessageHash(message)
 
-  // Try to recover public key from signature
-  const publicKey = recoverPublicKey(messageHash, signatureData, recoveryId)
-  assert(publicKey, 'Failed to recover public key')
+  // Try all recovery IDs and both compressed/uncompressed formats
+  for (let testRecoveryId = 0; testRecoveryId < 4; testRecoveryId++) {
+    const publicKey = recoverPublicKey(messageHash, signatureData, testRecoveryId)
+    if (publicKey) {
+      // Try both compressed and uncompressed
+      for (const compressed of [true, false]) {
+        const testAddress = await publicKeyToAddress(publicKey, compressed)
+        if (testAddress === address) {
+          return true
+        }
+      }
+    }
+  }
 
-  // Convert recovered public key to Bitcoin address
-  const recoveredAddressCompressed = await publicKeyToAddress(publicKey, true)
-  const recoveredAddressUncompressed = await publicKeyToAddress(publicKey, false)
-
-  // Compare with provided address (try both compressed and uncompressed)
-  return [recoveredAddressCompressed, recoveredAddressUncompressed].includes(address)
+  return false
 }
 
 export default async function verifySafe(params: Payload): Promise<boolean> {
