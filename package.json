@@ -8,7 +8,7 @@
     "typescript": "^5.0.0"
   },
   "scripts": {
-    "build:browser": "bun build ./verify.ts --outdir dist"
+    "build:browser": "bun build ./index.ts --outdir static"
   },
   "description": "A dependency-free Bitcoin message signature verifier that works in browsers",
   "type": "module"

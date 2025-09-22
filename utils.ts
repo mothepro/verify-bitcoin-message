@@ -1,4 +1,4 @@
-import * as CryptoJS from './cdn/crypto-js.min.js';
+import * as CryptoJS from './static/cdn/crypto-js.min.js';
 
 
 // Base58 alphabet used by Bitcoin

@@ -133,7 +133,7 @@
   ></script>
 
   <script type="module">
-    import { verify, assert } from './dist/verify.js';
+    import { verify, assert } from './index.js';
 
     const params = new URLSearchParams(location.search);
     const defaultAddress = params.get('address') ?? '';

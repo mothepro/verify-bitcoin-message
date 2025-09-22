@@ -3,8 +3,6 @@
  *
  * A complete dependency-free implementation of Bitcoin message signature verification
  * that works in modern browsers using only Web APIs.
- *
- * Includes full secp256k1 elliptic curve operations and RIPEMD-160 implementation.
  */
 
 

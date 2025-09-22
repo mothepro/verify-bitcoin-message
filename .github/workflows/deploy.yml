@@ -34,12 +34,6 @@ jobs:
       - name: Build for browser
         run: bun run build:browser
 
-      - name: Copy files from src to dist
-        run: |
-          mkdir dist/cdn
-          cp -r cdn/* dist/cdn
-          cp index.html dist
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
@@ -47,7 +41,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # This specifies the directory with your built website files
-          path: ./dist
+          path: ./static
 
   deploy:
     environment:
