@@ -107,3 +107,7 @@ All cryptographic functions are implemented from publicly available specificatio
 
 - tiny-secp256k1: https://github.com/bitcoinjs/tiny-secp256k1
 - crypto-js: https://github.com/brix/crypto-js
+
+### Alternatives
+<https://www.bitcoin.com/tools/verify-message/>
+<https://www.verifybitcoinmessage.com/>
