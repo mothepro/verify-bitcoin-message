@@ -54,12 +54,21 @@ Open `index.html` in a browser and enter:
 - **Message**: The original message that was signed
 - **Signature**: The base64-encoded signature
 
+### Command Line Interface
+
+```bash
+bitcoin-verify --json \
+   --address 1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV \
+   --message "This is an example of a signed message." \
+   --signature "H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk="
+```
+
 ### Programmatic Use
 
 ```typescript
-import verify, { verifySafe } from './verify.ts';
+import verify, { verifySafe } from '@mothepro/verify-bitcoin-message';
 
-// Basic usage
+// Basic usage (throws on error)
 const isValid = await verify({
   address: '1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV',
   message: 'This is an example of a signed message.',
@@ -80,7 +89,7 @@ This project uses GitHub Actions for automatic deployment to GitHub Pages:
 
 - **Automatic**: Deploys on every push to `main` branch
 - **Tested**: Runs `bun test` before deployment
-- **Built**: Runs `bun run build:browser` to create `dist/verify.js`
+- **Built**: Runs `bun run build:browser` to create `static/verify.js`
 - **Complete**: Includes both source files and built JavaScript in deployment
 
 The workflow ensures that only tested, working code gets deployed.
@@ -96,12 +105,5 @@ This is a **complete, production-ready implementation** of Bitcoin message signa
 
 All cryptographic functions are implemented from publicly available specifications.
 
-## Files
-
-- `verify.ts` - Main verification module with explicit return types
-- `utils.ts` - Cryptographic utilities (secp256k1, RIPEMD-160, Base58)
-- `index.html` - Web interface with form validation
-- `tests/` - Comprehensive test suite
-- `rpc.ts` - Bitcoin RPC integration (optional)
-- `dist/verify.js` - Built JavaScript for browser use (auto-generated)
-- `.github/workflows/deploy.yml` - GitHub Actions deployment workflow
+- tiny-secp256k1: https://github.com/bitcoinjs/tiny-secp256k1
+- crypto-js: https://github.com/brix/crypto-js
