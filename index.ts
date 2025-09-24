@@ -6,7 +6,7 @@
  */
 
 
-import { base64ToBytes, createMessageHash, publicKeyToAddress, recoverPublicKey } from './utils';
+import { base64ToBytes, createMessageHash, publicKeyToAddress, recoverPublicKey } from './cryptography';
 
 export interface Payload {
   message: string
@@ -60,6 +60,7 @@ export default async function verifySafe(params: Payload): Promise<boolean> {
   try {
     return await verify(params)
   } catch (error) {
+    console.error(error)
     return false
   }
 }

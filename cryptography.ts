@@ -1,5 +1,5 @@
-import * as CryptoJS from './static/cdn/crypto-js.min.js';
-
+// @ts-ignore yes this type exists
+import { lib, RIPEMD160 } from './static/cdn/crypto-js.min.js';
 
 // Base58 alphabet used by Bitcoin
 const BASE58_ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
@@ -63,8 +63,8 @@ function bytesToHex(bytes: Uint8Array): string {
 
 // RIPEMD-160 hash function using crypto-js
 function ripemd160(data: Uint8Array): Uint8Array {
-  const wordArray = CryptoJS.lib.WordArray.create(data)
-  const hash = CryptoJS.RIPEMD160(wordArray)
+  const wordArray = lib.WordArray.create(data)
+  const hash = RIPEMD160(wordArray)
   const hashBytes = new Uint8Array(20)
 
   for (let i = 0; i < 5; i++) {
