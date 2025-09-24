@@ -2,7 +2,9 @@
   "name": "verify-bitcoin-message",
   "module": "cli.ts",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/yargs": "^17.0.33",
+    "@types/bun": "latest",
+    "yargs": "^18.0.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
