@@ -14,7 +14,7 @@ export interface Payload {
   signature: string
 }
 
-export function fail(error: unknown) {
+export function fail(error: unknown): never {
   throw error instanceof Error ? error : new Error(error as string)
 }
 
@@ -22,8 +22,7 @@ export function assert(condition: unknown, error: unknown = 'Assertion failed'):
   if (!condition) fail(error)
 }
 
-export async function verify({message, address, signature}: Payload) {
-
+export default async function verify({message, address, signature}: Payload) {
   // Decode the signature from base64
   const sigBytes = base64ToBytes(signature)
   assert(sigBytes.length === 65, `Invalid signature length: ${sigBytes.length}, expected 65`)
@@ -43,7 +42,6 @@ export async function verify({message, address, signature}: Payload) {
   for (let testRecoveryId = 0; testRecoveryId < 4; testRecoveryId++) {
     const publicKey = recoverPublicKey(messageHash, signatureData, testRecoveryId)
     if (publicKey) {
-      // Try both compressed and uncompressed
       for (const compressed of [true, false]) {
         const testAddress = await publicKeyToAddress(publicKey, compressed)
         if (testAddress === address) {
@@ -53,14 +51,14 @@ export async function verify({message, address, signature}: Payload) {
     }
   }
 
-  return false
+  fail('Unable to recover public key from signature')
 }
 
-export default async function verifySafe(params: Payload): Promise<boolean> {
+export async function verifySafe(params: Payload, log = true) {
   try {
     return await verify(params)
   } catch (error) {
-    console.error(error)
+    if (log) console.error(error)
     return false
   }
 }

@@ -2,7 +2,7 @@
 
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import { assert, verify, type Payload } from './index.ts'
+import verify, { assert, type Payload } from './index.ts'
 import validPayloads from './tests/valid.json'
 
 const randomPayload = validPayloads[Math.floor(Math.random() * validPayloads.length)]
@@ -55,15 +55,15 @@ let duration = 0
 let error: string | undefined
 const { address, message, signature, json, verbose }  = await cli.parse()
 
-try {
-  if (verbose) {
-    console.debug('Verifying Bitcoin message signature...')
-    console.debug(`Address: ${address}`)
-    console.debug(`Message: ${message}`)
-    console.debug(`Signature: ${signature}`)
-    console.debug()
-  }
+if (verbose) {
+  console.debug('Verifying Bitcoin message signature...')
+  console.debug(`Address: ${address}`)
+  console.debug(`Message: ${message}`)
+  console.debug(`Signature: ${signature}`)
+  console.debug()
+}
 
+try {
   const startTime = performance.now() ?? Date.now()
   valid = await verify({ address, message, signature })
   const endTime = performance.now() ?? Date.now()

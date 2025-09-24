@@ -12,47 +12,37 @@ A dependency-free Bitcoin message signature verifier that works in browsers with
 
 ## Prerequisites
 
-- **Modern Browser**: Supports ES modules and Web Crypto API
-- **Optional - Bun**: For running tests locally (can download from [https://bun.sh](https://bun.sh))
+- **Modern Browser**:
 
-## Getting Started
+## Things you can do
 
-### Option 1: Direct Browser Use (No Installation Required)
+### Clone the repository
 
-clone
-switch to gh-pages branch
-open index.html in browser
-
-### Option 2: Development with Bun
-
-1. **Clone the repository:**
+   Bun: download from [https://bun.sh](https://bun.sh)
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/mothepro/verify-bitcoin-message
    cd verify-bitcoin-message
-   ```
-
-2. **Run tests:**
-
-   ```bash
+   bun install
    bun test
    ```
 
-3. **Serve locally:**
+### Serve locally / Run offline
+
+   Requires ES modules and Web Crypto API support
 
    ```bash
+   bun run build:browser
    python -m http.server 8000
    ```
 
+   You can test offline mode in Chrome by opening
+
+- Developer Tools (F12)
+  - Network
+    - Change "No Throttling" -> "Offline"
+
 ## Usage
-
-### Web Interface
-
-Open `index.html` in a browser and enter:
-
-- **Bitcoin Address**: The address that signed the message
-- **Message**: The original message that was signed
-- **Signature**: The base64-encoded signature
 
 ### Command Line Interface
 
@@ -105,9 +95,10 @@ This is a **complete, production-ready implementation** of Bitcoin message signa
 
 All cryptographic functions are implemented from publicly available specifications.
 
-- tiny-secp256k1: https://github.com/bitcoinjs/tiny-secp256k1
-- crypto-js: https://github.com/brix/crypto-js
+- tiny-secp256k1: <https://github.com/bitcoinjs/tiny-secp256k1>
+- crypto-js: <https://github.com/brix/crypto-js>
 
 ### Alternatives
+
 <https://www.bitcoin.com/tools/verify-message/>
 <https://www.verifybitcoinmessage.com/>

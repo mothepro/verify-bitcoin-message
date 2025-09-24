@@ -14,5 +14,5 @@ count = 0
 for (const payload of invalid)
   test(
     `js invalid ${++count}`,
-    () => expect(verify(payload)).resolves.toBe(false)
+    () => expect(verify(payload)).rejects.toBeTruthy()
   )
