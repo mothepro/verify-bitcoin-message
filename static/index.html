@@ -51,7 +51,12 @@
 
 <body>
   <h1>Bitcoin Signature Verifier</h1>
-  <p>Verify a message signed with a Bitcoin private key. <a href="https://github.com/mothepro/verify-bitcoin-message?tab=readme-ov-file#offline" target="_blank" rel="noopener noreferrer">offline</a> and without any <a href="https://npmgraph.js.org/?q=@mothepro/verify-bitcoin-message">external dependencies</a>.</p>
+  <p>Verify a message signed with a Bitcoin private key. <a
+      href="https://github.com/mothepro/verify-bitcoin-message?tab=readme-ov-file#offline"
+      target="_blank"
+      rel="noopener noreferrer"
+    >offline</a> and without any <a href="https://npmgraph.js.org/?q=@mothepro/verify-bitcoin-message">external
+      dependencies</a>.</p>
   <form
     method="get"
     id="verifyForm"
@@ -106,7 +111,8 @@
   </p>
 
   <p>
-    Audit the <a href="https://github.com/mothepro/verify-bitcoin-message">Source Code</a> yourself, then please contribute 🙏🏿
+    Audit the <a href="https://github.com/mothepro/verify-bitcoin-message">Source Code</a> yourself, then please
+    contribute 🙏🏿
   </p>
 
 
@@ -116,20 +122,24 @@
     <li>better ui (i.e. the signed page should look nice and doesn't need to be a form)</li>
     <li>more support for address types</li>
     <li>explainer what this is, how, and why (why cold storage >>> exchanges)</li>
-    <li>remove deps</li>
+    <li>remove deps - these are not external deps, just in `static/cdn/`, but should be able to remove some</li>
   </ul>
 
   Check out some other sites that do the same thing:
   <ul>
     <li><a href="https://www.bitcoin.com/tools/verify-message/">Bitcoin.com</a> Close Source</li>
     <li><a href="https://www.verifybitcoinmessage.com/">Verify Bitcoin Message</a> Close Source</li>
-    <li><a href="https://bluewallet.github.io/VerifySignature?a=&m=&s=" id="blue-wallet-link">bluewallet's VerifySignature</a> Open Source! See their <a href="https://npmgraph.js.org/?q=bitcoinjs-message">dependnecy tree</a>.</li>
+    <li><a
+        href="https://bluewallet.github.io/VerifySignature?a=&m=&s="
+        id="blue-wallet-link"
+      >bluewallet's VerifySignature</a> Open Source! See their <a
+        href="https://npmgraph.js.org/?q=bitcoinjs-message">dependnecy tree</a>.</li>
 
   </ul>
 
   <script
     type="text/javascript"
-    src="cdn/crypto-js.min.js"
+    src="cdn/crypto-js.js"
   ></script>
   <script
     type="module"
