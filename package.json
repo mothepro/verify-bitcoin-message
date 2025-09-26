@@ -5,16 +5,16 @@
     "bitcoin-verify": "./cli.ts"
   },
   "devDependencies": {
-    "@types/yargs": "^17.0.33",
     "@types/bun": "latest",
+    "@types/yargs": "^17.0.33",
     "yargs": "^18.0.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "scripts": {
-    "prebuild:browser": "bun run build:valid-payloads",
-    "build:browser": "bun build ./index.ts --outdir static",
+    "build:browser": "bun run build:valid-payloads",
+    "Pbuild:browser": "bun build ./index.ts --outdir static",
     "build:valid-payloads": "bun run ./static/valid-payloads.ts > static/valid-payloads.html",
     "cli": "bun cli.ts"
   },
