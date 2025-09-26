@@ -13,10 +13,9 @@
     "typescript": "^5.0.0"
   },
   "scripts": {
-    "build:browser": "bun run build:valid-payloads",
-    "Pbuild:browser": "bun build ./index.ts --outdir static",
-    "build:valid-payloads": "bun run ./static/valid-payloads.ts > static/valid-payloads.html",
-    "cli": "bun cli.ts"
+    "prebuild:browser": "bun run build:valid-payloads",
+    "build:browser": "bun build ./index.ts --outdir static",
+    "build:valid-payloads": "bun run ./static/valid-payloads.ts > static/valid-payloads.html"
   },
   "description": "A dependency-free Bitcoin message signature verifier that works in browsers",
   "type": "module"

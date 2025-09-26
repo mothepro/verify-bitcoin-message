@@ -170,7 +170,7 @@ console.log(`<!DOCTYPE html>
                     🌐
                 </a>
                 <a
-                    href="/?${new URLSearchParams({ address, message, signature })}"
+                    href="./?${new URLSearchParams({ address, message, signature })}"
                     class="verify-message">
                     ${escapeHtml(message)}
                 </a>
