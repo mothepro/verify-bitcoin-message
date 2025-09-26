@@ -18,5 +18,6 @@
     "build:valid-payloads": "bun run ./static/valid-payloads.ts > static/valid-payloads.html"
   },
   "description": "A dependency-free Bitcoin message signature verifier that works in browsers",
-  "type": "module"
+  "type": "module",
+  "version": "0.0.1"
 }
