@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test";
 import verify from '..';
-import invalid from "./invalid.json";
-import valid from "./valid.json";
+import invalid from "./invalid-payloads.json";
+import valid from "./valid-payloads.json";
 
 let count = 0
 for (const payload of valid)
