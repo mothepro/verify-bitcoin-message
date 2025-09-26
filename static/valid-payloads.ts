@@ -152,11 +152,6 @@ console.log(`<!DOCTYPE html>
     <div class="container">
         <h1>🔐 Bitcoin Message Signature Test Cases</h1>
         <p class="subtitle">Valid signatures for testing Bitcoin message verification</p>
-
-        <div class="stats">
-            <strong>${validPayloads.length}</strong> test cases available
-        </div>
-
         <ol>
             ${validPayloads
               .map(

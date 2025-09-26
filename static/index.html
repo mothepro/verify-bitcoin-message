@@ -51,7 +51,7 @@
 
 <body>
   <h1>Bitcoin Signature Verifier</h1>
-  <p>Verify a message signed with a Bitcoin private key offline and without any external dependencies.</p>
+  <p>Verify a message signed with a Bitcoin private key. <a href="https://github.com/mothepro/verify-bitcoin-message?tab=readme-ov-file#offline" target="_blank" rel="noopener noreferrer">offline</a> and without any <a href="https://npmgraph.js.org/?q=@mothepro/verify-bitcoin-message">external dependencies</a>.</p>
   <form
     method="get"
     id="verifyForm"
@@ -112,18 +112,19 @@
 
   Up next:
   <ul>
-    <li>get help</li>
     <li>better error messages</li>
     <li>better ui (i.e. the signed page should look nice and doesn't need to be a form)</li>
     <li>more support for address types</li>
-    <li>explainer (why cold storage >>> exchanges)</li>
+    <li>explainer what this is, how, and why (why cold storage >>> exchanges)</li>
     <li>remove deps</li>
   </ul>
 
   Check out some other sites that do the same thing:
   <ul>
-    <li><a href="https://www.bitcoin.com/tools/verify-message/">Bitcoin.com</a></li>
-    <li><a href="https://www.verifybitcoinmessage.com/">Verify Bitcoin Message</a></li>
+    <li><a href="https://www.bitcoin.com/tools/verify-message/">Bitcoin.com</a> Close Source</li>
+    <li><a href="https://www.verifybitcoinmessage.com/">Verify Bitcoin Message</a> Close Source</li>
+    <li><a href="https://bluewallet.github.io/VerifySignature?a=&m=&s=" id="blue-wallet-link">bluewallet's VerifySignature</a> Open Source! See their <a href="https://npmgraph.js.org/?q=bitcoinjs-message">dependnecy tree</a>.</li>
+
   </ul>
 
   <script
@@ -143,14 +144,15 @@
     const defaultMessage = params.get('message') ?? '';
     const defaultSignature = params.get('signature') ?? '';
 
-    const form = document.getElementById('verifyForm');
-    const addressInput = document.getElementById('address');
-    const messageInput = document.getElementById('message');
-    const signatureInput = document.getElementById('signature');
-    const resultDiv = document.getElementById('result');
-    const moreInfoContainer = document.getElementById('more-info-container');
-    const moreInfoDiv = document.getElementById('more-info');
-    const mempoolLink = document.getElementById('mempoolLink');
+    const form = document.getElementById('verifyForm')
+    const addressInput = document.getElementById('address')
+    const messageInput = document.getElementById('message')
+    const signatureInput = document.getElementById('signature')
+    const resultDiv = document.getElementById('result')
+    const moreInfoContainer = document.getElementById('more-info-container')
+    const moreInfoDiv = document.getElementById('more-info')
+    const mempoolLink = document.getElementById('mempoolLink')
+    const blueWalletLink = document.getElementById('blue-wallet-link')
 
     // Set default values
     addressInput.value = defaultAddress;
@@ -170,6 +172,12 @@
       const address = addressInput.value.trim();
       const message = messageInput.value.trim();
       const signature = signatureInput.value.trim();
+
+      const blueUrl = new URL(blueWalletLink.href)
+      blueUrl.searchParams.set('a', address)
+      blueUrl.searchParams.set('m', message)
+      blueUrl.searchParams.set('s', signature)
+      blueWalletLink.href = blueUrl.toString()
 
       // Clear previous result
       moreInfoContainer.classList.add('hidden');

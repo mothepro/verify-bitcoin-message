@@ -27,7 +27,7 @@ A dependency-free Bitcoin message signature verifier that works in browsers with
    bun test
    ```
 
-### Serve locally / Run offline
+### Serve locally
 
    Requires ES modules and Web Crypto API support
 
@@ -36,11 +36,12 @@ A dependency-free Bitcoin message signature verifier that works in browsers with
    python -m http.server 8000
    ```
 
-   You can test offline mode in Chrome by opening
+### Offline
 
-- Developer Tools (F12)
-  - Network
-    - Change "No Throttling" -> "Offline"
+You can test offline mode in Chrome (webkit browsers) by opening Developer Tools (F12)
+
+- Network
+- Change "No Throttling" -> "Offline"
 
 ## Usage
 
