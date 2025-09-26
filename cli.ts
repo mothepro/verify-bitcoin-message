@@ -3,7 +3,7 @@
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import verify, { assert, type Payload } from './index.ts'
-import validPayloads from './tests/valid.json'
+import validPayloads from './tests/valid-payloads.json'
 
 const randomPayload = validPayloads[Math.floor(Math.random() * validPayloads.length)]
 const anotherRandomPayload = validPayloads[Math.floor(Math.random() * validPayloads.length)]
