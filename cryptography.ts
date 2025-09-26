@@ -1,5 +1,5 @@
-// @ts-ignore yes this type exists
-import { lib, RIPEMD160 } from './static/cdn/crypto-js.min.js';
+// @ts-ignore yes this type exists x_x
+import { lib, RIPEMD160 } from './static/cdn/crypto-js.js';
 
 // Base58 alphabet used by Bitcoin
 const BASE58_ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
@@ -47,14 +47,6 @@ async function doubleSha256(data: ArrayBuffer): Promise<ArrayBuffer> {
 // Convert string to UTF-8 bytes
 function stringToBytes(str: string): Uint8Array {
   return new TextEncoder().encode(str);
-}
-// Convert hex string to bytes
-function hexToBytes(hex: string): Uint8Array {
-  const bytes = new Uint8Array(hex.length / 2);
-  for (let i = 0; i < hex.length; i += 2) {
-    bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
-  }
-  return bytes;
 }
 // Convert bytes to hex string
 function bytesToHex(bytes: Uint8Array): string {

@@ -96,8 +96,10 @@ This is a **complete, production-ready implementation** of Bitcoin message signa
 
 All cryptographic functions are implemented from publicly available specifications.
 
-- tiny-secp256k1: <https://github.com/bitcoinjs/tiny-secp256k1>
 - crypto-js: <https://github.com/brix/crypto-js>
+
+goal is to extract only what we need from crypto-js.
+then update it to use built in crypto APIs.
 
 ### Alternatives
 
