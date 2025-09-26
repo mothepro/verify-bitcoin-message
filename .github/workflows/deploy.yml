@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -13,7 +13,7 @@ permissions:
 # Allow only one concurrent deployment, skipping runs queued between
 # the latest run and the new one.
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: true
 
 jobs:
@@ -30,6 +30,9 @@ jobs:
 
       - name: Run tests (No RPC node)
         run: bun test tests/verify-safe.test.ts
+
+      - name: Install dev-dependencies (github only)
+        run: bun install
 
       - name: Build for browser
         run: bun run build:browser
