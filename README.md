@@ -57,7 +57,7 @@ bitcoin-verify --json \
 ### Programmatic Use
 
 ```typescript
-import verify, { verifySafe } from '@mothepro/verify-bitcoin-message';
+import verify, { verifySafe } from 'verify-bitcoin-message';
 
 // Basic usage (throws on error)
 const isValid = await verify({
