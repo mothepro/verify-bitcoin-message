@@ -7,6 +7,7 @@
 
 
 import { base64ToBytes, createMessageHash, publicKeyToAddress, recoverPublicKey } from './cryptography';
+export * as rpc from './rpc'
 
 export interface Payload {
   message: string
