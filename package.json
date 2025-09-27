@@ -14,11 +14,11 @@
   },
   "scripts": {
     "prebuild:browser": "bun run build:valid-payloads",
-    "build:browser": "bun build ./index.ts --outdir static",
+    "build:browser": "bun build ./verify.ts --outdir static",
     "build:valid-payloads": "bun run ./static/valid-payloads.ts > static/valid-payloads.html"
   },
-  "main": "static/index.js",
-  "module": "index.ts",
+  "main": "static/verify.js",
+  "module": "verify.ts",
   "files": [
     "static"
   ],

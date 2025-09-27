@@ -191,8 +191,8 @@
         let message = messageStr
         if (isHex) {
           message = new Uint8Array(hex.length / 2)
-          for (let i = 0; i < bytes.length; i++)
-            bytes[i] = parseInt(hex.substring(i * 2, i * 2 + 2), 16)
+          for (let i = 0; i < message.length; i++)
+            message[i] = parseInt(hex.substring(i * 2, i * 2 + 2), 16)
         }
         const isValid = await verify({ message, address, signature });
         assert(isValid, 'Signature is invalid');

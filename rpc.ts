@@ -1,4 +1,4 @@
-import { fail, type Payload } from './index';
+import { fail, type Payload } from './verify.ts';
 
 const defaultLocalConnection = {
   url: "http://127.0.0.1:8332/",

@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import verify from '..';
+import verify from '../verify';
 import invalid from "./invalid-payloads.json";
 import valid from "./valid-payloads.json";
 
