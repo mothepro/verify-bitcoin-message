@@ -1,7 +1,6 @@
 {
   "name": "verify-bitcoin-message",
   "description": "A dependency-free Bitcoin message signature verifier that works in browsers",
-  "module": "cli.ts",
   "bin": {
     "verify-bitcoin-message": "./cli.ts"
   },
@@ -19,6 +18,7 @@
     "build:valid-payloads": "bun run ./static/valid-payloads.ts > static/valid-payloads.html"
   },
   "main": "static/index.js",
+  "module": "index.ts",
   "files": [
     "static"
   ],

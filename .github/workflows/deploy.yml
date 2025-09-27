@@ -28,9 +28,6 @@ jobs:
         with:
           bun-version: latests
 
-      - name: Install dev-dependencies (github only)
-        run: bun install
-
       - name: Run tests (No RPC node)
         run: bun test tests/verify-safe.test.t
 
