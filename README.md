@@ -57,6 +57,16 @@ npx verify-bitcoin-message --json \
 
 ### Programmatic Use
 
+```bash
+bun add verify-bitcoin-message
+```
+
+OR
+
+```bash
+npm install verify-bitcoin-message
+```
+
 ```typescript
 import verify from 'verify-bitcoin-message';
 

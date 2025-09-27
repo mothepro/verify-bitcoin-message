@@ -2,8 +2,8 @@
 
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import verify, { assert, type Payload } from './verify.ts'
 import validPayloads from './tests/valid-payloads.json'
+import verify, { assert, strToMessage, type Payload } from './verify.ts'
 
 const randomPayload = validPayloads[Math.floor(Math.random() * validPayloads.length)]
 const anotherRandomPayload = validPayloads[Math.floor(Math.random() * validPayloads.length)]
@@ -44,6 +44,12 @@ const cli = yargs(hideBin(process.argv))
     type: 'boolean',
     default: false,
   })
+  .option('hex', {
+    alias: 'h',
+    describe: 'Interpret message as hex-encoded binary string',
+    type: 'boolean',
+    default: false,
+  })
   .option('verbose', {
     alias: 'v',
     describe: 'Verbose output with timing and other details',
@@ -64,12 +70,13 @@ const cli = yargs(hideBin(process.argv))
 let valid = false
 let duration = 0
 let error: string | undefined
-const { address, message, signature, json, verbose } = await cli.parse()
+const { address, message: messageStr, signature, json, verbose, hex } = await cli.parse()
+const message = strToMessage(messageStr, hex)
 
 if (verbose) {
   console.debug('Verifying Bitcoin message signature...')
   console.debug(`Address: ${address}`)
-  console.debug(`Message: ${message}`)
+  console.debug(`Message: ${messageStr}`)
   console.debug(`Signature: ${signature}`)
   console.debug()
 }

@@ -1,4 +1,4 @@
-import verify, { assert } from '../verify'
+import verify, { assert, strToMessage } from '../verify'
 
 const params = new URLSearchParams(location.search)
 const defaultAddress = params.get('address') ?? ''
@@ -48,13 +48,7 @@ async function verifySignature() {
   resultDiv.className = ''
 
   try {
-    let message: string | Uint8Array = messageStr
-    if (isHex) {
-      assert(messageStr.length % 2 === 0, 'Hex string must have even length')
-      message = new Uint8Array(messageStr.length / 2)
-      for (let i = 0; i < message.length; i++)
-        message[i] = parseInt(messageStr.substring(i * 2, i * 2 + 2), 16)
-    }
+    const message = strToMessage(messageStr, isHex)
     const isValid = await verify({ message, address, signature })
     assert(isValid, 'Signature is invalid')
     resultDiv.textContent = '✅ Signature is valid!'

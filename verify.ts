@@ -62,6 +62,17 @@ export async function verifySafe(params: Payload, log = true) {
   }
 }
 
+export function strToMessage(message: string, isHex = false) {
+  if (isHex) {
+    assert(message.length % 2 === 0, 'Hex string must have even length')
+    const bytes = new Uint8Array(message.length / 2)
+    for (let i = message.startsWith('0x') ? 2 : 0; i < message.length; i++)
+      bytes[i] = parseInt(message.substring(i * 2, i * 2 + 2), 16)
+    return bytes
+  }
+  return message
+}
+
 // Pure TypeScript RIPEMD160 implementation following RFC 1320
 
 // Base58 alphabet used by Bitcoin
