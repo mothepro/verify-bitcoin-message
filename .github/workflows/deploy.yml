@@ -26,13 +26,13 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
         with:
-          bun-version: latest
-
-      - name: Run tests (No RPC node)
-        run: bun test tests/verify-safe.test.ts
+          bun-version: latests
 
       - name: Install dev-dependencies (github only)
         run: bun install
+
+      - name: Run tests (No RPC node)
+        run: bun test tests/verify-safe.test.t
 
       - name: Build for browser
         run: bun run build:browser
