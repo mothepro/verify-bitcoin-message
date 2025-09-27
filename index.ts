@@ -5,11 +5,10 @@
  * that works in modern browsers using only Web APIs.
  */
 
-
 export * as rpc from './rpc'
 
 export interface Payload {
-  message: string
+  message: string | Uint8Array
   address: string
   signature: string
 }
@@ -22,7 +21,7 @@ export function assert(condition: unknown, error: unknown = 'Assertion failed'):
   if (!condition) fail(error)
 }
 
-export default async function verify({message, address, signature}: Payload) {
+export default async function verify({ message, address, signature }: Payload) {
   // Decode the signature from base64
   const sigBytes = base64ToBytes(signature)
   assert(sigBytes.length === 65, `Invalid signature length: ${sigBytes.length}, expected 65`)
@@ -36,7 +35,7 @@ export default async function verify({message, address, signature}: Payload) {
   const signatureData = sigBytes.slice(1)
 
   // Create message hash using Bitcoin's message signing format
-  const messageHash = await createMessageHash(message)
+  const messageHash = await createMessageHash(typeof message === 'string' ? encoder.encode(message) : message)
 
   // Try all recovery IDs and both compressed/uncompressed formats
   for (let testRecoveryId = 0; testRecoveryId < 4; testRecoveryId++) {
@@ -363,10 +362,9 @@ function encodeVarint(n: number): Uint8Array {
   }
 }
 // Create Bitcoin message hash
-async function createMessageHash(message: string): Promise<Uint8Array> {
+async function createMessageHash(messageBytes: Uint8Array): Promise<Uint8Array> {
   const prefix = 'Bitcoin Signed Message:\n'
   const prefixBytes = encoder.encode(prefix)
-  const messageBytes = encoder.encode(message)
 
   // Create the message with varint length prefixes (Bitcoin's format)
   const prefixLength = encodeVarint(prefixBytes.length)
@@ -392,10 +390,7 @@ async function createMessageHash(message: string): Promise<Uint8Array> {
 }
 
 // Convert public key point to Bitcoin address
-async function publicKeyToAddress(
-  publicKey: Point,
-  compressed: boolean = true
-): Promise<string> {
+async function publicKeyToAddress(publicKey: Point, compressed: boolean = true): Promise<string> {
   let publicKeyBytes: Uint8Array
 
   if (compressed) {
