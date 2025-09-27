@@ -7,11 +7,12 @@ const defaultLocalConnection = {
 }
 
 export async function verify({ address, signature, message }: Payload, { url, user, password } = defaultLocalConnection) {
+  const messageStr = typeof message === 'string' ? message : new TextDecoder().decode(message)
   const body = JSON.stringify({
     jsonrpc: "1.0",
     id: "curltest",
     method: "verifymessage",
-    params: [address, signature, message],
+    params: [address, signature, messageStr],
   });
   const response = await fetch(url, {
     body,

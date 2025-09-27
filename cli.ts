@@ -7,7 +7,15 @@ import validPayloads from './tests/valid-payloads.json'
 
 const randomPayload = validPayloads[Math.floor(Math.random() * validPayloads.length)]
 const anotherRandomPayload = validPayloads[Math.floor(Math.random() * validPayloads.length)]
-const payloadToArgs = ({ address, message, signature }: Payload, full: boolean) => `${full ? '--address ' : '-a'} ${address} ${full ? '--message' : '-m'} "${message}" ${full ? '--signature' : '-s'} "${signature}"`
+const payloadToArgs = ({ address, message, signature }: Payload, full: boolean) =>
+  [
+    full ? '--address ' : '-a',
+    address,
+    full ? '--message' : '-m',
+    `"${message}"`,
+    full ? '--signature' : '-s',
+    `${signature}"`,
+  ].join(' ')
 
 const cli = yargs(hideBin(process.argv))
   .scriptName('verify-bitcoin-message')
@@ -56,7 +64,7 @@ const cli = yargs(hideBin(process.argv))
 let valid = false
 let duration = 0
 let error: string | undefined
-const { address, message, signature, json, verbose }  = await cli.parse()
+const { address, message, signature, json, verbose } = await cli.parse()
 
 if (verbose) {
   console.debug('Verifying Bitcoin message signature...')
@@ -88,8 +96,7 @@ try {
       message,
       signature,
       duration,
-      error
+      error,
     })
   process.exit(valid ? 0 : 1) // Exit with appropriate code
 }
-

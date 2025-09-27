@@ -93,6 +93,14 @@
         required
       >
     </label>
+    <label>
+      <input
+        type="checkbox"
+        id="isHex"
+        name="isHex"
+      >
+      Is Hex-encoded binary string
+    </label>
     <button type="submit">Verify Signature</button>
   </form>
   <div id="result">
@@ -134,6 +142,7 @@
     const defaultAddress = params.get('address') ?? '';
     const defaultMessage = params.get('message') ?? '';
     const defaultSignature = params.get('signature') ?? '';
+    const isHex = Boolean(params.get('isHex')?.length > 0);
 
     const form = document.getElementById('verifyForm')
     const addressInput = document.getElementById('address')
@@ -144,11 +153,13 @@
     const moreInfoDiv = document.getElementById('more-info')
     const mempoolLink = document.getElementById('mempoolLink')
     const blueWalletLink = document.getElementById('blue-wallet-link')
+    const isHexInput = document.getElementById('isHex')
 
     // Set default values
     addressInput.value = defaultAddress;
     messageInput.value = defaultMessage;
     signatureInput.value = defaultSignature;
+    isHexInput.checked = isHex === 'on';
 
     if (defaultAddress) {
       mempoolLink.classList.remove('hidden');
@@ -161,12 +172,13 @@
 
     async function verifySignature() {
       const address = addressInput.value.trim();
-      const message = messageInput.value.trim();
+      const messageStr = messageInput.value.trim();
       const signature = signatureInput.value.trim();
+      const isHex = isHexInput.checked;
 
       const blueUrl = new URL(blueWalletLink.href)
       blueUrl.searchParams.set('a', address)
-      blueUrl.searchParams.set('m', message)
+      blueUrl.searchParams.set('m', messageStr)
       blueUrl.searchParams.set('s', signature)
       blueWalletLink.href = blueUrl.toString()
 
@@ -176,6 +188,12 @@
       resultDiv.className = '';
 
       try {
+        let message = messageStr
+        if (isHex) {
+          message = new Uint8Array(hex.length / 2)
+          for (let i = 0; i < bytes.length; i++)
+            bytes[i] = parseInt(hex.substring(i * 2, i * 2 + 2), 16)
+        }
         const isValid = await verify({ message, address, signature });
         assert(isValid, 'Signature is invalid');
         resultDiv.textContent = '✅ Signature is valid!';
