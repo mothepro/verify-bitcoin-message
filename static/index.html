@@ -142,7 +142,7 @@
     const defaultAddress = params.get('address') ?? '';
     const defaultMessage = params.get('message') ?? '';
     const defaultSignature = params.get('signature') ?? '';
-    const isHex = Boolean(params.get('isHex')?.length > 0);
+    const isHex = params.get('isHex') ?? 'off';
 
     const form = document.getElementById('verifyForm')
     const addressInput = document.getElementById('address')
