@@ -12,9 +12,17 @@ A dependency-free Bitcoin message signature verifier that works in browsers with
 
 ## Things you can do
 
+### Offline
+
+Visit the [live page](https://mothepro.github.io/verify-bitcoin-message), then you can test offline mode in
+Chrome (webkit browsers) by opening Developer Tools (F12)
+
+- Network
+- Change "No Throttling" -> "Offline"
+
 ### Clone the repository
 
-   Bun: download from [https://bun.sh](https://bun.sh)
+   Download [Bun](https://bun.sh), JS runtime
 
    ```bash
    git clone https://github.com/mothepro/verify-bitcoin-message
@@ -25,11 +33,9 @@ A dependency-free Bitcoin message signature verifier that works in browsers with
 
 ### Serve locally
 
-   Requires ES modules and Web Crypto API support
-
    ```bash
    bun run build:browser
-   python -m http.server 8000
+   python -m http.server 8000 static # Any "server" is fine. Since it requires ES modules and Web Crypto API support
    ```
 
 ### CDN
@@ -39,13 +45,6 @@ A dependency-free Bitcoin message signature verifier that works in browsers with
      import verify, { verifySafe } from 'https://unpkg.com/verify-bitcoin-message';
    </script>
    ```
-
-### Offline
-
-You can test offline mode in Chrome (webkit browsers) by opening Developer Tools (F12)
-
-- Network
-- Change "No Throttling" -> "Offline"
 
 ### Command Line Interface
 
@@ -59,17 +58,21 @@ npx verify-bitcoin-message --json \
 ### Programmatic Use
 
 ```typescript
-import verify, { verifySafe } from 'verify-bitcoin-message';
+import verify from 'verify-bitcoin-message';
 
-// Basic usage (throws on error)
 const isValid = await verify({
   address: '1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV',
   message: 'This is an example of a signed message.',
   signature: 'H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk='
 });
+```
 
-// Safe usage (never throws)
-const isValid2 = await verifySafe({
+Or, if you're not a fan of throwing errors:
+
+```typescript
+import { verifySafe } from 'verify-bitcoin-message';
+
+const isValid = await verifySafe({
   address: '1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV',
   message: 'This is an example of a signed message.',
   signature: 'H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk='
@@ -107,8 +110,8 @@ All cryptographic functions are implemented from publicly available specificatio
 - [ ] service worker?
 - [ ] move this to readme
 
-
 ### Alternatives
 
 <https://www.bitcoin.com/tools/verify-message/>
 <https://www.verifybitcoinmessage.com/>
+<https://bluewallet.github.io/VerifySignature>
