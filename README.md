@@ -10,10 +10,6 @@ A dependency-free Bitcoin message signature verifier that works in browsers with
 - **Simple API**: Clean TypeScript interface for programmatic use
 - **Unit Tests**: Includes a test suite for the verification logic
 
-## Prerequisites
-
-- **Modern Browser**:
-
 ## Things you can do
 
 ### Clone the repository
@@ -36,14 +32,20 @@ A dependency-free Bitcoin message signature verifier that works in browsers with
    python -m http.server 8000
    ```
 
+### CDN
+
+   ```html
+   <script type="module">
+     import verify, { verifySafe } from 'https://unpkg.com/verify-bitcoin-message';
+   </script>
+   ```
+
 ### Offline
 
 You can test offline mode in Chrome (webkit browsers) by opening Developer Tools (F12)
 
 - Network
 - Change "No Throttling" -> "Offline"
-
-## Usage
 
 ### Command Line Interface
 
@@ -96,11 +98,6 @@ This is a **complete, production-ready implementation** of Bitcoin message signa
 
 All cryptographic functions are implemented from publicly available specifications in pure TypeScript.
 
-### Alternatives
-
-<https://www.bitcoin.com/tools/verify-message/>
-<https://www.verifybitcoinmessage.com/>
-
 ### Up Next
 
 - [ ] better error messages
@@ -109,3 +106,9 @@ All cryptographic functions are implemented from publicly available specificatio
 - [ ] explainer what this is, how, and why (why cold storage >>> exchanges)
 - [ ] service worker?
 - [ ] move this to readme
+
+
+### Alternatives
+
+<https://www.bitcoin.com/tools/verify-message/>
+<https://www.verifybitcoinmessage.com/>
