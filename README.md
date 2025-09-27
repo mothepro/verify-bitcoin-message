@@ -48,7 +48,7 @@ You can test offline mode in Chrome (webkit browsers) by opening Developer Tools
 ### Command Line Interface
 
 ```bash
-bitcoin-verify --json \
+npx verify-bitcoin-message --json \
    --address 1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV \
    --message "This is an example of a signed message." \
    --signature "H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk="

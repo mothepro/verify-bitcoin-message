@@ -10,40 +10,43 @@ const anotherRandomPayload = validPayloads[Math.floor(Math.random() * validPaylo
 const payloadToArgs = ({ address, message, signature }: Payload, full: boolean) => `${full ? '--address ' : '-a'} ${address} ${full ? '--message' : '-m'} "${message}" ${full ? '--signature' : '-s'} "${signature}"`
 
 const cli = yargs(hideBin(process.argv))
-  .scriptName('bitcoin-verify')
+  .scriptName('verify-bitcoin-message')
   .usage('$0 <command> [options]')
   .option('address', {
     alias: 'a',
     describe: 'Bitcoin address that signed the message',
     type: 'string',
-    demandOption: true
+    demandOption: true,
   })
   .option('message', {
     alias: 'm',
     describe: 'Original message that was signed',
     type: 'string',
-    demandOption: true
+    demandOption: true,
   })
   .option('signature', {
     alias: 's',
     describe: 'Base64-encoded signature',
     type: 'string',
-    demandOption: true
+    demandOption: true,
   })
   .option('json', {
     alias: 'j',
     describe: 'Output result as JSON',
     type: 'boolean',
-    default: false
+    default: false,
   })
   .option('verbose', {
     alias: 'v',
     describe: 'Verbose output with timing and other details',
     type: 'boolean',
-    default: false
+    default: false,
   })
   .example(`$0 ${payloadToArgs(randomPayload, false)}`, 'Verify a valid Bitcoin message signature')
-  .example(`$0 --json ${payloadToArgs(anotherRandomPayload, true)}`, 'Verification with JSON output')
+  .example(
+    `$0 --json ${payloadToArgs(anotherRandomPayload, true)}`,
+    'Verification with JSON output'
+  )
   .help()
   .alias('help', 'h')
   .version()

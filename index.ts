@@ -116,9 +116,9 @@ function ripemd160(data: Uint8Array): Uint8Array {
   ]
 
   // Helper functions
-  const rotateLeft = (n: number, b: number): number => (n << b) | (n >>> (32 - b))
+  const rotateLeft = (n: number, b: number) => (n << b) | (n >>> (32 - b))
 
-  const f = (j: number, x: number, y: number, z: number): number => {
+  const f = (j: number, x: number, y: number, z: number) => {
     if (j < 16) return x ^ y ^ z
     if (j < 32) return (x & y) | (~x & z)
     if (j < 48) return (x | ~y) ^ z
