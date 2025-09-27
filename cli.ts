@@ -14,7 +14,7 @@ const payloadToArgs = ({ address, message, signature }: Payload, full: boolean) 
     full ? '--message' : '-m',
     `"${message}"`,
     full ? '--signature' : '-s',
-    `${signature}"`,
+    `"${signature}"`,
   ].join(' ')
 
 const cli = yargs(hideBin(process.argv))
