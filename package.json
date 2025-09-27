@@ -13,14 +13,18 @@
     "bun": "^1.2.22"
   },
   "scripts": {
+    "build:valid-payloads": "bun run ./static/valid-payloads.ts > static/valid-payloads.html",
     "prebuild:browser": "bun run build:valid-payloads",
-    "build:browser": "bun build ./verify.ts --outdir static",
-    "build:valid-payloads": "bun run ./static/valid-payloads.ts > static/valid-payloads.html"
+    "build:browser": "bun build static/index.ts --outdir static",
+    "build:script": "bun build ./verify.ts --outdir .",
+    "build": "bun run build:script && bun run build:browser"
   },
-  "main": "static/verify.js",
-  "module": "verify.ts",
+  "main": "verify.js",
+  "module": "verify.js",
   "files": [
-    "static"
+    "README.md",
+    "package.json",
+    "verify.js"
   ],
   "type": "module",
   "license": "MIT",

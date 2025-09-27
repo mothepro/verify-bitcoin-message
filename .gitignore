@@ -14,7 +14,7 @@ lerna-debug.log*
 
 .cache
 node_modules/
-static/*.js
+*.js
 static/valid-payloads.html
 
 # Finder (MacOS) folder config
