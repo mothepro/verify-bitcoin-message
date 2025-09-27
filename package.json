@@ -10,7 +10,7 @@
     "yargs": "^18.0.0"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "bun": "^1.2.22"
   },
   "scripts": {
     "prebuild:browser": "bun run build:valid-payloads",
@@ -19,5 +19,6 @@
   },
   "description": "A dependency-free Bitcoin message signature verifier that works in browsers",
   "type": "module",
+  "license": "MIT",
   "version": "0.0.1"
 }
