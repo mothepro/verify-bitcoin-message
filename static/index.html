@@ -115,16 +115,6 @@
     contribute 🙏🏿
   </p>
 
-
-  Up next:
-  <ul>
-    <li>better error messages</li>
-    <li>better ui (i.e. the signed page should look nice and doesn't need to be a form)</li>
-    <li>more support for address types</li>
-    <li>explainer what this is, how, and why (why cold storage >>> exchanges)</li>
-    <li>remove deps - these are not external deps, just in `static/cdn/`, but should be able to remove some</li>
-  </ul>
-
   Check out some other sites that do the same thing:
   <ul>
     <li><a href="https://www.bitcoin.com/tools/verify-message/">Bitcoin.com</a> Close Source</li>
@@ -136,15 +126,6 @@
         href="https://npmgraph.js.org/?q=bitcoinjs-message">dependnecy tree</a>.</li>
 
   </ul>
-
-  <script
-    type="text/javascript"
-    src="cdn/crypto-js.js"
-  ></script>
-  <script
-    type="module"
-    src="cdn/noble-secp256k1.js"
-  ></script>
 
   <script type="module">
     import verify, { assert } from './index.js';

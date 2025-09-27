@@ -90,18 +90,22 @@ The workflow ensures that only tested, working code gets deployed.
 This is a **complete, production-ready implementation** of Bitcoin message signature verification:
 
 1. **Full secp256k1 implementation**: Complete elliptic curve operations from scratch
-2. **Complete RIPEMD-160**: Full RIPEMD-160 hash function using crypto-js
+2. **Complete RIPEMD-160**: Pure TypeScript implementation following RFC 1320
 3. **Complete signature recovery**: Handles all Bitcoin signature formats and recovery IDs
 4. **Zero dependencies**: Works in browsers without any external dependencies
 
-All cryptographic functions are implemented from publicly available specifications.
-
-- crypto-js: <https://github.com/brix/crypto-js>
-
-goal is to extract only what we need from crypto-js.
-then update it to use built in crypto APIs.
+All cryptographic functions are implemented from publicly available specifications in pure TypeScript.
 
 ### Alternatives
 
 <https://www.bitcoin.com/tools/verify-message/>
 <https://www.verifybitcoinmessage.com/>
+
+### Up Next
+
+- [ ] better error messages
+- [ ] better ui (i.e. the signed page should look nice and doesn't need to be a form)
+- [ ] more support for address types
+- [ ] explainer what this is, how, and why (why cold storage >>> exchanges)
+- [ ] service worker?
+- [ ] move this to readme
