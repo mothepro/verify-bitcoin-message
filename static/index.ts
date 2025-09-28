@@ -97,7 +97,7 @@ async function verifySignature() {
     url.searchParams.set('message', messageUTF8)
     url.searchParams.set('signature', signature)
     if (isHex) url.searchParams.set('isHex', 'on')
-    window.history.replaceState({}, document.title, url.toString())
+    history.pushState('', '@mothepro', url.toString())
 
     // Update BlueWallet link
     const blueUrl = new URL(blueWalletLink.href)

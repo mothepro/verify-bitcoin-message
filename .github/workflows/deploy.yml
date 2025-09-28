@@ -32,7 +32,7 @@ jobs:
         run: bun test tests/verify-safe.test.ts
 
       - name: Install Dev Dependencies
-        run: bun install
+        run: bun install --ignore-scripts
 
       - name: Build for browser
         run: bun run build:browser
