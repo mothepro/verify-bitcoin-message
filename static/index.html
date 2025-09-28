@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html
+  lang="en"
+  data-theme="light"
+>
 
 <head>
   <meta charset="UTF-8">
@@ -7,136 +10,354 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   >
-  <title>Bitcoin Signature Verifier</title>
+  <title>Bitcoin Message Signature Verifier</title>
+  <link
+    rel="stylesheet"
+    href="./css/pico.min.css"
+  >
   <style>
-    body {
-      font-family: sans-serif;
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
+    .verified-message {
+      background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+      border: 1px solid #c3e6cb;
+      border-radius: var(--pico-border-radius);
+      padding: 1rem;
+      margin: 1rem 0;
     }
 
-    label,
-    input,
-    textarea,
-    button {
-      display: block;
-      width: 100%;
-      margin-bottom: 10px;
+    .hero {
+      text-align: center;
+      padding: 2rem 0;
     }
 
-    textarea {
-      height: 100px;
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
     }
 
-    #result {
-      margin-top: 20px;
-      padding: 10px;
-      border: 1px solid #ccc;
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--pico-muted-color);
+      margin-bottom: 2rem;
     }
 
-    .success {
-      color: green;
+    .signature-info {
+      background: var(--pico-card-background-color);
+      border: 1px solid var(--pico-card-border-color);
+      border-radius: var(--pico-border-radius);
+      padding: 1.5rem;
+      margin: 1rem 0;
     }
 
-    .error {
-      color: red;
+    .address-link {
+      color: var(--pico-primary-color);
+      text-decoration: none;
+      font-family: monospace;
+      font-weight: bold;
+    }
+
+    .address-link:hover {
+      text-decoration: underline;
     }
 
     .hidden {
-      display: none;
+      display: none !important;
+    }
+
+    .actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+
+    .education {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--pico-muted-border-color);
+    }
+
+    .education h2 {
+      color: var(--pico-primary-color);
+    }
+
+    .alternatives {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: var(--pico-muted-color);
     }
   </style>
 </head>
 
 <body>
-  <h1>Bitcoin Signature Verifier</h1>
-  <p>Verify a message signed with a Bitcoin private key. <a
-      href="https://github.com/mothepro/verify-bitcoin-message?tab=readme-ov-file#offline"
-      target="_blank"
-      rel="noopener noreferrer"
-    >offline</a> and without any <a href="https://npmgraph.js.org/?q=verify-bitcoin-message">external
-      dependencies</a>.</p>
-  <form
-    method="get"
-    id="verifyForm"
-  >
-    <label for="address">
-      Bitcoin Address:
-      <a
-        id="mempoolLink"
-        class="hidden"
-        target="_blank"
-      >🌐↗️</a>
-      <input
-        type="text"
-        id="address"
-        name="address"
-        required
+  <main class="container">
+    <!-- Hero Section (shown when no message) -->
+    <div
+      id="hero"
+      class="hero"
+    >
+      <h1>🔐 Bitcoin Message Verifier</h1>
+      <p>Cryptographically verify messages signed with Bitcoin private keys</p>
+
+      <div class="actions">
+        <button
+          onclick="openVerifyDialog()"
+          class="primary"
+        >Verify a Message</button>
+      </div>
+    </div>
+    <!-- Verified Message Display (shown when message is verified) -->
+    <div
+      id="verified-display"
+      class="hidden"
+    >
+      <div class="signature-info">
+        <h2>✅ Verified Message</h2>
+        <p>The following message was cryptographically signed by
+          <a
+            id="verified-address-link"
+            class="address-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          ></a>
+        </p>
+      </div>
+
+      <div
+        id="verified-message-content"
+        class="verified-message"
       >
-    </label>
+        <!-- Message content will be inserted here -->
+      </div>
 
-    <label for="message">Message:
-      <textarea
-        id="message"
-        name="message"
-        required
-        title="Whitespace is trimmed"
-      ></textarea>
-    </label>
+      <div class="actions">
+        <button
+          type="button"
+          onclick="openVerifyDialog()"
+          class="secondary"
+        >Verify Another Message</button>
+      </div>
+    </div>
 
-    <label for="signature">Signature:
-      <input
-        type="text"
-        id="signature"
-        name="signature"
-        required
+    <!-- Error Display (shown when verification fails) -->
+    <div
+      id="error-display"
+      class="hidden"
+    >
+      <div
+        class="signature-info"
+        style="border-color: var(--pico-del-color); background: var(--pico-del-background-color);"
       >
-    </label>
-    <label>
-      <input
-        type="checkbox"
-        id="isHex"
-        name="isHex"
-        style="display: inline; width: auto;"
+        <h2>❌ Verification Failed</h2>
+        <p>The signature could not be verified for the provided message and address.</p>
+        <details>
+          <summary>Reason for Failure</summary>
+          <p id="error-reason"></p>
+        </details>
+      </div>
+
+      <div
+        style="background: var(--pico-card-background-color); border: 1px solid var(--pico-card-border-color); border-radius: var(--pico-border-radius); padding: 1.5rem; margin: 1rem 0;"
       >
-      Is Hex-encoded binary string
-    </label>
-    <button type="submit">Verify Signature</button>
-  </form>
-  <div id="result">
-  </div>
+        <h3>🔒 What This Proves</h3>
+        <p><strong>This failed verification is actually a security feature!</strong> It proves that:</p>
+        <ul>
+          <li><strong>The message was NOT signed by the claimed address</strong> - Someone else created this signature
+          </li>
+          <li><strong>The message may have been altered</strong> - Even a single character change breaks the signature
+          </li>
+          <li><strong>The signature is invalid or corrupted</strong> - The cryptographic proof doesn't match</li>
+        </ul>
 
-  <details
-    class="hidden"
-    id="more-info-container"
-  >
-    <summary>Reason</summary>
-    <div id="more-info"></div>
-  </details>
+        <p>This demonstrates the <strong>integrity protection</strong> of digital signatures. Unlike traditional
+          signatures that can be forged,
+          cryptographic signatures are mathematically impossible to fake without the private key.</p>
 
-  <p>
-    <a href="valid-payloads.html">📋 View all 147 test cases</a>
-  </p>
+        <details>
+          <summary>🔬 Why This Is Secure</summary>
+          <p>Bitcoin signatures use <strong>elliptic curve cryptography</strong> with the secp256k1 curve. To forge a
+            signature, an attacker would need to:</p>
+          <ul>
+            <li>Solve the <strong>discrete logarithm problem</strong> (computationally infeasible)</li>
+            <li>Find a hash collision in <strong>SHA-256</strong> (2^256 operations)</li>
+            <li>Break the <strong>ECDSA algorithm</strong> (no known efficient method)</li>
+          </ul>
+          <p>These mathematical problems are so difficult that even with all the world's computing power,
+            it would take longer than the age of the universe to break a single signature.</p>
+        </details>
+      </div>
 
-  <p>
-    Audit the <a href="https://github.com/mothepro/verify-bitcoin-message">Source Code</a> yourself, then please
-    contribute 🙏🏿
-  </p>
+      <div class="actions">
+        <button
+          type="button"
+          onclick="openVerifyDialog()"
+          class="secondary"
+        >Try Again</button>
+      </div>
+    </div>
 
-  Check out some other sites that do the same thing:
-  <ul>
-    <li><a href="https://www.bitcoin.com/tools/verify-message/">Bitcoin.com</a> Close Source</li>
-    <li><a href="https://www.verifybitcoinmessage.com/">Verify Bitcoin Message</a> Close Source</li>
-    <li><a
-        href="https://bluewallet.github.io/VerifySignature?a=&m=&s="
-        id="blue-wallet-link"
-      >bluewallet's VerifySignature</a> Open Source! See their <a
-        href="https://npmgraph.js.org/?q=bitcoinjs-message">dependnecy tree</a>.</li>
+    <!-- Verification Dialog -->
+    <dialog id="verify-dialog">
+      <article>
+        <header>
+          <h3>Verify Bitcoin Message Signature</h3>
+          <button
+            type="button"
+            aria-label="Close"
+            rel="prev"
+            onclick="closeVerifyDialog()"
+          ></button>
+        </header>
 
-  </ul>
+        <form
+          method="get"
+          id="verifyForm"
+        >
+          <label for="address">
+            Bitcoin Address:
+            <input
+              type="text"
+              id="address"
+              name="address"
+              required
+              placeholder="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+            >
+          </label>
 
-  <script type="module" src="./index.js"></script>
+          <label for="message">
+            Message:
+            <textarea
+              id="message"
+              name="message"
+              required
+              placeholder="Enter the message that was signed..."
+              rows="4"
+            ></textarea>
+
+            https://opentimestamps.org/ or the top bitcoin blockchain hash
+          </label>
+
+          <label for="signature">
+            Signature:
+            <input
+              type="text"
+              id="signature"
+              name="signature"
+              required
+              placeholder="Base64 encoded signature"
+            >
+          </label>
+
+          <label
+            id="hex-checkbox-container"
+            style="display: none;"
+          >
+            <input
+              type="checkbox"
+              id="isHex"
+              name="isHex"
+            >
+            Message is hex-encoded binary data
+          </label>
+        </form>
+
+        <footer>
+          <button
+            type="submit"
+            form="verifyForm"
+            class="primary"
+          >Verify</button>
+        </footer>
+      </article>
+    </dialog>
+
+    <!-- Educational Content -->
+    <div class="education">
+      <h2>🎓 What Does a Digital Signature Prove?</h2>
+
+      <p>A Bitcoin message signature cryptographically proves three important things:</p>
+
+      <ul>
+        <li><strong>Authentication:</strong> The message was signed by someone who controls the private key associated
+          with the Bitcoin address</li>
+        <li><strong>Integrity:</strong> The message has not been altered since it was signed</li>
+        <li><strong>Non-repudiation:</strong> The signer cannot deny having signed the message</li>
+      </ul>
+
+      <p>This verification process uses <a
+          href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm"
+          target="_blank"
+          rel="noopener noreferrer"
+        >elliptic curve cryptography</a>
+        and the same mathematical principles that secure the Bitcoin network itself.</p>
+
+      <details>
+        <summary>🔬 Technical Details</summary>
+        <p>This implementation uses:</p>
+        <ul>
+          <li><strong>secp256k1</strong> elliptic curve (same as Bitcoin)</li>
+          <li><strong>RIPEMD-160</strong> and <strong>SHA-256</strong> hash functions</li>
+          <li><strong>ECDSA signature recovery</strong> to derive the public key</li>
+          <li><strong>Base58Check encoding</strong> for Bitcoin addresses</li>
+        </ul>
+        <p>All cryptographic functions are implemented in pure TypeScript without
+          <a href="https://github.com/mothepro/verify-bitcoin-message">external dependencies</a>.
+          Learn more about <a
+            href="https://en.wikipedia.org/wiki/Public-key_cryptography"
+            target="_blank"
+            rel="noopener noreferrer"
+          >public-key cryptography</a>
+          and <a
+            href="https://en.wikipedia.org/wiki/Digital_signature"
+            target="_blank"
+            rel="noopener noreferrer"
+          >digital signatures</a> on Wikipedia.
+        </p>
+      </details>
+    </div>
+
+    <div class="alternatives">
+      <p><strong>🔍 Audit the Code:</strong> This is <a href="https://github.com/mothepro/verify-bitcoin-message">open
+          source</a>
+        and runs entirely in your browser without <a href="https://github.com/mothepro/verify-bitcoin-message">external
+          dependencies</a>.</p>
+
+      <details>
+        <summary>Alternative Verifiers</summary>
+        <ul>
+          <li><a
+              href="https://www.bitcoin.com/tools/verify-message/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Bitcoin.com</a> (Closed Source)</li>
+          <li><a
+              href="https://www.verifybitcoinmessage.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Verify Bitcoin Message</a> (Closed Source)</li>
+          <li><a
+              href="https://bluewallet.github.io/VerifySignature?a=&m=&s="
+              id="blue-wallet-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >BlueWallet's VerifySignature</a> (Open Source)</li>
+        </ul>
+      </details><a
+        href="valid-payloads.html"
+        role="button"
+        class="secondary"
+      >See other valid signatures</a>
+    </div>
+  </main>
+
+  <footer>
+    Donations: <a href="bitcoin:bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s">bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s</a>
+  </footer>
+
+  <script
+    type="module"
+    src="./index.js"
+  ></script>
 </body>
 
 </html>

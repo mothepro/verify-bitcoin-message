@@ -18,8 +18,8 @@
     "build:copy-css": "cp -R node_modules/@picocss/pico/css static",
     "prebuild:browser": "bun run build:valid-payloads && bun run build:copy-css",
     "build:browser": "bun build static/index.ts --outdir static",
-    "build:script": "bun build ./verify.ts --outdir .",
-    "build": "bun run build:script && bun run build:browser",
+    "build:verify": "bun build ./verify.ts --outdir .",
+    "build": "bun run build:verify && bun run build:browser",
     "postinstall": "bun test && bun run build"
   },
   "main": "verify.js",
