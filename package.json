@@ -5,19 +5,22 @@
     "verify-bitcoin-message": "./cli.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest",
-    "@types/yargs": "^17.0.33",
-    "yargs": "^18.0.0"
+    "@picocss/pico": "2.1.1",
+    "@types/bun": "1.1.23",
+    "@types/yargs": "17.0.33",
+    "yargs": "18.0.0"
   },
   "peerDependencies": {
-    "bun": "^1.2.22"
+    "bun": "1.2.22"
   },
   "scripts": {
     "build:valid-payloads": "bun run ./static/valid-payloads.ts > static/valid-payloads.html",
-    "prebuild:browser": "bun run build:valid-payloads",
+    "build:copy-css": "cp -R node_modules/@picocss/pico/css static",
+    "prebuild:browser": "bun run build:valid-payloads && bun run build:copy-css",
     "build:browser": "bun build static/index.ts --outdir static",
     "build:script": "bun build ./verify.ts --outdir .",
-    "build": "bun run build:script && bun run build:browser"
+    "build": "bun run build:script && bun run build:browser",
+    "postinstall": "bun test && bun run build"
   },
   "main": "verify.js",
   "module": "verify.js",

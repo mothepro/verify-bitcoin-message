@@ -16,6 +16,7 @@ lerna-debug.log*
 node_modules/
 *.js
 static/valid-payloads.html
+static/css
 
 # Finder (MacOS) folder config
 .DS_Store
