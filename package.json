@@ -6,20 +6,21 @@
   },
   "devDependencies": {
     "@picocss/pico": "2.1.1",
-    "@types/bun": "1.1.23",
     "@types/yargs": "17.0.33",
     "yargs": "18.0.0"
   },
   "peerDependencies": {
+    "@types/bun": "1.1.22",
     "bun": "1.2.22"
   },
   "scripts": {
     "build:valid-payloads": "bun run ./static/valid-payloads.ts > static/valid-payloads.html",
     "build:copy-css": "cp -R node_modules/@picocss/pico/css static",
-    "prebuild:browser": "bun run build:valid-payloads && bun run build:copy-css",
     "build:browser": "bun build static/index.ts --outdir static",
     "build:verify": "bun build ./verify.ts --outdir .",
     "build": "bun run build:verify && bun run build:browser",
+    "prebuild:browser": "bun run build:valid-payloads && bun run build:copy-css",
+    "prepublish": "bun test && bun run build:verify",
     "postinstall": "bun test && bun run build"
   },
   "main": "verify.js",

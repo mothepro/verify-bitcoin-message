@@ -14,8 +14,9 @@ A dependency-free Bitcoin message signature verifier that works in browsers with
 
 ### Offline
 
-Visit the [live page](https://mothepro.github.io/verify-bitcoin-message), then you can test offline mode in
-Chrome (webkit browsers) by opening Developer Tools (F12)
+First visit the page by [Serving Locally](#serve-locally) or using our [GitHub Pages demo](https://mothepro.github.io/verify-bitcoin-message).
+
+Then you can test offline mode in Chrome (webkit browsers) by opening Developer Tools (F12)
 
 - Network
 - Change "No Throttling" -> "Offline"

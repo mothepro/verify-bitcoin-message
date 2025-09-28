@@ -29,7 +29,10 @@ jobs:
           bun-version: latest
 
       - name: Run tests (No RPC node)
-        run: bun test tests/verify-safe.test.t
+        run: bun test tests/verify-safe.test.ts
+
+      - name: Install Dev Dependencies
+        run: bun install
 
       - name: Build for browser
         run: bun run build:browser
