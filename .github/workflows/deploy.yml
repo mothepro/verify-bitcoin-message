@@ -28,14 +28,8 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Run tests (No RPC node)
-        run: bun test tests/verify-safe.test.ts
-
       - name: Install Dev Dependencies
-        run: bun install --ignore-scripts
-
-      - name: Build for browser
-        run: bun run build:browser
+        run: bun install
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -43,7 +37,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # This specifies the directory with your built website files
           path: ./static
 
   deploy:

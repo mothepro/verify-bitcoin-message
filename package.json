@@ -10,8 +10,7 @@
     "yargs": "18.0.0"
   },
   "peerDependencies": {
-    "@types/bun": "1.1.22",
-    "bun": "1.2.22"
+    "@types/bun": "^1.1.22"
   },
   "scripts": {
     "build:valid-payloads": "bun run ./static/valid-payloads.ts > static/valid-payloads.html",
@@ -21,7 +20,8 @@
     "build": "bun run build:verify && bun run build:browser",
     "prebuild:browser": "bun run build:valid-payloads && bun run build:copy-css",
     "prepublish": "bun test && bun run build:verify",
-    "postinstall": "bun test && bun run build"
+    "postinstall": "bun test:no-rpc && bun run build",
+    "test:no-rpc": "bun test tests/verify-safe.test.ts"
   },
   "main": "verify.js",
   "module": "verify.js",
