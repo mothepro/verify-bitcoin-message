@@ -24,6 +24,13 @@
       margin: 1rem 0;
     }
 
+    pre {
+      border: 1px solid #c3e6cb;
+      border-radius: var(--pico-border-radius);
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
     .hero {
       text-align: center;
       padding: 2rem 0;
@@ -148,11 +155,9 @@
         class="signature-info"
         style="border-color: var(--pico-del-color); background: var(--pico-del-background-color);"
       >
-        <h2>❌ Verification Failed</h2>
-        <p>The signature could not be verified for the provided message and address.</p>
         <details>
-          <summary>Reason for Failure</summary>
-          <p id="error-reason"></p>
+          <summary><h2>❌ Verification Failed</h2></summary>
+          <p id="error-reason">The signature could not be verified for the provided message and address.</p>
         </details>
       </div>
 
@@ -199,54 +204,36 @@
     <!-- Verification Dialog -->
     <dialog id="verify-dialog">
       <article>
-        <header>
-          <h3>Verify Bitcoin Message Signature</h3>
-          <button
-            type="button"
-            aria-label="Close"
-            rel="prev"
-            onclick="closeVerifyDialog()"
-          ></button>
-        </header>
-
         <form
           method="get"
           id="verifyForm"
         >
-          <label for="address">
-            Bitcoin Address:
-            <input
-              type="text"
-              id="address"
-              name="address"
-              required
-              placeholder="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
-            >
-          </label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            required
+            placeholder="Bitcoin Address"
+          />
+          <textarea
+            id="message"
+            name="message"
+            required
+            placeholder="Message
 
-          <label for="message">
-            Message:
-            <textarea
-              id="message"
-              name="message"
-              required
-              placeholder="Enter the message that was signed..."
-              rows="4"
-            ></textarea>
-
-            https://opentimestamps.org/ or the top bitcoin blockchain hash
-          </label>
-
-          <label for="signature">
-            Signature:
-            <input
-              type="text"
-              id="signature"
-              name="signature"
-              required
-              placeholder="Base64 encoded signature"
-            >
-          </label>
+              It's a good idea to include on of these
+              - a timestamp
+              - opentimestamps.org
+              - the top bitcoin blockchain hash"
+            rows="5"
+          ></textarea>
+          <input
+            type="text"
+            id="signature"
+            name="signature"
+            required
+            placeholder="Signature (Base64 encoded)"
+          />
 
           <label
             id="hex-checkbox-container"
@@ -262,6 +249,13 @@
         </form>
 
         <footer>
+          <button
+            type="button"
+            aria-label="Close"
+            rel="prev"
+            class="secondary"
+            onclick="closeVerifyDialog()"
+          ></button>
           <button
             type="submit"
             form="verifyForm"
@@ -304,6 +298,7 @@
           <a
             href="https://npmgraph.js.org/?q=verify-bitcoin-message"
             target="_blank"
+            rel="noopener noreferrer"
           >external dependencies</a>.
           Learn more about <a
             href="https://en.wikipedia.org/wiki/Public-key_cryptography"
@@ -346,13 +341,23 @@
             >BlueWallet's VerifySignature</a> (Open Source, <a
               href="https://npmgraph.js.org/?q=bitcoinjs-message"
               target="_blank"
+              rel="noopener noreferrer"
             >dependency graph</a>)</li>
         </ul>
-      </details><a
+      </details>
+      <a
         href="valid-payloads.html"
         role="button"
         class="secondary"
       >See other valid signatures</a>
+
+      <details>
+        <summary><a
+            role="button"
+            class="secondary"
+          >View JSON</a></summary>
+        <pre id="json-stringify"></pre>
+      </details>
     </div>
   </main>
 

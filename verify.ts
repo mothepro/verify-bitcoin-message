@@ -7,8 +7,10 @@
 
 export * as rpc from './rpc'
 
+type StringOrBytes = string | Uint8Array
+
 export interface Payload {
-  message: string | Uint8Array
+  message: StringOrBytes
   address: string
   signature: string
 }
@@ -22,7 +24,6 @@ export function assert(condition: unknown, error: unknown = 'Assertion failed'):
 }
 
 export default async function verify({ message, address, signature }: Payload) {
-  // Decode the signature from base64
   const sigBytes = base64ToBytes(signature)
   assert(sigBytes.length === 65, `Invalid signature length: ${sigBytes.length}, expected 65`)
 
@@ -34,8 +35,8 @@ export default async function verify({ message, address, signature }: Payload) {
   // Extract signature data (skip recovery flag)
   const signatureData = sigBytes.slice(1)
 
-  // Create message hash using Bitcoin's message signing format
-  const messageHash = await createMessageHash(typeof message === 'string' ? encoder.encode(message) : message)
+  const messageBytes = typeof message === 'string' ? encoder.encode(message) : message
+  const messageHash = await createMessageHash(messageBytes)
 
   // Try all recovery IDs and both compressed/uncompressed formats
   for (let testRecoveryId = 0; testRecoveryId < 4; testRecoveryId++) {
@@ -62,15 +63,22 @@ export async function verifySafe(params: Payload, log = true) {
   }
 }
 
-export function strToMessage(message: string, isHex = false) {
-  if (isHex) {
-    assert(message.length % 2 === 0, 'Hex string must have even length')
-    const bytes = new Uint8Array(message.length / 2)
-    for (let i = message.startsWith('0x') ? 2 : 0; i < message.length; i++)
-      bytes[i] = parseInt(message.substring(i * 2, i * 2 + 2), 16)
-    return bytes
+export function parsePayload({ address, message, signature }: Payload) {
+  let bytes = message as Uint8Array
+  let utf8 = message as string
+
+  if (typeof message === 'string') {
+    if (utf8.startsWith('0x')) {
+      bytes = new Uint8Array(utf8.length / 2 - 1)
+      for (let i = 0; i < bytes.byteLength; i++)
+        bytes[i] = parseInt(utf8.substring(2 + i * 2, 4 + i * 2), 16)
+    } else bytes = encoder.encode(utf8)
+  } else if (message instanceof Uint8Array) {
+    utf8 = bytesToHex(bytes, ' ').toUpperCase()
+    // new TextDecoder().decode(bytes)
   }
-  return message
+
+  return { address, signature, message: { bytes, utf8 } }
 }
 
 // Pure TypeScript RIPEMD160 implementation following RFC 1320
@@ -88,8 +96,8 @@ async function doubleSha256(data: ArrayBuffer): Promise<ArrayBuffer> {
 }
 
 // Convert bytes to hex string
-function bytesToHex(bytes: Uint8Array): string {
-  return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('')
+export function bytesToHex(bytes: Uint8Array, delimiter = ''): string {
+  return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join(delimiter)
 }
 
 // RIPEMD-160 hash function - pure TypeScript implementation

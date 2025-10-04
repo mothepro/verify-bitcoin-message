@@ -3,23 +3,10 @@
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import validPayloads from './tests/valid-payloads.json'
-import verify, { assert, strToMessage, type Payload } from './verify.ts'
-
-const randomPayload = validPayloads[Math.floor(Math.random() * validPayloads.length)]
-const anotherRandomPayload = validPayloads[Math.floor(Math.random() * validPayloads.length)]
-const payloadToArgs = ({ address, message, signature }: Payload, full: boolean) =>
-  [
-    full ? '--address ' : '-a',
-    address,
-    full ? '--message' : '-m',
-    `"${message}"`,
-    full ? '--signature' : '-s',
-    `"${signature}"`,
-  ].join(' ')
+import verify, { assert, parsePayload } from './verify.ts'
 
 const cli = yargs(hideBin(process.argv))
   .scriptName('verify-bitcoin-message')
-  .usage('$0 <command> [options]')
   .option('address', {
     alias: 'a',
     describe: 'Bitcoin address that signed the message',
@@ -48,7 +35,7 @@ const cli = yargs(hideBin(process.argv))
     alias: 'h',
     describe: 'Interpret message as hex-encoded binary string',
     type: 'boolean',
-    default: false,
+    default: undefined,
   })
   .option('verbose', {
     alias: 'v',
@@ -56,54 +43,77 @@ const cli = yargs(hideBin(process.argv))
     type: 'boolean',
     default: false,
   })
-  .example(`$0 ${payloadToArgs(randomPayload, false)}`, 'Verify a valid Bitcoin message signature')
-  .example(
-    `$0 --json ${payloadToArgs(anotherRandomPayload, true)}`,
-    'Verification with JSON output'
-  )
   .help()
   .alias('help', 'h')
   .version()
   .alias('version', 'V')
   .strict()
 
-let valid = false
-let duration = 0
-let error: string | undefined
-const { address, message: messageStr, signature, json, verbose, hex } = await cli.parse()
-const message = strToMessage(messageStr, hex)
+const randomPayload = validPayloads[Math.floor(Math.random() * validPayloads.length)]
+cli.example(
+  [
+    '$0',
+    '--address',
+    randomPayload.address,
+    '--message',
+    `"${randomPayload.message}"`,
+    '--signature',
+    `"${randomPayload.signature}"`,
+  ].join(' '),
+  'Verify a valid Bitcoin message signature'
+)
 
-if (verbose) {
-  console.debug('Verifying Bitcoin message signature...')
-  console.debug(`Address: ${address}`)
-  console.debug(`Message: ${messageStr}`)
-  console.debug(`Signature: ${signature}`)
-  console.debug()
-}
+const anotherRandomPayload = validPayloads[Math.floor(Math.random() * validPayloads.length)]
+cli.example(
+  [
+    '$0',
+    '--json',
+    '-a',
+    anotherRandomPayload.address,
+    '-m',
+    `"${anotherRandomPayload.message}"`,
+    '-s',
+    `"${anotherRandomPayload.signature}"`,
+  ].join(' '),
+  'Verification with JSON output'
+)
+
+let valid = false
+let error: string | undefined
+const { json, verbose, hex, ...payload } = await cli.parse()
+const { address, signature, message: { bytes, utf8 } } = parsePayload(payload)
+
+if (verbose)
+  console.debug('Verifying Bitcoin message signature...', {
+    address,
+    signature,
+    message: utf8,
+  })
+
+const startTime = performance.now() ?? Date.now()
 
 try {
-  const startTime = performance.now() ?? Date.now()
-  valid = await verify({ address, message, signature })
-  const endTime = performance.now() ?? Date.now()
-  duration = endTime - startTime
+  valid = await verify({ address, message: bytes, signature })
   assert(valid, '❌ Signature is invalid')
-  if (!json) {
-    if (verbose) console.debug(`Verification completed in ${duration}ms`)
-    console.log('✅ Signature is valid')
-  }
+  if (!json) console.log('✅ Signature is valid')
 } catch (e) {
-  valid = false
+  console.error(e)
   error = e instanceof Error ? e.message : String(e)
-  if (!json) console.error(e)
-} finally {
-  if (json)
-    console.log({
-      valid,
-      address,
-      message,
-      signature,
-      duration,
-      error,
-    })
-  process.exit(valid ? 0 : 1) // Exit with appropriate code
 }
+
+const endTime = performance.now() ?? Date.now()
+const durationMs = endTime - startTime
+if (verbose) console.debug(`Completed in ${durationMs.toFixed(2)}ms`)
+
+if (json)
+  console.log(JSON.stringify({
+    valid,
+    address,
+    message: utf8,
+    signature,
+    durationMs,
+    error,
+  }, null, 2))
+
+const exitCode = valid ? 0 : 1
+process.exit(exitCode)
