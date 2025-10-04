@@ -16,10 +16,10 @@
     "build:valid-payloads": "bun run ./static/valid-payloads.ts > static/valid-payloads.html",
     "build:copy-css": "cp -R node_modules/@picocss/pico/css static",
     "build:browser": "bun build static/index.ts --outdir static",
-    "build:verify": "bun build ./verify.ts --outdir .",
-    "build": "bun run build:verify && bun run build:browser",
+    "build:js": "bun build ./verify.ts --outdir . && bun build ./cli.ts --target=node --outdir . && bun build ./cli.ts --compile --outfile verify-bitcoin-message",
+    "build": "bun run build:js && bun run build:browser",
     "prebuild:browser": "bun run build:valid-payloads && bun run build:copy-css",
-    "prepublish": "bun test && bun run build:verify",
+    "prepublish": "bun test && bun run build:js",
     "postinstall": "bun test:no-rpc && bun run build",
     "test:no-rpc": "bun test tests/verify-safe.test.ts"
   },
