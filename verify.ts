@@ -79,14 +79,14 @@ export function parsePayload({ address, message, signature }: Payload) {
     // new TextDecoder().decode(bytes)
   }
 
-  return { address, signature, message: { bytes, utf8, isHexStr: !!hex } }
+  return { address, signature, message: { bytes, utf8, hex } }
 }
 
 function toHexString(str: string) {
   try {
     assert(str.startsWith('0x'), 'Must start with 0x')
     assert(str.length % 2 === 0, 'Must be even length')
-    assert(/^0x[0-9a-fA-F]+$/.test(str), 'Must be hex characters only')
+    assert(/^0x[a-f\d\s]+$/i.test(str), 'Must be hex characters only')
     return str.substring(2)
   } catch { }
 }

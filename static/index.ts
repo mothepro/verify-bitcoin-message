@@ -13,7 +13,6 @@ const addressInput = document.getElementById('address') as HTMLInputElement
 const messageInput = document.getElementById('message') as HTMLTextAreaElement
 const signatureInput = document.getElementById('signature') as HTMLInputElement
 const blueWalletLink = document.getElementById('blue-wallet-link') as HTMLAnchorElement
-const isHexInput = document.getElementById('isHex') as HTMLInputElement
 const jsonStringifyPre = document.getElementById('json-stringify') as HTMLPreElement
 const validPayloadsList = document.getElementById('valid-payloads') as HTMLOListElement
 
@@ -24,34 +23,17 @@ const params = new URLSearchParams(location.search)
 addressInput.value = params.get('address')?.trim() ?? ''
 messageInput.value = params.get('message')?.trim() ?? ''
 signatureInput.value = params.get('signature')?.trim() ?? ''
-switch (params.get('isHex')?.trim()) {
-  case '':
-  case 'yes':
-  case 'on':
-  case 'true':
-    isHexInput.checked = true
-    break
-
-  case 'no':
-  case 'off':
-  case 'false':
-    isHexInput.checked = false
-    break
-}
 
 if (signatureInput.value) verifySignature()
 
 heroDiv.classList.remove('hidden')
 async function verifySignature() {
-  let messageParam = messageInput.value.trim()
-  if (isHexInput.checked && !messageParam.startsWith('0x')) messageParam = '0x' + messageParam
-
   const {
     address,
     signature,
-    message: { bytes, utf8, isHexStr },
+    message: { bytes, utf8, hex },
   } = parsePayload({
-    message: messageParam,
+    message: messageInput.value.trim(),
     address: addressInput.value.trim(),
     signature: signatureInput.value.trim(),
   })
@@ -89,7 +71,7 @@ async function verifySignature() {
     url.searchParams.set('address', address)
     url.searchParams.set('message', utf8)
     url.searchParams.set('signature', signature)
-    if (isHexStr) url.searchParams.set('isHex', 'on')
+    if (hex) url.searchParams.set('isHex', 'on')
 
     history.pushState('', '@mothepro', url.toString())
   }
