@@ -29,6 +29,7 @@
       border-radius: var(--pico-border-radius);
       padding: 1rem;
       margin: 1rem 0;
+      white-space: break-spaces;
     }
 
     .hero {
@@ -92,6 +93,14 @@
       margin-top: 2rem;
       font-size: 0.9rem;
       color: var(--pico-muted-color);
+    }
+
+    #valid-payloads a {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
   </style>
 </head>
@@ -209,25 +218,25 @@
           id="verifyForm"
         >
           <input
+          required
             type="text"
             id="address"
             name="address"
-            required
             placeholder="Bitcoin Address"
           />
           <textarea
+          required
             id="message"
             name="message"
-            required
+            rows="7"
             placeholder="Message
 
-              It's a good idea to include on of these
-              - a timestamp
-              - opentimestamps.org
-              - the top bitcoin blockchain hash
+It's a good idea to include on of these
+- a timestamp
+- opentimestamps.org
+- the top bitcoin blockchain hash
 
-            a 0x prefix for binary strings."
-            rows="5"
+Prefix hex strings with '0x'"
           ></textarea>
           <input
             type="text"
@@ -347,17 +356,21 @@
             >dependency graph</a>)</li>
         </ul>
       </details>
-      <a
-        href="valid-payloads.html"
-        role="button"
-        class="secondary"
-      >See other valid signatures</a>
-
       <details>
-        <summary><a
-            role="button"
-            class="secondary"
-          >View JSON</a></summary>
+        <summary
+          role="button"
+          class="secondary"
+        >
+          Verified Messages
+        </summary>
+        <ol id="valid-payloads"></ol>
+      </details>
+      <details>
+        <summary
+          role="button"
+          class="secondary"
+        >
+          View JSON</summary>
         <pre id="json-stringify"></pre>
       </details>
     </div>

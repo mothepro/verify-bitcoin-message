@@ -1,3 +1,4 @@
+import validPayloads from '../tests/valid-payloads.json'
 import verify, { assert, parsePayload } from '../verify'
 
 const form = document.getElementById('verifyForm') as HTMLFormElement
@@ -14,6 +15,7 @@ const signatureInput = document.getElementById('signature') as HTMLInputElement
 const blueWalletLink = document.getElementById('blue-wallet-link') as HTMLAnchorElement
 const isHexInput = document.getElementById('isHex') as HTMLInputElement
 const jsonStringifyPre = document.getElementById('json-stringify') as HTMLPreElement
+const validPayloadsList = document.getElementById('valid-payloads') as HTMLOListElement
 
 form.addEventListener('submit', handleSubmit)
 
@@ -73,7 +75,7 @@ async function verifySignature() {
   } finally {
     verifyDialog.close()
     heroDiv.classList.add('hidden')
-    jsonStringifyPre.textContent = JSON.stringify({ address, message: utf8, signature }, null, 2)
+    jsonStringifyPre.textContent = JSON.stringify({ address, signature, message: utf8 }, null, 2)
 
     // Update BlueWallet link
     const blueUrl = new URL(blueWalletLink.href)
@@ -100,15 +102,21 @@ function handleSubmit(e: SubmitEvent) {
   verifySignature()
   return false
 }
+for (const { address, message, signature } of validPayloads) {
+  const url = new URL(location.href)
+  url.searchParams.set('address', address)
+  url.searchParams.set('message', message)
+  url.searchParams.set('signature', signature)
 
-function payloadFromHtml() {
-  const address = addressInput.value.trim()
-  const signature = signatureInput.value.trim()
-  let message = messageInput.value.trim()
+  const anchor = document.createElement('a')
+  anchor.textContent = message
+  anchor.target = '_blank'
+  anchor.rel = 'noopener noreferrer'
+  anchor.href = url.toString()
 
-  if (isHexInput.checked && !message.startsWith('0x')) message = '0x' + message
-
-  return parsePayload({ address, message, signature })
+  const li = document.createElement('li')
+  li.appendChild(anchor)
+  validPayloadsList.appendChild(li)
 }
 
 globalThis.openVerifyDialog = () => verifyDialog.showModal()

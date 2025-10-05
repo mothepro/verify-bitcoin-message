@@ -36,8 +36,11 @@ Then you can test offline mode in Chrome (webkit browsers) by opening Developer 
 
    ```bash
    bun run build:browser
-   python -m http.server 8000 static # Any "server" is fine. Since it requires ES modules and Web Crypto API support
+   python -m http.server 8000 static # Any "server" is fine, doesn't have to be python
    ```
+
+   Unfortunately, opening the html file directly from the file system will not work.
+   The browser's [built-in `crypto` libraries](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto) are [not available](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts) when running from the file system.
 
 ### CDN
 
@@ -59,35 +62,24 @@ npx verify-bitcoin-message --json \
 ### Programmatic Use
 
 ```bash
-bun add verify-bitcoin-message
-```
-
-OR
-
-```bash
-npm install verify-bitcoin-message
+bun add verify-bitcoin-message # OR npm install verify-bitcoin-message
 ```
 
 ```typescript
-import verify from 'verify-bitcoin-message';
+import verify, { verifySafe } from 'verify-bitcoin-message';
 
-const isValid = await verify({
+await verify({
   address: '1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV',
   message: 'This is an example of a signed message.',
   signature: 'H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk='
-});
-```
+})
 
-Or, if you're not a fan of throwing errors:
-
-```typescript
-import { verifySafe } from 'verify-bitcoin-message';
-
+// If you're not a fan of throwing errors:
 const isValid = await verifySafe({
   address: '1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV',
   message: 'This is an example of a signed message.',
   signature: 'H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk='
-});
+})
 ```
 
 ## Deployment
@@ -114,12 +106,12 @@ All cryptographic functions are implemented from publicly available specificatio
 
 ### Up Next
 
+- [ ] My idea to prevent fake screenshots
 - [ ] better error messages
 - [ ] better ui (i.e. the signed page should look nice and doesn't need to be a form)
 - [ ] more support for address types
 - [ ] explainer what this is, how, and why (why cold storage >>> exchanges)
 - [ ] service worker?
-- [ ] move this to readme
 
 ### Alternatives
 

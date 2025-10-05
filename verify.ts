@@ -66,20 +66,29 @@ export async function verifySafe(params: Payload, log = true) {
 export function parsePayload({ address, message, signature }: Payload) {
   let bytes = message as Uint8Array
   let utf8 = String(message)
-  let isHexStr = utf8.startsWith('0x')
+  let hex = toHexString(utf8)
 
   if (typeof message === 'string') {
-    if (isHexStr) {
-      bytes = new Uint8Array(utf8.length / 2 - 1)
+    if (hex) {
+      bytes = new Uint8Array(hex.length / 2)
       for (let i = 0; i < bytes.byteLength; i++)
-        bytes[i] = parseInt(utf8.substring(2 + i * 2, 4 + i * 2), 16)
+        bytes[i] = parseInt(hex[i * 2] + hex[i * 2 + 1], 16)
     } else bytes = encoder.encode(utf8)
   } else if (message instanceof Uint8Array) {
     utf8 = bytesToHex(bytes, ' ').toUpperCase()
     // new TextDecoder().decode(bytes)
   }
 
-  return { address, signature, message: { bytes, utf8, isHexStr } }
+  return { address, signature, message: { bytes, utf8, isHexStr: !!hex } }
+}
+
+function toHexString(str: string) {
+  try {
+    assert(str.startsWith('0x'), 'Must start with 0x')
+    assert(str.length % 2 === 0, 'Must be even length')
+    assert(/^0x[0-9a-fA-F]+$/.test(str), 'Must be hex characters only')
+    return str.substring(2)
+  } catch { }
 }
 
 // Pure TypeScript RIPEMD160 implementation following RFC 1320
