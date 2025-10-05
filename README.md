@@ -1,6 +1,8 @@
 # Bitcoin Signature Verifier
 
-A dependency-free Bitcoin message signature verifier that works in browsers without requiring npm install.
+![dependency-free](https://img.shields.io/badge/dependencies-none-success)
+
+A dependency-free Bitcoin message signature verifier that works in browsers and as a lightweight CLI.
 
 ## Features
 

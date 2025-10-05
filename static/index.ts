@@ -15,8 +15,8 @@ const signatureInput = document.getElementById('signature') as HTMLInputElement
 const blueWalletLink = document.getElementById('blue-wallet-link') as HTMLAnchorElement
 const jsonStringifyPre = document.getElementById('json-stringify') as HTMLPreElement
 const validPayloadsList = document.getElementById('valid-payloads') as HTMLOListElement
+const jsonStringifyDetails = document.getElementById('json-stringify-details') as HTMLDetailsElement
 
-form.addEventListener('submit', handleSubmit)
 
 // Set URL params to the UI Elements
 const params = new URLSearchParams(location.search)
@@ -24,20 +24,46 @@ addressInput.value = params.get('address')?.trim() ?? ''
 messageInput.value = params.get('message')?.trim() ?? ''
 signatureInput.value = params.get('signature')?.trim() ?? ''
 
-if (signatureInput.value) verifySignature()
+// Add valid payloads to the list
+for (const { address, message, signature } of validPayloads) {
+  const url = new URL(location.href)
+  url.searchParams.set('address', address)
+  url.searchParams.set('message', message)
+  url.searchParams.set('signature', signature)
 
-heroDiv.classList.remove('hidden')
+  const anchor = document.createElement('a')
+  anchor.textContent = message
+  // anchor.target = '_blank'
+  // anchor.rel = 'noopener noreferrer'
+  anchor.href = url.toString()
+
+  const li = document.createElement('li')
+  li.appendChild(anchor)
+  validPayloadsList.appendChild(li)
+}
+
+// Verify if we have a signature in the URL or whenever form is submitted
+if (signatureInput.value) verifySignature()
+form.addEventListener('submit', (e) => {
+  e.preventDefault()
+  return verifySignature()
+})
+
 async function verifySignature() {
+  const data = new FormData(form)
+  const payload = {
+    message: String(data.get('message')).trim(),
+    address: String(data.get('address')).trim(),
+    signature: String(data.get('signature')).trim(),
+  }
   const {
     address,
     signature,
     message: { bytes, utf8, hex },
-  } = parsePayload({
-    message: messageInput.value.trim(),
-    address: addressInput.value.trim(),
-    signature: signatureInput.value.trim(),
-  })
+  } = parsePayload(payload)
 
+  heroDiv.classList.add('hidden')
+  jsonStringifyDetails.classList.remove('hidden')
   verifiedDisplay.classList.add('hidden')
   errorDisplay.classList.add('hidden')
 
@@ -49,14 +75,11 @@ async function verifySignature() {
     verifiedAddressLink.href = `https://mempool.space/address/${address}`
     verifiedMessageContent.textContent = utf8
     verifiedDisplay.classList.remove('hidden')
-    errorDisplay.classList.add('hidden')
   } catch (error: unknown) {
     errorReason.textContent = error instanceof Error ? error.message : String(error)
-    verifiedDisplay.classList.add('hidden')
     errorDisplay.classList.remove('hidden')
   } finally {
     verifyDialog.close()
-    heroDiv.classList.add('hidden')
     jsonStringifyPre.textContent = JSON.stringify({ address, signature, message: utf8 }, null, 2)
 
     // Update BlueWallet link
@@ -75,36 +98,4 @@ async function verifySignature() {
 
     history.pushState('', '@mothepro', url.toString())
   }
-}
-
-/// These are the functions that update the UI
-
-function handleSubmit(e: SubmitEvent) {
-  e.preventDefault()
-  verifySignature()
-  return false
-}
-for (const { address, message, signature } of validPayloads) {
-  const url = new URL(location.href)
-  url.searchParams.set('address', address)
-  url.searchParams.set('message', message)
-  url.searchParams.set('signature', signature)
-
-  const anchor = document.createElement('a')
-  anchor.textContent = message
-  anchor.target = '_blank'
-  anchor.rel = 'noopener noreferrer'
-  anchor.href = url.toString()
-
-  const li = document.createElement('li')
-  li.appendChild(anchor)
-  validPayloadsList.appendChild(li)
-}
-
-globalThis.openVerifyDialog = () => verifyDialog.showModal()
-globalThis.closeVerifyDialog = () => verifyDialog.close()
-declare global {
-  // for onclick handlers
-  function openVerifyDialog(): void
-  function closeVerifyDialog(): void
 }

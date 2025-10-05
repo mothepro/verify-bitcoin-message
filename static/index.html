@@ -10,7 +10,7 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   >
-  <title>Bitcoin Message Signature Verifier</title>
+  <title>Mo's Message Verifier</title>
   <link
     rel="stylesheet"
     href="./css/pico.min.css"
@@ -102,25 +102,50 @@
       text-overflow: ellipsis;
       max-width: 100%;
     }
+
+    .fork-me {
+      position: fixed;
+      right: 0;
+      top: 0;
+    }
+
+    #verify-dialog footer {
+      display: flex;
+    }
   </style>
 </head>
 
 <body>
   <main class="container">
-    <noscript>
-      Verification requires JavaScript. Please enable JavaScript in your browser.
-    </noscript>
+
+    <a
+      href="https://github.com/mothepro/verify-bitcoin-message"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="fork-me"
+    ><img
+        loading="lazy"
+        decoding="async"
+        width="149"
+        height="149"
+        src="https://github.blog/wp-content/uploads/2008/12/forkme_right_orange_ff7600.png"
+        class="attachment-full size-full"
+        alt="Fork me on GitHub"
+      ></a>
     <!-- Hero Section (shown when no message) -->
     <div
       id="hero"
       class="hero"
     >
-      <h1>🔐 Bitcoin Message Verifier</h1>
-      <p>Cryptographically verify messages signed with Bitcoin private keys</p>
+      <h1>Mo&apos;s Message Verifier</h1>
+      <p>Cryptographically verify messages signed by Bitcoin private keys</p>
+      <noscript>
+        Please enable JavaScript in your browser, cannot verify messages without it.
+      </noscript>
 
       <div class="actions">
         <button
-          onclick="openVerifyDialog()"
+          onclick="document.getElementById('verify-dialog').showModal()"
           class="primary"
         >Verify a Message</button>
       </div>
@@ -147,7 +172,7 @@
       <div class="actions">
         <button
           type="button"
-          onclick="openVerifyDialog()"
+          onclick="document.getElementById('verify-dialog').showModal()"
           class="secondary"
         >Verify Another Message</button>
       </div>
@@ -204,7 +229,7 @@
       <div class="actions">
         <button
           type="button"
-          onclick="openVerifyDialog()"
+          onclick="document.getElementById('verify-dialog').showModal()"
           class="secondary"
         >Try Again</button>
       </div>
@@ -216,19 +241,20 @@
         <form
           method="get"
           id="verifyForm"
+          action=""
         >
           <input
-          required
+            required
             type="text"
             id="address"
             name="address"
             placeholder="Bitcoin Address"
           />
           <textarea
-          required
+            required
             id="message"
             name="message"
-            rows="7"
+            rows="9"
             placeholder="Message
 
 It's a good idea to include on of these
@@ -251,10 +277,9 @@ Prefix hex strings with '0x'"
           <button
             type="button"
             aria-label="Close"
-            rel="prev"
             class="secondary"
-            onclick="closeVerifyDialog()"
-          ></button>
+            onclick="document.getElementById('verify-dialog').close()"
+          >Cancel</button>
           <button
             type="submit"
             form="verifyForm"
@@ -314,35 +339,17 @@ Prefix hex strings with '0x'"
     </div>
 
     <div class="alternatives">
-      <p><strong>🔍 Audit the Code:</strong> This is <a href="https://github.com/mothepro/verify-bitcoin-message">open
-          source</a>
-        and runs entirely in your browser without <a href="https://npmgraph.js.org/?q=verify-bitcoin-message">external
-          dependencies</a>.</p>
 
-      <details>
-        <summary>Alternative Verifiers</summary>
-        <ul>
-          <li><a
-              href="https://www.bitcoin.com/tools/verify-message/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >Bitcoin.com</a> (Closed Source)</li>
-          <li><a
-              href="https://www.verifybitcoinmessage.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >Verify Bitcoin Message</a> (Closed Source)</li>
-          <li><a
-              href="https://bluewallet.github.io/VerifySignature?a=&m=&s="
-              id="blue-wallet-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >BlueWallet's VerifySignature</a> (Open Source, <a
-              href="https://npmgraph.js.org/?q=bitcoinjs-message"
-              target="_blank"
-              rel="noopener noreferrer"
-            >dependency graph</a>)</li>
-        </ul>
+      <details
+        class="hidden"
+        id="json-stringify-details"
+      >
+        <summary
+          role="button"
+          class="secondary"
+        >
+          JSON</summary>
+        <pre id="json-stringify"></pre>
       </details>
       <details>
         <summary
@@ -351,23 +358,110 @@ Prefix hex strings with '0x'"
         >
           Verified Messages
         </summary>
+        <p>
+          To publish your verified message here, make
+          <a
+            href="https://github.com/mothepro/verify-bitcoin-message/pulls"
+            target="_blank"
+            rel="noopener noreferrer"
+          >a pull request</a>
+          that updates <code>tests/valid-payloads.json</code>
+        </p>
+
+
         <ol id="valid-payloads"></ol>
       </details>
       <details>
         <summary
           role="button"
           class="secondary"
-        >
-          View JSON</summary>
-        <pre id="json-stringify"></pre>
+        >Alternative Message Verifiers</summary>
+        <ul>
+          <li>
+            <a
+              href="https://www.bitcoin.com/tools/verify-message/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Bitcoin.com</a>
+            <img
+              alt="Static Badge"
+              src="https://img.shields.io/badge/source-Closed-red"
+            >
+
+          </li>
+          <li>
+            <a
+              href="https://www.verifybitcoinmessage.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Verify Bitcoin Message</a>
+            <img
+              alt="Static Badge"
+              src="https://img.shields.io/badge/source-Closed-red"
+            >
+          </li>
+          <li>
+            <a
+              href="https://bluewallet.github.io/VerifySignature?a=&m=&s="
+              id="blue-wallet-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >BlueWallet's VerifySignature</a>
+            <img
+              alt="Static Badge"
+              src="https://img.shields.io/badge/source-Open-success"
+            >
+            <img
+              alt="Static Badge"
+              src="https://img.shields.io/badge/Internet_Required-No-success"
+            />
+            <a
+              href="https://npmgraph.js.org/?q=bitcoinjs-message"
+              target="_blank"
+              rel="noopener noreferrer"
+            ><img
+                alt="Static Badge"
+                src="https://img.shields.io/badge/dependencies-68-yellow"
+              ></a>
+          </li>
+        </ul>
+
+        <footer>
+          <p>
+            Mo's Message Verifier
+            <a href="https://github.com/mothepro/verify-bitcoin-message">
+              <img
+                alt="free and open source"
+                src="https://img.shields.io/badge/source-Open-success"
+              ></a>
+            <a
+              href="https://npmgraph.js.org/?q=verify-bitcoin-message"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                alt="External Dependencies"
+                src="https://img.shields.io/badge/dependencies-0-success"
+              ></a>
+            <img
+              alt="Offline First"
+              src="https://img.shields.io/badge/Internet_Required-No-success"
+            />
+            <img
+              alt="Bundle Size"
+              src="https://img.shields.io/badge/Bundle_Size-14.7kb-success"
+            />
+            <!-- TODO replace with a payload instead :) -->
+            <a href="bitcoin:bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s">
+              <img
+                alt="Donations to bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s"
+                src="https://img.shields.io/badge/Donations-bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s-blue"
+              ></a>
+          </p>
+        </footer>
       </details>
     </div>
   </main>
-
-  <footer>
-    Donations: <a
-      href="bitcoin:bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s">bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s</a>
-  </footer>
 
   <script
     type="module"

@@ -105,12 +105,15 @@ async function doubleSha256(data: ArrayBuffer): Promise<ArrayBuffer> {
   return sha256(data).then(sha256)
 }
 
-// Convert bytes to hex string
 export function bytesToHex(bytes: Uint8Array, delimiter = ''): string {
   return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join(delimiter)
 }
 
-// RIPEMD-160 hash function - pure TypeScript implementation
+/**
+ * 
+ * @param data 
+ * @returns 
+ */
 function ripemd160(data: Uint8Array): Uint8Array {
   // RIPEMD-160 constants
   const K_LEFT = [0x00000000, 0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xa953fd4e]
