@@ -16,7 +16,7 @@
     href="./css/pico.min.css"
   >
   <style>
-    .verified-message {
+    #verified-message-content {
       background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
       border: 1px solid #c3e6cb;
       border-radius: var(--pico-border-radius);
@@ -98,6 +98,9 @@
 
 <body>
   <main class="container">
+    <noscript>
+      Verification requires JavaScript. Please enable JavaScript in your browser.
+    </noscript>
     <!-- Hero Section (shown when no message) -->
     <div
       id="hero"
@@ -130,12 +133,7 @@
         </p>
       </div>
 
-      <div
-        id="verified-message-content"
-        class="verified-message"
-      >
-        <!-- Message content will be inserted here -->
-      </div>
+      <pre id="verified-message-content"></pre>
 
       <div class="actions">
         <button
@@ -156,7 +154,9 @@
         style="border-color: var(--pico-del-color); background: var(--pico-del-background-color);"
       >
         <details>
-          <summary><h2>❌ Verification Failed</h2></summary>
+          <summary>
+            <h2>❌ Verification Failed</h2>
+          </summary>
           <p id="error-reason">The signature could not be verified for the provided message and address.</p>
         </details>
       </div>
@@ -224,7 +224,9 @@
               It's a good idea to include on of these
               - a timestamp
               - opentimestamps.org
-              - the top bitcoin blockchain hash"
+              - the top bitcoin blockchain hash
+
+            a 0x prefix for binary strings."
             rows="5"
           ></textarea>
           <input

@@ -65,10 +65,11 @@ export async function verifySafe(params: Payload, log = true) {
 
 export function parsePayload({ address, message, signature }: Payload) {
   let bytes = message as Uint8Array
-  let utf8 = message as string
+  let utf8 = String(message)
+  let isHexStr = utf8.startsWith('0x')
 
   if (typeof message === 'string') {
-    if (utf8.startsWith('0x')) {
+    if (isHexStr) {
       bytes = new Uint8Array(utf8.length / 2 - 1)
       for (let i = 0; i < bytes.byteLength; i++)
         bytes[i] = parseInt(utf8.substring(2 + i * 2, 4 + i * 2), 16)
@@ -78,7 +79,7 @@ export function parsePayload({ address, message, signature }: Payload) {
     // new TextDecoder().decode(bytes)
   }
 
-  return { address, signature, message: { bytes, utf8 } }
+  return { address, signature, message: { bytes, utf8, isHexStr } }
 }
 
 // Pure TypeScript RIPEMD160 implementation following RFC 1320

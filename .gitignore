@@ -17,7 +17,7 @@ node_modules/
 .DS_Store
 
 # Generated files
-.exe
+*.exe
 *.js
 static/valid-payloads.html
 static/css
