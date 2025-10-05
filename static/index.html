@@ -103,12 +103,6 @@
       max-width: 100%;
     }
 
-    .fork-me {
-      position: fixed;
-      right: 0;
-      top: 0;
-    }
-
     #verify-dialog footer {
       display: flex;
     }
@@ -117,21 +111,6 @@
 
 <body>
   <main class="container">
-
-    <a
-      href="https://github.com/mothepro/verify-bitcoin-message"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="fork-me"
-    ><img
-        loading="lazy"
-        decoding="async"
-        width="149"
-        height="149"
-        src="https://github.blog/wp-content/uploads/2008/12/forkme_right_orange_ff7600.png"
-        class="attachment-full size-full"
-        alt="Fork me on GitHub"
-      ></a>
     <!-- Hero Section (shown when no message) -->
     <div
       id="hero"
@@ -339,18 +318,6 @@ Prefix hex strings with '0x'"
     </div>
 
     <div class="alternatives">
-
-      <details
-        class="hidden"
-        id="json-stringify-details"
-      >
-        <summary
-          role="button"
-          class="secondary"
-        >
-          JSON</summary>
-        <pre id="json-stringify"></pre>
-      </details>
       <details>
         <summary
           role="button"
@@ -375,6 +342,60 @@ Prefix hex strings with '0x'"
         <summary
           role="button"
           class="secondary"
+        >Source Code</summary>
+        <a
+          href="https://github.com/mothepro/verify-bitcoin-message"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            alt="free and open source"
+            src="https://img.shields.io/badge/source-open-success?style=for-the-badge"
+          ></a>
+        <a
+          href="https://npmgraph.js.org/?q=verify-bitcoin-message"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            alt="External Dependencies"
+            src="https://img.shields.io/badge/dependencies-0-success?style=for-the-badge"
+          ></a>
+        <a
+          href="https://github.com/mothepro/verify-bitcoin-message?tab=readme-ov-file#offline"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            alt="Offline First"
+            src="https://img.shields.io/badge/Internet_Required-No-success?style=for-the-badge"
+          /></a>
+        <img
+          alt="Bundle Size"
+          src="https://img.shields.io/badge/Bundle_Size-14.7kb-success?style=for-the-badge"
+        />
+        <!-- TODO replace with a payload instead :) -->
+        <a href="bitcoin:bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s">
+          <img
+            alt="Donations to bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s"
+            src="https://img.shields.io/badge/Donations-bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s-blue?style=for-the-badge"
+          ></a>
+      </details>
+      <details
+        class="hidden"
+        id="json-stringify-details"
+      >
+        <summary
+          role="button"
+          class="secondary"
+        >
+          JSON</summary>
+        <pre id="json-stringify"></pre>
+      </details>
+      <details>
+        <summary
+          role="button"
+          class="secondary"
         >Alternative Message Verifiers</summary>
         <ul>
           <li>
@@ -385,7 +406,7 @@ Prefix hex strings with '0x'"
             >Bitcoin.com</a>
             <img
               alt="Static Badge"
-              src="https://img.shields.io/badge/source-Closed-red"
+              src="https://img.shields.io/badge/source-closed-red"
             >
 
           </li>
@@ -397,7 +418,7 @@ Prefix hex strings with '0x'"
             >Verify Bitcoin Message</a>
             <img
               alt="Static Badge"
-              src="https://img.shields.io/badge/source-Closed-red"
+              src="https://img.shields.io/badge/source-closed-red"
             >
           </li>
           <li>
@@ -425,40 +446,6 @@ Prefix hex strings with '0x'"
               ></a>
           </li>
         </ul>
-
-        <footer>
-          <p>
-            Mo's Message Verifier
-            <a href="https://github.com/mothepro/verify-bitcoin-message">
-              <img
-                alt="free and open source"
-                src="https://img.shields.io/badge/source-Open-success"
-              ></a>
-            <a
-              href="https://npmgraph.js.org/?q=verify-bitcoin-message"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img
-                alt="External Dependencies"
-                src="https://img.shields.io/badge/dependencies-0-success"
-              ></a>
-            <img
-              alt="Offline First"
-              src="https://img.shields.io/badge/Internet_Required-No-success"
-            />
-            <img
-              alt="Bundle Size"
-              src="https://img.shields.io/badge/Bundle_Size-14.7kb-success"
-            />
-            <!-- TODO replace with a payload instead :) -->
-            <a href="bitcoin:bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s">
-              <img
-                alt="Donations to bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s"
-                src="https://img.shields.io/badge/Donations-bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s-blue"
-              ></a>
-          </p>
-        </footer>
       </details>
     </div>
   </main>
