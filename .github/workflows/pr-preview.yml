@@ -39,10 +39,6 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.issue.number,
               body: `
-            🤖 These are all the verified messages and their proofs.
+            Verified messages and their proofs for commit ${context.sha.substring(0, 7)}
 
-            ${{ steps.run_output.outputs.OUTPUT }}
-
-            *This output will be updated automatically when you push new commits to this PR.*
-            📝 **Commit**: \`${context.sha.substring(0, 7)}\`
-            🔄 **Updated**: ${new Date().toISOString()} UTC`})
+            ${{ steps.run_output.outputs.OUTPUT }}`})
