@@ -2,7 +2,7 @@
 
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import validPayloads from './tests/valid-payloads.json'
+import validPayloads from './payloads.json'
 import verify, { assert, parsePayload } from './verify.ts'
 
 const cli = yargs(hideBin(process.argv))
