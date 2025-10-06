@@ -63,8 +63,8 @@ async function verifySignature() {
 
   heroDiv.classList.add('hidden')
   jsonStringifyDetails.classList.remove('hidden')
-  verifiedDisplay.values().map(e => e.classList.add('hidden'))
-  errorDisplay.values().map(e => e.classList.add('hidden'))
+  verifiedDisplay.forEach(e => e.classList.add('hidden'))
+  errorDisplay.forEach(e => e.classList.add('hidden'))
 
   try {
     const isValid = await verify({ message: bytes, address, signature })
@@ -73,10 +73,10 @@ async function verifySignature() {
     verifiedAddressLink.textContent = address
     verifiedAddressLink.href = `https://mempool.space/address/${address}`
     verifiedMessageContent.textContent = utf8
-    verifiedDisplay.values().map(e => e.classList.remove('hidden'))
+    verifiedDisplay.forEach(e => e.classList.remove('hidden'))
   } catch (error: unknown) {
     errorReason.textContent = error instanceof Error ? error.message : String(error)
-    errorDisplay.values().map(e => e.classList.remove('hidden'))
+    errorDisplay.forEach(e => e.classList.remove('hidden'))
   } finally {
     verifyDialog.close()
     jsonStringifyPre.textContent = JSON.stringify({ address, signature, message: utf8 }, null, 2)

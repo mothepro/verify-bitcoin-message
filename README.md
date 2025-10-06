@@ -6,7 +6,7 @@ A dependency-free Bitcoin message signature verifier that works in browsers and 
 
 ## Publish
 
-1. [Add messages to `payloads.json`](/edit/main/payloads.json)
+1. [Add messages to `payloads.json`](https://mothepro.github.io/verify-bitcoin-message/edit/main/payloads.json)
 2. Open a pull request
 
 Github Actions will automatically verify the messages and comment the proof on the PR.

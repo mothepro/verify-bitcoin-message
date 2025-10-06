@@ -3,7 +3,9 @@ import payloads from '../../payloads.json'
 
 /** Generate GitHub Markdown comments for verified messages */
 
-const limit = 75
+// https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#about-secondary-rate-limits
+const limit = 75 // instead I should concat all the rest into the last comment
+
 const escapeMarkdown = (str: string) => str.replace(/[\\`*_{}[\]()#+-.!>]/g, '\\$&')
 
 for (const { address, message, signature } of payloads.slice(0, limit)) {
