@@ -27,7 +27,7 @@ jobs:
         # Save output to environment variable, handling multiline
         run: |
           echo "OUTPUT<<EOF" >> $GITHUB_OUTPUT
-          bun run generate-github-comments.ts  >> $GITHUB_OUTPUT
+          bun run .github\workflows\generate-github-comments.ts >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Comment PR with output
