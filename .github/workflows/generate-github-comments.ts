@@ -3,10 +3,9 @@ import payloads from '../../payloads.json'
 
 /** Generate GitHub Markdown comments for verified messages */
 
-const limit = 75
 const escapeMarkdown = (str: string) => str.replace(/[\\`*_{}[\]()#+-.!>]/g, '\\$&')
 
-for (const { address, message, signature } of payloads.slice(0, limit)) {
+for (const { address, message, signature } of payloads) {
   for (const line of message.split('\n')) console.log(`> ${escapeMarkdown(line)}`)
   console.log()
 
