@@ -38,12 +38,11 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: `🤖 These are all the verified messages and their proofs.
+              body: `
+            🤖 These are all the verified messages and their proofs.
 
-                ${{ steps.run_output.outputs.OUTPUT }}
+            ${{ steps.run_output.outputs.OUTPUT }}
 
-                *This output will be updated automatically when you push new commits to this PR.*
-                📝 **Commit**: \`${context.sha.substring(0, 7)}\`
-                🔄 **Updated**: ${new Date().toISOString()}
-                `
-            })
+            *This output will be updated automatically when you push new commits to this PR.*
+            📝 **Commit**: \`${context.sha.substring(0, 7)}\`
+            🔄 **Updated**: ${new Date().toISOString()} UTC`})
