@@ -6,6 +6,9 @@ import payloads from '../../payloads.json'
 const escapeMarkdown = (str: string) => str.replace(/[\\`*_{}[\]()#+-.!>]/g, '\\$&')
 
 for (const { address, message, signature } of payloads) {
+  console.log('---')
+  console.log()
+  
   for (const line of message.split('\n')) console.log(`> ${escapeMarkdown(line)}`)
   console.log()
 
@@ -14,8 +17,5 @@ for (const { address, message, signature } of payloads) {
   proof.searchParams.set('message', message)
   proof.searchParams.set('signature', signature)
   console.log(`[signed](${proof}) by [\\\`${address}\\\`](https://mempool.space/address/${address})`)
-  console.log()
-
-  console.log('---')
   console.log()
 }
