@@ -132,6 +132,7 @@ All cryptographic functions are implemented from publicly available specificatio
 - [ ] more support for address types
 - [ ] explainer what this is, how, and why (why cold storage >>> exchanges)
 - [ ] service worker?
+- [ ] allow invalid messages in prs?
 
 ### Alternatives
 
