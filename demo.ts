@@ -3,8 +3,8 @@ import verify, { assert, parsePayload } from './verify'
 
 const form = document.getElementById('verifyForm') as HTMLFormElement
 const heroDiv = document.getElementById('hero') as HTMLDivElement
-const verifiedDisplay = document.getElementById('verified-display') as HTMLDivElement
-const errorDisplay = document.getElementById('error-display') as HTMLDivElement
+const verifiedDisplay = document.querySelectorAll('.verified-display')
+const errorDisplay = document.querySelectorAll('.error-display')
 const errorReason = document.getElementById('error-reason') as HTMLDivElement
 const verifiedAddressLink = document.getElementById('verified-address-link') as HTMLAnchorElement
 const verifiedMessageContent = document.getElementById('verified-message-content') as HTMLPreElement
@@ -16,7 +16,6 @@ const blueWalletLink = document.getElementById('blue-wallet-link') as HTMLAnchor
 const jsonStringifyPre = document.getElementById('json-stringify') as HTMLPreElement
 const validPayloadsList = document.getElementById('valid-payloads') as HTMLOListElement
 const jsonStringifyDetails = document.getElementById('json-stringify-details') as HTMLDetailsElement
-
 
 // Set URL params to the UI Elements
 const params = new URLSearchParams(location.search)
@@ -44,7 +43,7 @@ for (const { address, message, signature } of validPayloads) {
 
 // Verify if we have a signature in the URL or whenever form is submitted
 if (signatureInput.value) verifySignature()
-form.addEventListener('submit', (e) => {
+form.addEventListener('submit', e => {
   e.preventDefault()
   return verifySignature()
 })
@@ -64,8 +63,8 @@ async function verifySignature() {
 
   heroDiv.classList.add('hidden')
   jsonStringifyDetails.classList.remove('hidden')
-  verifiedDisplay.classList.add('hidden')
-  errorDisplay.classList.add('hidden')
+  verifiedDisplay.values().map(e => e.classList.add('hidden'))
+  errorDisplay.values().map(e => e.classList.add('hidden'))
 
   try {
     const isValid = await verify({ message: bytes, address, signature })
@@ -74,10 +73,10 @@ async function verifySignature() {
     verifiedAddressLink.textContent = address
     verifiedAddressLink.href = `https://mempool.space/address/${address}`
     verifiedMessageContent.textContent = utf8
-    verifiedDisplay.classList.remove('hidden')
+    verifiedDisplay.values().map(e => e.classList.remove('hidden'))
   } catch (error: unknown) {
     errorReason.textContent = error instanceof Error ? error.message : String(error)
-    errorDisplay.classList.remove('hidden')
+    errorDisplay.values().map(e => e.classList.remove('hidden'))
   } finally {
     verifyDialog.close()
     jsonStringifyPre.textContent = JSON.stringify({ address, signature, message: utf8 }, null, 2)

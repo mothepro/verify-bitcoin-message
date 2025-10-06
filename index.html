@@ -56,6 +56,11 @@
       margin: 1rem 0;
     }
 
+    .failed {
+      border-color: var(--pico-del-color);
+      background: var(--pico-del-background-color);
+    }
+
     .address-link {
       color: var(--pico-primary-color);
       text-decoration: none;
@@ -162,10 +167,7 @@
       id="error-display"
       class="hidden"
     >
-      <div
-        class="signature-info"
-        style="border-color: var(--pico-del-color); background: var(--pico-del-background-color);"
-      >
+      <div class="signature-info failed">
         <details>
           <summary>
             <h2>❌ Verification Failed</h2>
@@ -176,6 +178,7 @@
 
       <div
         style="background: var(--pico-card-background-color); border: 1px solid var(--pico-card-border-color); border-radius: var(--pico-border-radius); padding: 1.5rem; margin: 1rem 0;"
+        class="hidden"
       >
         <h3>🔒 What This Proves</h3>
         <p><strong>This failed verification is actually a security feature!</strong> It proves that:</p>
@@ -283,29 +286,24 @@ Prefix hex strings with '0x'"
     </div>
 
     <div class="alternatives">
-      <details>
-        <summary
-          role="button"
-          class="secondary"
-        >
-          Published messages
+      <details class="hidden error-display">
+        <summary>
+          <h2>❌ Verification Failed</h2>
+        </summary>
+        <p id="error-reason">The signature could not be verified for the provided message and address.</p>
+      </details>
+      <a
+        href="https://github.com/mothepro/verify-bitcoin-message/pulls"
+        target="_blank"
+        rel="noopener noreferrer"
+        role="button"
+        class="secondary"
+      >Published messages</a>
+      <details class="hidden">
+        <summary>
+          Payloads
         </summary>
         <ol id="valid-payloads"></ol>
-        <p>
-          <a
-            href="https://github.com/mothepro/verify-bitcoin-message/pulls"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Messages published by others</a>
-        </p>
-        <p>
-          Publish any message by
-          <a
-            href="https://github.com/mothepro/verify-bitcoin-message/edit/main/payloads.json"
-            target="_blank"
-            rel="noopener noreferrer"
-          >adding them to <code>payloads.json</code></a>, then submitting a pull request.
-        </p>
       </details>
       <details>
         <summary

@@ -4,6 +4,13 @@
 
 A dependency-free Bitcoin message signature verifier that works in browsers and as a lightweight CLI.
 
+## Publish
+
+1. [Add messages to `payloads.json`](/edit/main/payloads.json)
+2. Open a pull request
+
+Github Actions will automatically verify the messages and comment the proof on the PR.
+
 ## Features
 
 - **Zero Dependencies**: Pure TypeScript implementation with no external dependencies
