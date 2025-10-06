@@ -19,8 +19,7 @@
     "build": "bun run build:js && bun run build:browser",
     "prebuild:browser": "bun run build:copy-css",
     "prepublish": "bun test && bun run build:js",
-    "postinstall": "bun test:no-rpc && bun run build",
-    "test:no-rpc": "bun test verify.test.ts"
+    "postinstall": "bun test verify.test.ts && bun run build"
   },
   "main": "verify.js",
   "module": "verify.js",
