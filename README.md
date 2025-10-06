@@ -95,23 +95,23 @@ This project uses GitHub Actions for automatic deployment:
 - **Built**: Runs `bun run build:browser` to create `verify.js`
 - **Complete**: Includes both source files and built JavaScript in deployment
 
-### PR Preview Deployments
+### PR Output Comments
 
-- **Automatic**: Creates preview deployments for every pull request
-- **Isolated**: Each PR gets its own preview URL at `https://[username].github.io/[repo]/preview/pr-[number]/`
-- **Updated**: Preview updates automatically when new commits are pushed to the PR
-- **Commented**: GitHub bot automatically comments on PRs with preview links
-- **Cleaned**: Preview deployments are automatically removed when PRs are closed
+- **Automatic**: Runs TypeScript code for every pull request
+- **Immediate**: Executes `bun run verify.ts` and captures all output
+- **Commented**: GitHub bot automatically comments on PRs with the complete output
+- **Updated**: Output comment updates automatically when new commits are pushed to the PR
+- **Transparent**: Shows both successful runs and error messages
 
-#### Preview System Features
+#### Output System Features
 
-- ✅ **Automatic builds** on PR open/update
-- 🔗 **Direct preview links** in PR comments
-- 🧪 **Full testing** before deployment
-- 🗑️ **Automatic cleanup** on PR close
+- ✅ **Automatic execution** on PR open/update
+- 📝 **Complete output capture** (stdout and stderr)
+- 🤖 **Bot comments** with formatted output
 - 🔄 **Live updates** with each commit
+- 🐛 **Error visibility** for debugging
 
-The workflow ensures that only tested, working code gets deployed to both production and preview environments.
+The workflow provides immediate feedback to contributors and reviewers by running the verification code and showing the results.
 
 ## Implementation Notes
 
