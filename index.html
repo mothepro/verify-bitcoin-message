@@ -280,41 +280,6 @@ Prefix hex strings with '0x'"
         <li><strong>Integrity:</strong> The message has not been altered since it was signed</li>
         <li><strong>Non-repudiation:</strong> The signer cannot deny having signed the message</li>
       </ul>
-
-      <p>This verification process uses <a
-          href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm"
-          target="_blank"
-          rel="noopener noreferrer"
-        >elliptic curve cryptography</a>
-        and the same mathematical principles that secure the Bitcoin network itself.</p>
-
-      <details>
-        <summary>🔬 Technical Details</summary>
-        <p>This implementation uses:</p>
-        <ul>
-          <li><strong>secp256k1</strong> elliptic curve (same as Bitcoin)</li>
-          <li><strong>RIPEMD-160</strong> and <strong>SHA-256</strong> hash functions</li>
-          <li><strong>ECDSA signature recovery</strong> to derive the public key</li>
-          <li><strong>Base58Check encoding</strong> for Bitcoin addresses</li>
-        </ul>
-        <p>All cryptographic functions are implemented in pure TypeScript without
-          <a
-            href="https://npmgraph.js.org/?q=verify-bitcoin-message"
-            target="_blank"
-            rel="noopener noreferrer"
-          >external dependencies</a>.
-          Learn more about <a
-            href="https://en.wikipedia.org/wiki/Public-key_cryptography"
-            target="_blank"
-            rel="noopener noreferrer"
-          >public-key cryptography</a>
-          and <a
-            href="https://en.wikipedia.org/wiki/Digital_signature"
-            target="_blank"
-            rel="noopener noreferrer"
-          >digital signatures</a> on Wikipedia.
-        </p>
-      </details>
     </div>
 
     <div class="alternatives">
@@ -342,7 +307,54 @@ Prefix hex strings with '0x'"
         <summary
           role="button"
           class="secondary"
-        >Source Code</summary>
+        >How it works</summary>
+        Message verification uses
+        <a
+          href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm"
+          target="_blank"
+          rel="noopener noreferrer"
+        >elliptic curve cryptography</a>
+        and the same mathematical principles that secure the Bitcoin network itself.
+        <ul>
+          <li>
+            <a
+              href="https://en.bitcoin.it/wiki/Secp256k1"
+              target="_blank"
+              rel="noopener noreferrer"
+            >secp256k1</a> elliptic curve (same as Bitcoin)
+          </li>
+          <li>
+            <a
+              href="https://en.wikipedia.org/wiki/RIPEMD"
+              target="_blank"
+              rel="noopener noreferrer"
+            >RIPEMD-160</a>
+            and
+            <a
+              href="https://en.wikipedia.org/wiki/SHA-2"
+              target="_blank"
+              rel="noopener noreferrer"
+            >SHA-256</a> hash functions
+          </li>
+          <li><a
+              href="https://en.bitcoin.it/wiki/Base58Check_encoding"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Base58Check encoding</a> for Bitcoin addresses</li>
+        </ul>
+        <p>
+          Learn more about <a
+            href="https://en.wikipedia.org/wiki/Public-key_cryptography"
+            target="_blank"
+            rel="noopener noreferrer"
+          >public-key cryptography</a>
+          and <a
+            href="https://en.wikipedia.org/wiki/Digital_signature"
+            target="_blank"
+            rel="noopener noreferrer"
+          >digital signatures</a>.
+        </p>
+
         <a
           href="https://github.com/mothepro/verify-bitcoin-message"
           target="_blank"
@@ -352,6 +364,7 @@ Prefix hex strings with '0x'"
             alt="free and open source"
             src="https://img.shields.io/badge/source-open-success?style=for-the-badge"
           ></a>
+        <br />
         <a
           href="https://npmgraph.js.org/?q=verify-bitcoin-message"
           target="_blank"
@@ -361,6 +374,7 @@ Prefix hex strings with '0x'"
             alt="External Dependencies"
             src="https://img.shields.io/badge/dependencies-0-success?style=for-the-badge"
           ></a>
+        <br />
         <a
           href="https://github.com/mothepro/verify-bitcoin-message?tab=readme-ov-file#offline"
           target="_blank"
@@ -370,10 +384,12 @@ Prefix hex strings with '0x'"
             alt="Offline First"
             src="https://img.shields.io/badge/Internet_Required-No-success?style=for-the-badge"
           /></a>
+        <br />
         <img
           alt="Bundle Size"
           src="https://img.shields.io/badge/Bundle_Size-14kb-success?style=for-the-badge"
         />
+        <br />
         <!-- TODO replace with a payload instead :) -->
         <a href="bitcoin:bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s">
           <img
@@ -404,10 +420,11 @@ Prefix hex strings with '0x'"
               target="_blank"
               rel="noopener noreferrer"
             >Bitcoin.com</a>
+            <br />
             <img
               alt="Closed Source"
               src="https://img.shields.io/badge/source-closed-red"
-            >
+            />
 
           </li>
           <li>
@@ -416,10 +433,11 @@ Prefix hex strings with '0x'"
               target="_blank"
               rel="noopener noreferrer"
             >Verify Bitcoin Message</a>
+            <br />
             <img
               alt="Closed Source"
               src="https://img.shields.io/badge/source-closed-red"
-            >
+            />
           </li>
           <li>
             <a
@@ -428,14 +446,17 @@ Prefix hex strings with '0x'"
               target="_blank"
               rel="noopener noreferrer"
             >BlueWallet's VerifySignature</a>
+            <br />
             <img
               alt="Open Source"
               src="https://img.shields.io/badge/source-Open-success"
             >
+            <br />
             <img
               alt="Offline First"
               src="https://img.shields.io/badge/Internet_Required-No-success"
             />
+            <br />
             <a
               href="https://npmgraph.js.org/?q=bitcoinjs-message"
               target="_blank"
