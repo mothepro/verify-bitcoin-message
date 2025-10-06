@@ -28,7 +28,7 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Install Dev Dependencies
+      - name: Install Dev Dependencies, Run Tests, Build Project
         run: bun install
 
       - name: Setup Pages
