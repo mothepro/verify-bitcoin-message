@@ -20,12 +20,12 @@ for (const { address, message, signature } of payloads) {
       verify({ address, signature, message: message.substring(0, message.length - 1) })
     ).rejects.toBeTruthy())
 
-  test(`${address} did not sign something else`, () =>
+  test(`${address} did not sign a substring`, () =>
     expect(
       verify({
         address,
         signature,
-        message: message.substring(Math.floor(Math.random() * message.length)),
+        message: message.substring(1 + Math.floor(Math.random() * message.length)),
       })
     ).rejects.toBeTruthy())
 }
