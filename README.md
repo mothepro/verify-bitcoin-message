@@ -86,14 +86,32 @@ const isValid = await verifySafe({
 
 ## Deployment
 
-This project uses GitHub Actions for automatic deployment to GitHub Pages:
+This project uses GitHub Actions for automatic deployment:
+
+### Production Deployment (GitHub Pages)
 
 - **Automatic**: Deploys on every push to `main` branch
 - **Tested**: Runs `bun test` before deployment
 - **Built**: Runs `bun run build:browser` to create `static/verify.js`
 - **Complete**: Includes both source files and built JavaScript in deployment
 
-The workflow ensures that only tested, working code gets deployed.
+### PR Preview Deployments
+
+- **Automatic**: Creates preview deployments for every pull request
+- **Isolated**: Each PR gets its own preview URL at `https://[username].github.io/[repo]/preview/pr-[number]/`
+- **Updated**: Preview updates automatically when new commits are pushed to the PR
+- **Commented**: GitHub bot automatically comments on PRs with preview links
+- **Cleaned**: Preview deployments are automatically removed when PRs are closed
+
+#### Preview System Features
+
+- ✅ **Automatic builds** on PR open/update
+- 🔗 **Direct preview links** in PR comments
+- 🧪 **Full testing** before deployment
+- 🗑️ **Automatic cleanup** on PR close
+- 🔄 **Live updates** with each commit
+
+The workflow ensures that only tested, working code gets deployed to both production and preview environments.
 
 ## Implementation Notes
 
