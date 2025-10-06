@@ -42,8 +42,6 @@ jobs:
 
                 ${{ steps.run_output.outputs.OUTPUT }}
 
-                ---
-
                 *This output will be updated automatically when you push new commits to this PR.*
                 📝 **Commit**: \`${context.sha.substring(0, 7)}\`
                 🔄 **Updated**: ${new Date().toISOString()}

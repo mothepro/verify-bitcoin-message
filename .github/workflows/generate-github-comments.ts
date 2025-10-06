@@ -13,9 +13,9 @@ for (const { address, message, signature } of payloads) {
   proof.searchParams.set('address', address)
   proof.searchParams.set('message', message)
   proof.searchParams.set('signature', signature)
-  console.log(`[signed](${proof}) by [\`${address}\`](https://mempool.space/address/${address})`)
+  console.log(`[signed](${proof}) by [\\\`${address}\\\`](https://mempool.space/address/${address})`)
   console.log()
-  
+
   console.log('---')
   console.log()
 }
