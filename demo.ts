@@ -1,5 +1,5 @@
-import validPayloads from '../payloads.json'
-import verify, { assert, parsePayload } from '../verify'
+import validPayloads from './payloads.json'
+import verify, { assert, parsePayload } from './verify'
 
 const form = document.getElementById('verifyForm') as HTMLFormElement
 const heroDiv = document.getElementById('hero') as HTMLDivElement

@@ -19,4 +19,5 @@ node_modules/
 # Generated files
 *.exe
 *.js
-static/css
+css/*
+.vscode/*

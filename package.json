@@ -13,11 +13,12 @@
     "@types/bun": "^1.1.22"
   },
   "scripts": {
-    "build:copy-css": "cp -R node_modules/@picocss/pico/css static",
-    "build:browser": "bun build static/index.ts --outdir static",
-    "build:js": "bun build verify.ts --outdir . && bun build cli.ts --target=node --outdir . && bun build cli.ts --compile --outfile verify-bitcoin-message",
-    "build": "bun run build:js && bun run build:browser",
-    "prebuild:browser": "bun run build:copy-css",
+    "build:copy-css": "cp -R node_modules/@picocss/pico/css .",
+    "build:js": "bun build verify.ts demo.ts --outdir .",
+    "build:cli": "bun build cli.ts --target=node --outdir .",
+    "build:exe": "bun build cli.ts --compile --outfile verify-bitcoin-message",
+    "build": "bun run build:js && bun run build:cli && bun run build:exe",
+    "prebuild:js": "bun run build:copy-css",
     "prepublish": "bun test && bun run build:js",
     "postinstall": "bun test verify && bun run build"
   },

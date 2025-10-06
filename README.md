@@ -92,7 +92,7 @@ This project uses GitHub Actions for automatic deployment:
 
 - **Automatic**: Deploys on every push to `main` branch
 - **Tested**: Runs `bun test` before deployment
-- **Built**: Runs `bun run build:browser` to create `static/verify.js`
+- **Built**: Runs `bun run build:browser` to create `verify.js`
 - **Complete**: Includes both source files and built JavaScript in deployment
 
 ### PR Preview Deployments
