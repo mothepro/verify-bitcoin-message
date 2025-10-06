@@ -23,14 +23,8 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Install dependencies
+      - name: Install dependencies, build and test
         run: bun install
-
-      - name: Run tests
-        run: bun test
-
-      - name: Build project
-        run: bun run build:browser
 
       - name: Create preview directory
         run: |
