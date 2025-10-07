@@ -127,7 +127,7 @@ function toHexString(str: string) {
     assert(str.startsWith('0x'), 'Must start with 0x')
     assert(str.length % 2 === 0, 'Must be even length')
     assert(/^0x[a-f\d\s]+$/i.test(str), 'Must be hex characters only')
-    return str.substring(2)
+    return str.substring(2).replaceAll(/\s/g, '')
   } catch {
     // Return undefined if validation fails
   }

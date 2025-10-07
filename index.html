@@ -236,14 +236,12 @@
             id="message"
             name="message"
             rows="9"
-            placeholder="Message
+            placeholder="Message (Hex strings must start with '0x')
 
 It's a good idea to include on of these
 - a timestamp
 - opentimestamps.org
-- the top bitcoin blockchain hash
-
-Prefix hex strings with '0x'"
+- the top bitcoin blockchain hash"
           ></textarea>
           <input
             type="text"
@@ -400,6 +398,66 @@ Prefix hex strings with '0x'"
             alt="Donations to bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s"
             src="https://img.shields.io/badge/Donations-bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s-blue"
           ></a>
+        <details>
+          <summary
+            role="button"
+            class="secondary"
+          >Check out some other Message Verifiers</summary>
+          <ul>
+            <li>
+              <a
+                href="https://www.bitcoin.com/tools/verify-message/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Bitcoin.com</a>
+              <br />
+              <img
+                alt="Closed Source"
+                src="https://img.shields.io/badge/source-closed-red"
+              />
+
+            </li>
+            <li>
+              <a
+                href="https://www.verifybitcoinmessage.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Verify Bitcoin Message</a>
+              <br />
+              <img
+                alt="Closed Source"
+                src="https://img.shields.io/badge/source-closed-red"
+              />
+            </li>
+            <li>
+              <a
+                href="https://bluewallet.github.io/VerifySignature?a=&m=&s="
+                id="blue-wallet-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >BlueWallet's VerifySignature</a>
+              <br />
+              <img
+                alt="Open Source"
+                src="https://img.shields.io/badge/source-Open-success"
+              >
+              <br />
+              <img
+                alt="Offline First"
+                src="https://img.shields.io/badge/Internet-Not_Required-success"
+              />
+              <br />
+              <a
+                href="https://npmgraph.js.org/?q=bitcoinjs-message"
+                target="_blank"
+                rel="noopener noreferrer"
+              ><img
+                  alt="68 Dependencies"
+                  src="https://img.shields.io/badge/dependencies-68-yellow"
+                ></a>
+            </li>
+          </ul>
+        </details>
       </details>
       <details
         class="hidden"
@@ -408,69 +466,16 @@ Prefix hex strings with '0x'"
         <summary
           role="button"
           class="secondary"
-        >
-          JSON</summary>
+        >Publish this message</summary>
         <pre id="json-stringify"></pre>
-      </details>
-      <details>
-        <summary
+        Copy this, then when you're ready
+        <a
+          href="https://github.com/mothepro/verify-bitcoin-message/edit/main/payloads.json"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="primary"
           role="button"
-          class="secondary"
-        >Alternative Message Verifiers</summary>
-        <ul>
-          <li>
-            <a
-              href="https://www.bitcoin.com/tools/verify-message/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >Bitcoin.com</a>
-            <br />
-            <img
-              alt="Closed Source"
-              src="https://img.shields.io/badge/source-closed-red"
-            />
-
-          </li>
-          <li>
-            <a
-              href="https://www.verifybitcoinmessage.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >Verify Bitcoin Message</a>
-            <br />
-            <img
-              alt="Closed Source"
-              src="https://img.shields.io/badge/source-closed-red"
-            />
-          </li>
-          <li>
-            <a
-              href="https://bluewallet.github.io/VerifySignature?a=&m=&s="
-              id="blue-wallet-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >BlueWallet's VerifySignature</a>
-            <br />
-            <img
-              alt="Open Source"
-              src="https://img.shields.io/badge/source-Open-success"
-            >
-            <br />
-            <img
-              alt="Offline First"
-              src="https://img.shields.io/badge/Internet-Not_Required-success"
-            />
-            <br />
-            <a
-              href="https://npmgraph.js.org/?q=bitcoinjs-message"
-              target="_blank"
-              rel="noopener noreferrer"
-            ><img
-                alt="68 Dependencies"
-                src="https://img.shields.io/badge/dependencies-68-yellow"
-              ></a>
-          </li>
-        </ul>
+        >Paste &amp; Publish</a>
       </details>
     </div>
   </main>
