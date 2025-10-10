@@ -5,7 +5,7 @@
  * that works in modern browsers using only Web APIs.
  */
 
-// Export RPC functionality for Bitcoin node communication
+// Export RPC functionality for *optional* Bitcoin node communication
 export * as rpc from './rpc'
 
 // Union type for message input - can be string or raw bytes

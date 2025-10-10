@@ -1,15 +1,18 @@
 # Verify Bitcoin Message
 
-[![free and open source](https://img.shields.io/badge/source-open-success")](https://github.com/mothepro/verify-bitcoin-message) [![External Dependencies](https://img.shields.io/badge/dependencies-None-success")](https://npmgraph.js.org/?q=verify-bitcoin-message) [![Offline First](https://img.shields.io/badge/Internet-Not_Required-success")](https://github.com/mothepro/verify-bitcoin-message?tab=readme-ov-file#offline) ![Bundle Size](https://img.shields.io/badge/Bundle_Size-14kb-success")
+[![free and open source](https://img.shields.io/badge/source-open-success")](https://github.com/mothepro/verify-bitcoin-message) [![External Dependencies](https://img.shields.io/badge/dependencies-None-success")](https://npmgraph.js.org/?q=verify-bitcoin-message) [![Offline First](https://img.shields.io/badge/Internet-Not_Required-success")](https://github.com/mothepro/verify-bitcoin-message?tab=readme-ov-file#offline) [![Bundle Size](https://img.shields.io/badge/Bundle_Size-14kb-success")](https://app.unpkg.com/verify-bitcoin-message/)
 
-A dependency-free Bitcoin message signature verifier that works in browsers and as a lightweight CLI.
+> A dependency-free Bitcoin message verifier that works in browsers and as a lightweight CLI.
+
+Translations would be an incredible contribution now :)
+
 
 ## Published Messages
 
 Any messages, from around the globe, can be added via [Pull Requests](../../pulls).
 However, verification process automatically hides invalid messages.
 
-Translations would be an incredible contribution now :)
+*Each fork is like its own "[community](../../forks)".*
 
 ## Things you can do
 
@@ -17,10 +20,9 @@ Translations would be an incredible contribution now :)
 
 First visit the page by [Serving Locally](#serve-locally) or using our [GitHub Pages demo](https://mothepro.github.io/verify-bitcoin-message).
 
-Then you can test offline mode in Chrome (webkit browsers) by opening Developer Tools (F12)
+If you're on mobile, just turn on airplane mode.
 
-- Network
-- Change "No Throttling" -> "Offline"
+On desktop you can test offline mode in Chrome (webkit browsers) by opening Developer Tools (F12) > `Network` tab > Change `No Throttling` to `Offline`
 
 ### Clone the repository
 
@@ -29,8 +31,7 @@ Then you can test offline mode in Chrome (webkit browsers) by opening Developer 
    ```bash
    git clone https://github.com/mothepro/verify-bitcoin-message
    cd verify-bitcoin-message
-   bun install
-   bun test
+   bun install # Tests will be run automatically after installation
    ```
 
 ### Serve locally
@@ -93,57 +94,15 @@ const isValid = await verifySafe({
 - [ ] service worker?
 - [ ] allow invalid messages in prs?
 
-### Alternatives
+### Web Alternatives
 
-<details>
-  <summary>See Similar Message Verifiers</summary>
+- [Bitcoin.com](https://www.bitcoin.com/tools/verify-message/)
+  ![Closed Source](https://img.shields.io/badge/source-closed-red)
 
-   <ul>
-      <li>
-         <a
-            href="https://www.bitcoin.com/tools/verify-message/"
-            target="_blank"
-            rel="noopener noreferrer"
-         >Bitcoin.com</a>
-         <img
-            alt="Closed Source"
-            src="https://img.shields.io/badge/source-closed-red"
-         />
-      </li>
-      <li>
-         <a
-            href="https://www.verifybitcoinmessage.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-         >Verify Bitcoin Message</a>
-         <img
-            alt="Closed Source"
-            src="https://img.shields.io/badge/source-closed-red"
-         />
-      </li>
-      <li>
-         <a
-            href="https://bluewallet.github.io/VerifySignature?a=&m=&s="
-            id="blue-wallet-link"
-            target="_blank"
-            rel="noopener noreferrer"
-         >BlueWallet's VerifySignature</a>
-         <img
-            alt="Open Source"
-            src="https://img.shields.io/badge/source-Open-success"
-         >
-         <img
-            alt="Offline First"
-            src="https://img.shields.io/badge/Internet-Not_Required-success"
-         />
-         <a
-            href="https://npmgraph.js.org/?q=bitcoinjs-message"
-            target="_blank"
-            rel="noopener noreferrer"
-         ><img
-            alt="68 Dependencies"
-            src="https://img.shields.io/badge/dependencies-68-yellow"
-            ></a>
-      </li>
-   </ul>
-</details>
+- [Verify Bitcoin Message](https://www.verifybitcoinmessage.com/)
+  ![Closed Source](https://img.shields.io/badge/source-closed-red)
+
+- [BlueWallet's VerifySignature](https://bluewallet.github.io/VerifySignature?a=&m=&s=)
+  ![Open Source](https://img.shields.io/badge/source-Open-success)
+  ![Offline First](https://img.shields.io/badge/Internet-Not_Required-success)
+  [![68 Dependencies](https://img.shields.io/badge/dependencies-68-yellow)](https://npmgraph.js.org/?q=bitcoinjs-message)
