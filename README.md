@@ -1,20 +1,15 @@
-# Bitcoin Signature Verifier
+# Verify Bitcoin Message
 
-![dependency-free](https://img.shields.io/badge/dependencies-none-success)
+[![free and open source](https://img.shields.io/badge/source-open-success")](https://github.com/mothepro/verify-bitcoin-message) [![External Dependencies](https://img.shields.io/badge/dependencies-None-success")](https://npmgraph.js.org/?q=verify-bitcoin-message) [![Offline First](https://img.shields.io/badge/Internet-Not_Required-success")](https://github.com/mothepro/verify-bitcoin-message?tab=readme-ov-file#offline) ![Bundle Size](https://img.shields.io/badge/Bundle_Size-14kb-success")
 
 A dependency-free Bitcoin message signature verifier that works in browsers and as a lightweight CLI.
 
 ## Published Messages
 
-Verified messages from around the globe are found [in the Pull Requests](pulls).
+Any messages, from around the globe, can be added via [Pull Requests](../../pulls).
+However, verification process automatically hides invalid messages.
 
-## Features
-
-- **Zero Dependencies**: Pure TypeScript implementation with no external dependencies
-- **Browser Compatible**: Works directly in modern browsers using ES modules
-- **Client-Side Verification**: Verifies signatures entirely in the browser
-- **Simple API**: Clean TypeScript interface for programmatic use
-- **Unit Tests**: Includes a test suite for the verification logic
+Translations would be an incredible contribution now :)
 
 ## Things you can do
 
@@ -88,46 +83,6 @@ const isValid = await verifySafe({
 })
 ```
 
-## Deployment
-
-This project uses GitHub Actions for automatic deployment:
-
-### Production Deployment (GitHub Pages)
-
-- **Automatic**: Deploys on every push to `main` branch
-- **Tested**: Runs `bun test` before deployment
-- **Built**: Runs `bun run build:browser` to create `verify.js`
-- **Complete**: Includes both source files and built JavaScript in deployment
-
-### PR Output Comments
-
-- **Automatic**: Runs TypeScript code for every pull request
-- **Immediate**: Executes `bun run verify.ts` and captures all output
-- **Commented**: GitHub bot automatically comments on PRs with the complete output
-- **Updated**: Output comment updates automatically when new commits are pushed to the PR
-- **Transparent**: Shows both successful runs and error messages
-
-#### Output System Features
-
-- ✅ **Automatic execution** on PR open/update
-- 📝 **Complete output capture** (stdout and stderr)
-- 🤖 **Bot comments** with formatted output
-- 🔄 **Live updates** with each commit
-- 🐛 **Error visibility** for debugging
-
-The workflow provides immediate feedback to contributors and reviewers by running the verification code and showing the results.
-
-## Implementation Notes
-
-This is a **complete, production-ready implementation** of Bitcoin message signature verification:
-
-1. **Full secp256k1 implementation**: Complete elliptic curve operations from scratch
-2. **Complete RIPEMD-160**: Pure TypeScript implementation following RFC 1320
-3. **Complete signature recovery**: Handles all Bitcoin signature formats and recovery IDs
-4. **Zero dependencies**: Works in browsers without any external dependencies
-
-All cryptographic functions are implemented from publicly available specifications in pure TypeScript.
-
 ### Up Next
 
 - [ ] My idea to prevent fake screenshots
@@ -140,6 +95,55 @@ All cryptographic functions are implemented from publicly available specificatio
 
 ### Alternatives
 
-<https://www.bitcoin.com/tools/verify-message/>
-<https://www.verifybitcoinmessage.com/>
-<https://bluewallet.github.io/VerifySignature>
+<details>
+  <summary>See Similar Message Verifiers</summary>
+
+   <ul>
+      <li>
+         <a
+            href="https://www.bitcoin.com/tools/verify-message/"
+            target="_blank"
+            rel="noopener noreferrer"
+         >Bitcoin.com</a>
+         <img
+            alt="Closed Source"
+            src="https://img.shields.io/badge/source-closed-red"
+         />
+      </li>
+      <li>
+         <a
+            href="https://www.verifybitcoinmessage.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+         >Verify Bitcoin Message</a>
+         <img
+            alt="Closed Source"
+            src="https://img.shields.io/badge/source-closed-red"
+         />
+      </li>
+      <li>
+         <a
+            href="https://bluewallet.github.io/VerifySignature?a=&m=&s="
+            id="blue-wallet-link"
+            target="_blank"
+            rel="noopener noreferrer"
+         >BlueWallet's VerifySignature</a>
+         <img
+            alt="Open Source"
+            src="https://img.shields.io/badge/source-Open-success"
+         >
+         <img
+            alt="Offline First"
+            src="https://img.shields.io/badge/Internet-Not_Required-success"
+         />
+         <a
+            href="https://npmgraph.js.org/?q=bitcoinjs-message"
+            target="_blank"
+            rel="noopener noreferrer"
+         ><img
+            alt="68 Dependencies"
+            src="https://img.shields.io/badge/dependencies-68-yellow"
+            ></a>
+      </li>
+   </ul>
+</details>
