@@ -18,6 +18,24 @@ const blueWalletLink = document.getElementById('blue-wallet-link') as HTMLAnchor
 const jsonStringifyPre = document.getElementById('json-stringify') as HTMLPreElement
 const validPayloadsList = document.getElementById('valid-payloads') as HTMLOListElement
 
+// Nice
+addressInput.addEventListener('focus', addressInput.select)
+signatureInput.addEventListener('focus', signatureInput.select)
+messageInput.addEventListener('paste', ({ clipboardData }) => {
+  const maybeJson = clipboardData?.getData('text/plain')
+  try {
+    console.log({ maybeJson })
+    const { address, message, signature } = JSON.parse(maybeJson ?? '{}')
+    console.log({ address, message, signature })
+    if (address && message && signature) {
+      addressInput.value = address
+      messageInput.value = message
+      signatureInput.value = signature
+      verifySignature()
+    }
+  } catch (e) {}
+})
+
 // Set URL params to the UI Elements
 const params = new URLSearchParams(location.search)
 addressInput.value = params.get('address')?.trim() ?? ''
@@ -67,13 +85,16 @@ async function verifySignature() {
   verifiedDisplay.forEach(e => e.classList.add('hidden'))
   errorDisplay.forEach(e => e.classList.add('hidden'))
   document.querySelectorAll('[aria-busy]').forEach(e => e.setAttribute('aria-busy', 'true'))
-
+  errorReason.textContent = ''
+  verifiedAddressLink.textContent = ''
+  verifiedMessageContent.textContent = ''
+  verifiedAddressLink.href = 'https://mempool.space/address/'
   try {
     const isValid = await verify({ message: bytes, address, signature })
     assert(isValid, 'Signature is invalid')
 
     verifiedAddressLink.textContent = address
-    verifiedAddressLink.href = `https://mempool.space/address/${address}`
+    verifiedAddressLink.href += address
     verifiedMessageContent.textContent = utf8
     verifiedDisplay.forEach(e => e.classList.remove('hidden'))
   } catch (error: unknown) {
