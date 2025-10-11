@@ -67,24 +67,17 @@ jobs:
             let count = 0;
             const limit = 75;
             const existingSignatures = new Set();
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
             const comments = `${{ steps.run_output.outputs.OUTPUT }}`.split('\n\n\n').filter(Boolean);
             const signatures = JSON.parse(comments.pop());
-            const existingComments = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            });
+            const existingComments = await github.rest.issues.listComments({ owner, repo, issue_number });
             for (const [index, signature] of signatures.entries()) {
               existingSignatures.add(signature);
               const hasComment = existingComments.data.find(comment => comment.body.includes(signature))
               if (hasComment) continue;
               const body = comments[index]
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body
-              });
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
               if (count++ >= limit) {
                 console.error(`Reached comment limit of ${limit}, in the future this may fail. Try to upload messages in smaller batches.`)
                 break;
