@@ -66,16 +66,17 @@ jobs:
           script: |
             let count = 0;
             const limit = 75;
-            const existingSignatures = new Set();
             const { owner, repo } = context.repo;
             const issue_number = context.issue.number;
             const comments = `${{ steps.run_output.outputs.OUTPUT }}`.split('\n\n\n').filter(Boolean);
             const signatures = JSON.parse(comments.pop());
             const existingComments = await github.rest.issues.listComments({ owner, repo, issue_number });
             for (const [index, signature] of signatures.entries()) {
-              existingSignatures.add(signature);
               const hasComment = existingComments.data.find(comment => comment.body.includes(signature))
-              if (hasComment) continue;
+              if (hasComment) {
+                console.warn(`Skipping comment already exists for signature ${signature.slice(0, 8)}...`)
+                continue;
+              }
               const body = comments[index]
               await github.rest.issues.createComment({ owner, repo, issue_number, body });
               if (count++ >= limit) {
