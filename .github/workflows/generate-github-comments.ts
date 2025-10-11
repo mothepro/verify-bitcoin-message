@@ -1,8 +1,6 @@
 import { homepage } from '../../package.json'
 import payloads from '../../payloads.json'
 
-console.log({ payloads, homepage })
-
 /** Generate GitHub Markdown comments for verified messages */
 
 // TODO: move this logic to the yml so it can be tested easier
