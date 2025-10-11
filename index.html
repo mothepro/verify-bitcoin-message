@@ -241,12 +241,79 @@ It's a good idea to include on of these
         <li><strong>Non-repudiation</strong> The signer cannot deny having signed the message</li>
       </ul>
 
-      Using the <a
+      <details>
+        <summary
+          role="button"
+          class="outline"
+        >How it works</summary>
+
+        <p>
+          <a
+            href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Elliptic curve cryptography</a> makes it possible for
+        <ul>
+          <li>A private key to sign messages</li>
+          <li>Its corresponding <a
+              href="https://en.wikipedia.org/wiki/Public-key_cryptography"
+              target="_blank"
+              rel="noopener noreferrer"
+            >public key</a>s to verify the signatures</li>
+          <li>The <a
+              href="https://en.wikipedia.org/wiki/Digital_signature"
+              target="_blank"
+              rel="noopener noreferrer"
+            >signatures</a> never leak the private key</li>
+        </ul>
+        </p>
+
+        <p>
+          Not only does <abbr
+            title="Elliptic Curve Digital Signature Algorithm"
+            data-tooltip="Elliptic Curve Digital Signature Algorithm"
+          >ECDSA</abbr> provide security for every
+          day internet communication, it's also used to secure Bitcoin.
+        </p>
+
+        <p>
+          Bitcoin uses the following cryptographic primitives
+        <ul>
+          <li>
+            <a
+              href="https://en.bitcoin.it/wiki/Secp256k1"
+              target="_blank"
+              rel="noopener noreferrer"
+            >secp256k1</a> as the elliptic curve
+          </li>
+          <li>
+            <a
+              href="https://en.wikipedia.org/wiki/RIPEMD"
+              target="_blank"
+              rel="noopener noreferrer"
+            >RIPEMD-160</a>
+            and
+            <a
+              href="https://en.wikipedia.org/wiki/SHA-2"
+              target="_blank"
+              rel="noopener noreferrer"
+            >SHA-256</a> hash functions
+          </li>
+          <li><a
+              href="https://en.bitcoin.it/wiki/Base58Check_encoding"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Base58Check encoding</a> for converting public keys to Bitcoin addresses</li>
+        </ul>
+        </p>
+      </details>
+
+      The <a
         href="https://www.npmjs.com/package/verify-bitcoin-message"
         target="_blank"
         rel="noopener noreferrer"
         data-tooltip="This JavaScript library provides one line of code to verify signed messages"
-      >verify-bitcoin-message</a> library, you can verify signatures in your browser without an internet connection.
+      >verify-bitcoin-message</a> library, verifies signatures on device, without an internet connection.
     </article>
 
     <div class="alternatives">
@@ -269,74 +336,6 @@ It's a good idea to include on of these
           Payloads
         </summary>
         <ol id="valid-payloads"></ol>
-      </details>
-      <details>
-        <summary
-          role="button"
-          class="secondary"
-        >How it works</summary>
-        <article>
-
-          <p>
-            <a
-              href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm"
-              target="_blank"
-              rel="noopener noreferrer"
-            >Elliptic curve cryptography</a> makes it possible for
-          <ul>
-            <li>A private key to sign messages</li>
-            <li>Its corresponding <a
-                href="https://en.wikipedia.org/wiki/Public-key_cryptography"
-                target="_blank"
-                rel="noopener noreferrer"
-              >public key</a>s to verify the signatures</li>
-            <li>The <a
-                href="https://en.wikipedia.org/wiki/Digital_signature"
-                target="_blank"
-                rel="noopener noreferrer"
-              >signatures</a> never leak the private key</li>
-          </ul>
-          </p>
-
-          <p>
-            Not only does <abbr
-              title="Elliptic Curve Digital Signature Algorithm"
-              data-tooltip="Elliptic Curve Digital Signature Algorithm"
-            >ECDSA</abbr> provide security for every
-            day internet communication, it's also used to secure Bitcoin.
-          </p>
-
-          <p>
-            Bitcoin uses the following cryptographic primitives
-          <ul>
-            <li>
-              <a
-                href="https://en.bitcoin.it/wiki/Secp256k1"
-                target="_blank"
-                rel="noopener noreferrer"
-              >secp256k1</a> as the elliptic curve
-            </li>
-            <li>
-              <a
-                href="https://en.wikipedia.org/wiki/RIPEMD"
-                target="_blank"
-                rel="noopener noreferrer"
-              >RIPEMD-160</a>
-              and
-              <a
-                href="https://en.wikipedia.org/wiki/SHA-2"
-                target="_blank"
-                rel="noopener noreferrer"
-              >SHA-256</a> hash functions
-            </li>
-            <li><a
-                href="https://en.bitcoin.it/wiki/Base58Check_encoding"
-                target="_blank"
-                rel="noopener noreferrer"
-              >Base58Check encoding</a> for converting public keys to Bitcoin addresses</li>
-          </ul>
-          </p>
-        </article>
       </details>
       <details class="hidden verify-attempted-display">
         <summary
