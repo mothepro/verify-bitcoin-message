@@ -18,6 +18,10 @@ const blueWalletLink = document.getElementById('blue-wallet-link') as HTMLAnchor
 const jsonStringifyPre = document.getElementById('json-stringify') as HTMLPreElement
 const validPayloadsList = document.getElementById('valid-payloads') as HTMLOListElement
 
+// Nice
+addressInput.addEventListener('focus', addressInput.select)
+signatureInput.addEventListener('focus', signatureInput.select)
+
 // Set URL params to the UI Elements
 const params = new URLSearchParams(location.search)
 addressInput.value = params.get('address')?.trim() ?? ''
