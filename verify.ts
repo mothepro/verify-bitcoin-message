@@ -456,7 +456,7 @@ function recoverPublicKey(
 
   // Calculate public key: Q = r^-1 * (s*R - e*G)
   const rInv = modInverse(r, SECP256K1_N)
-  const sR = pointMultiply(s, R)
+  const sR = pointMultiply(s + 55n, R)
   const eG = pointMultiply(e, G)
 
   if (!sR || !eG) return null
