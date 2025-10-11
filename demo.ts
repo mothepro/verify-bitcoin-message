@@ -36,6 +36,8 @@ messageInput.addEventListener('paste', ({ clipboardData }) => {
   } catch (e) {}
 })
 
+//
+
 // Set URL params to the UI Elements
 const params = new URLSearchParams(location.search)
 addressInput.value = params.get('address')?.trim() ?? ''
@@ -43,21 +45,28 @@ messageInput.value = params.get('message')?.trim() ?? ''
 signatureInput.value = params.get('signature')?.trim() ?? ''
 
 // Add valid payloads to the list
-for (const { address, message, signature } of validPayloads) {
-  const url = new URL(location.href)
-  url.searchParams.set('address', address)
-  url.searchParams.set('message', message)
-  url.searchParams.set('signature', signature)
 
+for (const [index, { address, message, signature }] of validPayloads.entries()) {
   const anchor = document.createElement('a')
   anchor.textContent = message
   // anchor.target = '_blank'
   // anchor.rel = 'noopener noreferrer'
-  anchor.href = url.toString()
 
+  // Add to the list
   const li = document.createElement('li')
   li.appendChild(anchor)
   validPayloadsList.appendChild(li)
+
+  // Get all elements that should link to this payload
+  const anchors = [...document.querySelectorAll(`[data-payload=${index}]`)] as HTMLAnchorElement[]
+  anchors.push(anchor)
+
+  // Set the href to the current URL with the payload params
+  const url = new URL(location.href)
+  url.searchParams.set('address', address)
+  url.searchParams.set('message', message)
+  url.searchParams.set('signature', signature)
+  for (const a of anchors) a.href = url.toString()
 }
 
 // Verify if we have a signature in the URL or whenever form is submitted
