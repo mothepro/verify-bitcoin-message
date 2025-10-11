@@ -1,6 +1,8 @@
 import { homepage } from '../../package.json'
 import payloads from '../../payloads.json'
 
+console.log({ payloads, homepage })
+
 /** Generate GitHub Markdown comments for verified messages */
 
 // TODO: move this logic to the yml so it can be tested easier
@@ -15,12 +17,18 @@ for (const { address, message, signature } of payloads.slice(0, limit)) {
   for (const line of message.split('\n')) console.log(`> ${escapeMarkdown(line)}`)
   console.log()
 
+  const mempoolUrl = new URL(`https://mempool.space`)
+  mempoolUrl.pathname += `address/${address}`
+
   const proof = new URL(homepage)
   proof.searchParams.set('address', address)
   proof.searchParams.set('message', message)
   proof.searchParams.set('signature', signature)
-  console.log(`[signed](${proof}) by [\\\`${address}\\\`](https://mempool.space/address/${address})`)
+  console.log(`[signed](${proof}) by [\\\`${address}\\\`](${mempoolUrl})`)
   console.log()
   console.log()
   console.log()
 }
+
+const signatures = payloads.map(({ signature }) => signature)
+console.log(JSON.stringify(signatures));
