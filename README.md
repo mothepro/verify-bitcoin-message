@@ -6,7 +6,6 @@
 
 Translations would be an incredible contribution now :)
 
-
 ## Published Messages
 
 Any messages, from around the globe, can be added via [Pull Requests](../../pulls).
@@ -93,6 +92,7 @@ const isValid = await verifySafe({
 - [ ] explainer what this is, how, and why (why cold storage >>> exchanges)
 - [ ] service worker?
 - [ ] allow invalid messages in prs?
+- [x] auto-close PRs if `bun install` fails
 
 ### Web Alternatives
 
