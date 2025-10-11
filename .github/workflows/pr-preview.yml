@@ -77,10 +77,11 @@ jobs:
                 console.warn(`Skipping comment already exists for signature ${signature.slice(0, 8)}...`)
                 continue;
               }
-              const body = comments[index]
+              let body = comments[index]
               await github.rest.issues.createComment({ owner, repo, issue_number, body });
               if (count++ >= limit) {
-                console.error(`Reached comment limit of ${limit}, in the future this may fail. Try to upload messages in smaller batches.`)
+                body = `Try to upload messages in smaller batches.\n\nPayload limit reached per commit.`
+                await github.rest.issues.createComment({ owner, repo, issue_number, body });
                 break;
               }
             }
