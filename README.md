@@ -9,9 +9,10 @@ Translations would be an incredible contribution now :)
 ## Published Messages
 
 Any messages, from around the globe, can be added via [Pull Requests](../../pulls).
+
 However, verification process automatically hides invalid messages.
 
-*Each fork is like its own "[community](../../forks)".*
+<!-- *Each fork is like its own "[community](../../forks)".* -->
 
 ## Things you can do
 
@@ -91,8 +92,6 @@ const isValid = await verifySafe({
 - [ ] more support for address types
 - [ ] explainer what this is, how, and why (why cold storage >>> exchanges)
 - [ ] service worker?
-- [ ] allow invalid messages in prs?
-- [x] auto-close PRs if `bun install` fails
 
 ### Web Alternatives
 

@@ -3,8 +3,10 @@ import verify, { assert, parsePayload } from './verify'
 
 const form = document.getElementById('verifyForm') as HTMLFormElement
 const heroDiv = document.getElementById('hero') as HTMLDivElement
+const attemptedDisplay = document.querySelectorAll('.verify-attempted-display')
 const verifiedDisplay = document.querySelectorAll('.verified-display')
 const errorDisplay = document.querySelectorAll('.error-display')
+const completedDisplay = document.querySelectorAll('.verify-completed-display')
 const errorReason = document.getElementById('error-reason') as HTMLDivElement
 const verifiedAddressLink = document.getElementById('verified-address-link') as HTMLAnchorElement
 const verifiedMessageContent = document.getElementById('verified-message-content') as HTMLPreElement
@@ -15,7 +17,6 @@ const signatureInput = document.getElementById('signature') as HTMLInputElement
 const blueWalletLink = document.getElementById('blue-wallet-link') as HTMLAnchorElement
 const jsonStringifyPre = document.getElementById('json-stringify') as HTMLPreElement
 const validPayloadsList = document.getElementById('valid-payloads') as HTMLOListElement
-const jsonStringifyDetails = document.getElementById('json-stringify-details') as HTMLDetailsElement
 
 // Set URL params to the UI Elements
 const params = new URLSearchParams(location.search)
@@ -62,9 +63,10 @@ async function verifySignature() {
   } = parsePayload(payload)
 
   heroDiv.classList.add('hidden')
-  jsonStringifyDetails.classList.remove('hidden')
+  attemptedDisplay.forEach(e => e.classList.remove('hidden'))
   verifiedDisplay.forEach(e => e.classList.add('hidden'))
   errorDisplay.forEach(e => e.classList.add('hidden'))
+  document.querySelectorAll('[aria-busy]').forEach(e => e.setAttribute('aria-busy', 'true'))
 
   try {
     const isValid = await verify({ message: bytes, address, signature })
@@ -78,6 +80,9 @@ async function verifySignature() {
     errorReason.textContent = error instanceof Error ? error.message : String(error)
     errorDisplay.forEach(e => e.classList.remove('hidden'))
   } finally {
+    completedDisplay.forEach(e => e.classList.remove('hidden'))
+    document.querySelectorAll('[aria-busy]').forEach(e => e.setAttribute('aria-busy', 'false'))
+
     verifyDialog.close()
     jsonStringifyPre.textContent = JSON.stringify({ address, signature, message: utf8 }, null, 2)
 
@@ -94,6 +99,8 @@ async function verifySignature() {
     url.searchParams.set('message', utf8)
     url.searchParams.set('signature', signature)
     if (hex) url.searchParams.set('isHex', 'on')
+
+    // TODO update the "Other ways to verify"
 
     history.pushState('', '@mothepro', url.toString())
   }

@@ -10,7 +10,7 @@
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   >
-  <title>Verify Bitcoin Message</title>
+  <title>Message Verifier</title>
   <link
     rel="stylesheet"
     href="./css/pico.min.css"
@@ -85,9 +85,9 @@
     }
 
     .education {
-      margin-top: 3rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--pico-muted-border-color);
+      margin: 3rem 0;
+      padding: 2rem;
+      /* border-top: 1px solid var(--pico-muted-border-color); */
     }
 
     .education h2 {
@@ -116,6 +116,26 @@
     #verify-dialog footer {
       display: flex;
     }
+
+    details.indent[open]>* {
+      margin-inline-start: 3rem;
+    }
+
+    details.indent[open]>summary {
+      margin-inline-start: 0;
+    }
+
+    .flex {
+      display: flex;
+      gap: var(--pico-spacing);
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: var(--pico-spacing);
+    }
+
+    .flex .one {
+      flex: 1 1 10rem;
+    }
   </style>
 </head>
 
@@ -126,93 +146,33 @@
       id="hero"
       class="hero"
     >
-      <h1>Verify Bitcoin Message</h1>
-      <p>Cryptographically verify messages signed by Bitcoin private keys</p>
+      <h1>Message Verifier</h1>
+      <p>Authenticate signed messages on your device &mdash; <i>even in airplane mode</i></p>
       <noscript>
         Please enable JavaScript in your browser, cannot verify messages without it.
       </noscript>
-
-      <div class="actions">
-        <button
-          onclick="document.getElementById('verify-dialog').showModal()"
-          class="primary"
-        >Verify a Message</button>
-      </div>
     </div>
     <!-- Verified Message Display (shown when message is verified) -->
     <div class="verified-display hidden">
       <div class="signature-info">
         <h2>✅ Verified Message</h2>
-        <p>The following message was cryptographically signed by
+        <p>
           <a
             id="verified-address-link"
             class="address-link"
             target="_blank"
             rel="noopener noreferrer"
-          ></a>
+          ></a> cryptographically signed
         </p>
       </div>
 
       <pre id="verified-message-content"></pre>
-
-      <div class="actions">
-        <button
-          type="button"
-          onclick="document.getElementById('verify-dialog').showModal()"
-          class="secondary"
-        >Verify Another Message</button>
-      </div>
     </div>
 
     <!-- Error Display (shown when verification fails) -->
     <div class="error-display hidden">
       <div class="signature-info failed">
-        <details>
-          <summary>
-            <h2>❌ Verification Failed</h2>
-          </summary>
-          <p id="error-reason">The signature could not be verified for the provided message and address.</p>
-        </details>
-      </div>
-
-      <div
-        style="background: var(--pico-card-background-color); border: 1px solid var(--pico-card-border-color); border-radius: var(--pico-border-radius); padding: 1.5rem; margin: 1rem 0;"
-        class="hidden"
-      >
-        <h3>🔒 What This Proves</h3>
-        <p><strong>This failed verification is actually a security feature!</strong> It proves that:</p>
-        <ul>
-          <li><strong>The message was NOT signed by the claimed address</strong> - Someone else created this signature
-          </li>
-          <li><strong>The message may have been altered</strong> - Even a single character change breaks the signature
-          </li>
-          <li><strong>The signature is invalid or corrupted</strong> - The cryptographic proof doesn't match</li>
-        </ul>
-
-        <p>This demonstrates the <strong>integrity protection</strong> of digital signatures. Unlike traditional
-          signatures that can be forged,
-          cryptographic signatures are mathematically impossible to fake without the private key.</p>
-
-        <details>
-          <summary>🔬 Why This Is Secure</summary>
-          <p>Bitcoin signatures use <strong>elliptic curve cryptography</strong> with the secp256k1 curve. To forge a
-            signature, an attacker would need to:</p>
-          <ul>
-            <li>Solve the <strong>discrete logarithm problem</strong> (computationally infeasible)</li>
-            <li>Find a hash collision in <strong>SHA-256</strong> (2^256 operations)</li>
-            <li>Break the <strong>ECDSA algorithm</strong> (no known efficient method)</li>
-          </ul>
-          <p>These mathematical problems are so difficult that even with all the world's computing power,
-            it would take longer than the age of the universe to break a single signature.</p>
-        </details>
-      </div>
-
-      <div class="actions">
-        <button
-          type="button"
-          onclick="document.getElementById('verify-dialog').showModal()"
-          class="secondary"
-        >Try Again</button>
+        <h2>❌ Verification Failed</h2>
       </div>
     </div>
 
@@ -235,6 +195,7 @@
             required
             id="message"
             name="message"
+            aria-label="Message"
             rows="9"
             placeholder="Message (Hex strings must start with '0x')
 
@@ -269,33 +230,40 @@ It's a good idea to include on of these
     </dialog>
 
     <!-- Educational Content -->
-    <div class="education">
-      <h2>🎓 What Does a Digital Signature Prove?</h2>
+    <article class="education">
+      <!-- <h3>Message signed by a Bitcoin private key</h3> -->
 
-      <p>A Bitcoin message signature cryptographically proves three important things:</p>
+      <p>Digital signatures cryptographically prove</p>
 
       <ul>
-        <li><strong>Authentication:</strong> The message was signed by someone who controls the private key associated
-          with the Bitcoin address</li>
-        <li><strong>Integrity:</strong> The message has not been altered since it was signed</li>
-        <li><strong>Non-repudiation:</strong> The signer cannot deny having signed the message</li>
+        <li><strong>Authentication</strong> The signer can spend bitcoin from the address</li>
+        <li><strong>Integrity</strong> The message has not been altered since it was signed</li>
+        <li><strong>Non-repudiation</strong> The signer cannot deny having signed the message</li>
       </ul>
-    </div>
 
-    <div class="alternatives">
-      <details class="hidden error-display">
-        <summary>
-          <h2>❌ Verification Failed</h2>
-        </summary>
-        <p id="error-reason">The signature could not be verified for the provided message and address.</p>
-      </details>
-      <a
-        href="https://github.com/mothepro/verify-bitcoin-message/pulls"
+      Using the <a
+        href="https://www.npmjs.com/package/verify-bitcoin-message"
         target="_blank"
         rel="noopener noreferrer"
-        role="button"
-        class="secondary"
-      >Published messages</a>
+        data-tooltip="This JavaScript library provides one line of code to verify signed messages"
+      >verify-bitcoin-message</a> library, you can verify signatures in your browser without an internet connection.
+    </article>
+
+    <div class="alternatives">
+      <div class="flex">
+        <a
+          href="https://github.com/mothepro/verify-bitcoin-message/pulls"
+          target="_blank"
+          rel="noopener noreferrer"
+          role="button"
+          class="one secondary"
+        >Published messages</a>
+
+        <button
+          onclick="document.getElementById('verify-dialog').showModal()"
+          class="one primary"
+        >Verify any Message</button>
+      </div>
       <details class="hidden">
         <summary>
           Payloads
@@ -307,116 +275,249 @@ It's a good idea to include on of these
           role="button"
           class="secondary"
         >How it works</summary>
-        <p>
+        <article>
 
-          Message verification uses
-          <a
-            href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm"
-            target="_blank"
-            rel="noopener noreferrer"
-          >elliptic curve cryptography</a>
-          and the same mathematical principles that secure the Bitcoin network itself.
-        </p>
-        <ul>
-          <li>
+          <p>
             <a
-              href="https://en.bitcoin.it/wiki/Secp256k1"
+              href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm"
               target="_blank"
               rel="noopener noreferrer"
-            >secp256k1</a> elliptic curve (same as Bitcoin)
-          </li>
-          <li>
-            <a
-              href="https://en.wikipedia.org/wiki/RIPEMD"
-              target="_blank"
-              rel="noopener noreferrer"
-            >RIPEMD-160</a>
-            and
-            <a
-              href="https://en.wikipedia.org/wiki/SHA-2"
-              target="_blank"
-              rel="noopener noreferrer"
-            >SHA-256</a> hash functions
-          </li>
-          <li><a
-              href="https://en.bitcoin.it/wiki/Base58Check_encoding"
-              target="_blank"
-              rel="noopener noreferrer"
-            >Base58Check encoding</a> for Bitcoin addresses</li>
-        </ul>
-        <p class="hidden">
-          Learn more about <a
-            href="https://en.wikipedia.org/wiki/Public-key_cryptography"
-            target="_blank"
-            rel="noopener noreferrer"
-          >public-key cryptography</a>
-          and <a
-            href="https://en.wikipedia.org/wiki/Digital_signature"
-            target="_blank"
-            rel="noopener noreferrer"
-          >digital signatures</a>.
-        </p>
+            >Elliptic curve cryptography</a> makes it possible for
+          <ul>
+            <li>A private key to sign messages</li>
+            <li>Its corresponding <a
+                href="https://en.wikipedia.org/wiki/Public-key_cryptography"
+                target="_blank"
+                rel="noopener noreferrer"
+              >public key</a>s to verify the signatures</li>
+            <li>The <a
+                href="https://en.wikipedia.org/wiki/Digital_signature"
+                target="_blank"
+                rel="noopener noreferrer"
+              >signatures</a> never leak the private key</li>
+          </ul>
+          </p>
 
-        <a
-          href="https://github.com/mothepro/verify-bitcoin-message"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            alt="free and open source"
-            src="https://img.shields.io/badge/source-open-success"
-          ></a>
-        <br />
-        <a
-          href="https://npmgraph.js.org/?q=verify-bitcoin-message"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            alt="External Dependencies"
-            src="https://img.shields.io/badge/dependencies-0-success"
-          ></a>
-        <br />
-        <a
-          href="https://github.com/mothepro/verify-bitcoin-message?tab=readme-ov-file#offline"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            alt="Offline First"
-            src="https://img.shields.io/badge/Internet-Not_Required-success"
-          /></a>
-        <br />
-        <a href="https://github.com/mothepro/verify-bitcoin-message/blob/main/verify.ts">
-          <img
-            alt="Bundle Size"
-            src="https://img.shields.io/badge/Bundle_Size-14kb-success"
-          /></a>
-        <br />
-        <!-- TODO replace with a payload instead :) -->
-        <a href="bitcoin:bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s">
-          <img
-            alt="Donations to bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s"
-            src="https://img.shields.io/badge/Donations-bc1q4ctk3p0gwdhtmyytlcvkttz3epjrlectzx0w8s-blue"
-          ></a>
+          <p>
+            Not only does <abbr
+              title="Elliptic Curve Digital Signature Algorithm"
+              data-tooltip="Elliptic Curve Digital Signature Algorithm"
+            >ECDSA</abbr> provide security for every
+            day internet communication, it's also used to secure Bitcoin.
+          </p>
+
+          <p>
+            Bitcoin uses the following cryptographic primitives
+          <ul>
+            <li>
+              <a
+                href="https://en.bitcoin.it/wiki/Secp256k1"
+                target="_blank"
+                rel="noopener noreferrer"
+              >secp256k1</a> as the elliptic curve
+            </li>
+            <li>
+              <a
+                href="https://en.wikipedia.org/wiki/RIPEMD"
+                target="_blank"
+                rel="noopener noreferrer"
+              >RIPEMD-160</a>
+              and
+              <a
+                href="https://en.wikipedia.org/wiki/SHA-2"
+                target="_blank"
+                rel="noopener noreferrer"
+              >SHA-256</a> hash functions
+            </li>
+            <li><a
+                href="https://en.bitcoin.it/wiki/Base58Check_encoding"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Base58Check encoding</a> for converting public keys to Bitcoin addresses</li>
+          </ul>
+          </p>
+        </article>
       </details>
-      <details
-        class="hidden"
-        id="json-stringify-details"
-      >
+      <details class="hidden verify-attempted-display">
         <summary
           role="button"
           class="secondary"
-        >Publish this message</summary>
+        >
+          <span class="verified-display">
+            Publish this message
+          </span>
+          <span class="error-display">
+            Reason for failure
+          </span>
+        </summary>
+        <p id="error-reason">The signature could not be verified for the provided message and address.</p>
         <pre id="json-stringify"></pre>
-        Copy this, then when you're ready
         <a
           href="https://github.com/mothepro/verify-bitcoin-message/edit/main/payloads.json"
           target="_blank"
           rel="noopener noreferrer"
-          class="primary"
+          class="primary verified-display"
           role="button"
         >Paste &amp; Publish</a>
+      </details>
+
+      <details
+        open
+        class="indent"
+        class="verify-completed-display-close"
+      >
+        <summary
+          role="button"
+          class="outline"
+        >Other ways to verify signed messages</summary>
+
+        <details>
+          <summary
+            role="button"
+            class="secondary"
+          >Bitcoin Node</summary>
+
+          Command Line
+          <pre><code>
+bitcoin-cli verifymessage &lt;address&gt; &lt;signature&gt; &lt;message&gt;
+</code></pre>
+
+          RPC
+          <pre><code>
+curl
+  --user &lt;rpcuser&gt;:&lt;rpcpassword&gt; \
+  --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifymessage", "params": [&lt;address&gt;, &lt;signature&gt;, &lt;message&gt;] }' \
+  -H 'content-type: text/plain;' \
+  http://127.0.0.1:8332/
+          </code></pre>
+        </details>
+
+        <details>
+          <summary
+            role="button"
+            class="secondary"
+          >JavaScript</summary>
+
+          Command Line
+          <pre><code>
+npx verify-bitcoin-message --json \
+  --address 1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV \
+  --message "This is an example of a signed message." \
+  --signature "H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk="
+            </code></pre>
+
+          Browser
+          <pre><code>
+&lt;script type="module"&gt;
+  import verify, { verifySafe } from 'https://unpkg.com/verify-bitcoin-message';
+&lt;/script&gt;
+
+<!-- TODO: Verify this actually works -->
+&lt;!-- Legacy Script Tag --&gt;
+&lt;script type="text/javascript" src="https://unpkg.com/verify-bitcoin-message"&gt;
+&lt;/script&gt;
+            </code></pre>
+
+          Node
+          <pre><code>
+npm install verify-bitcoin-message
+            </code></pre>
+
+          Bun
+          <pre><code>
+bun add verify-bitcoin-message
+            </code></pre>
+
+          Usage
+          <pre><code>
+import verify, { verifySafe } from 'verify-bitcoin-message';
+
+await verify({
+  address: '1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV',
+  message: 'This is an example of a signed message.',
+  signature: 'H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk='
+})
+
+// If you're not a fan of throwing errors:
+const isValid = await verifySafe({
+  address: '1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV',
+  message: 'This is an example of a signed message.',
+  signature: 'H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk='
+})
+            </code></pre>
+        </details>
+
+        <details>
+          <summary
+            role="button"
+            class="secondary"
+          >Websites</summary>
+
+          <ul>
+            <li>
+              <a
+                href="https://www.bitcoin.com/tools/verify-message/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Bitcoin.com</a>
+              <br />
+              <img
+                alt="Closed Source"
+                src="https://img.shields.io/badge/source-closed-red"
+              />
+
+            </li>
+            <li>
+              <a
+                href="https://www.verifybitcoinmessage.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Verify Bitcoin Message</a>
+              <br />
+              <img
+                alt="Closed Source"
+                src="https://img.shields.io/badge/source-closed-red"
+              />
+            </li>
+            <li>
+              <a
+                href="https://bluewallet.github.io/VerifySignature?a=&m=&s="
+                id="blue-wallet-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >BlueWallet's VerifySignature</a>
+              <br />
+              <img
+                alt="Open Source"
+                src="https://img.shields.io/badge/source-Open-success"
+              >
+              <br />
+              <img
+                alt="Offline First"
+                src="https://img.shields.io/badge/Internet-Not_Required-success"
+              />
+              <br />
+              <a
+                href="https://npmgraph.js.org/?q=bitcoinjs-message"
+                target="_blank"
+                rel="noopener noreferrer"
+              ><img
+                  alt="68 Dependencies"
+                  src="https://img.shields.io/badge/dependencies-68-yellow"
+                ></a>
+            </li>
+          </ul>
+        </details>
+
+        <a
+          href="https://github.com/mothepro/verify-bitcoin-message#verify-bitcoin-message"
+          target="_blank"
+          rel="noopener noreferrer"
+          role="button"
+          style="display: block"
+          class="outline primary"
+        >Check out the source code</a>
+
       </details>
     </div>
   </main>
