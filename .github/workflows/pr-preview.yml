@@ -65,7 +65,7 @@ jobs:
         with:
           script: |
             let count = 0;
-            const limit = 75;
+            const limit = 2;
             const { owner, repo } = context.repo;
             const issue_number = context.issue.number;
             const comments = `${{ steps.run_output.outputs.OUTPUT }}`.split('\n\n\n').filter(Boolean);
@@ -82,6 +82,7 @@ jobs:
               if (count++ >= limit) {
                 body = `Try to upload messages in smaller batches.\n\nPayload limit reached per commit.`
                 await github.rest.issues.createComment({ owner, repo, issue_number, body });
+                throw new Error(count);
                 break;
               }
             }
