@@ -23,6 +23,7 @@ for (const { address, message, signature } of payloads.slice(0, limit)) {
   proof.searchParams.set('message', message)
   proof.searchParams.set('signature', signature)
   console.log(`[signed](${proof}) by [\\\`${address}\\\`](${mempoolUrl})`)
+  console.log(`*The author on Github may or may not be the message signer.*`)
   console.log()
   console.log()
   console.log()
