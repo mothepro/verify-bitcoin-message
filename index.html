@@ -562,20 +562,24 @@ const isValid = await verifySafe({
 
       </details>
 
-      <!-- Eventually this and the published messages will be on the homescreen -->
-      <details
-        class="verify-completed-display indent hidden"
-        open
+      <!-- Eventually this and the published messages will be on the homescreen - right?! -->
+      <div
+        class="hidden"
         data-threshold="2"
       >
-        <summary
-          role="button"
-          class="outline"
+        <details
+          class="verify-completed-display indent hidden"
+          open
         >
-          More verified messages
-        </summary>
-        <div id="valid-payloads"></div>
-      </details>
+          <summary
+            role="button"
+            class="outline"
+          >
+            More verified messages
+          </summary>
+          <div id="valid-payloads"></div>
+        </details>
+      </div>
     </div>
   </main>
 
