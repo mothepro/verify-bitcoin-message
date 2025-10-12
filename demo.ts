@@ -16,15 +16,15 @@ const messageInput = document.getElementById('message') as HTMLTextAreaElement
 const signatureInput = document.getElementById('signature') as HTMLInputElement
 const blueWalletLink = document.getElementById('blue-wallet-link') as HTMLAnchorElement
 const jsonStringifyPre = document.getElementById('json-stringify') as HTMLPreElement
+const jsonStringifySelectAll = document.getElementById('json-stringify-select-all') as HTMLButtonElement
 const validPayloadsList = document.getElementById('valid-payloads') as HTMLOListElement
 
 // Nice
 addressInput.addEventListener('focus', addressInput.select)
 signatureInput.addEventListener('focus', signatureInput.select)
 messageInput.addEventListener('paste', ({ clipboardData }) => {
-  const maybeJson = clipboardData?.getData('text/plain')
+  const maybeJson = clipboardData?.getData('text/plain')?.trim()
   try {
-    console.log({ maybeJson })
     const { address, message, signature } = JSON.parse(maybeJson ?? '{}')
     console.log({ address, message, signature })
     if (address && message && signature) {
@@ -36,7 +36,39 @@ messageInput.addEventListener('paste', ({ clipboardData }) => {
   } catch (e) {}
 })
 
-//
+messageInput.addEventListener('paste', ({ clipboardData }) => {
+  const maybeSignedMessage = clipboardData?.getData('text/plain')?.trim()
+  const prefix = '-----BEGIN BITCOIN SIGNED MESSAGE-----'
+  const signaturePrefix = '-----BEGIN BITCOIN SIGNATURE-----'
+  const suffix = '-----END BITCOIN SIGNATURE-----'
+  try {
+    assert(maybeSignedMessage, 'Not a signed message')
+    for (const line of [prefix, signaturePrefix, suffix]) {
+      assert(maybeSignedMessage.includes(line), 'Not a signed message')
+    }
+    const mStart = prefix.length + maybeSignedMessage.indexOf(prefix)
+    const mEnd = maybeSignedMessage.indexOf(signaturePrefix)
+    const message = maybeSignedMessage.slice(mStart, mEnd).trim()
+
+    const sStart = signaturePrefix.length + maybeSignedMessage.indexOf(signaturePrefix)
+    const sEnd = maybeSignedMessage.indexOf(suffix)
+    const addressAndSignature = maybeSignedMessage.slice(sStart, sEnd).trim()
+    const [address, signature] = addressAndSignature.split('\n').map(line => line.trim())
+
+    addressInput.value = address
+    messageInput.value = message
+    signatureInput.value = signature
+    verifySignature()
+  } catch (e) {}
+})
+
+jsonStringifySelectAll.addEventListener('click', () => {
+  const range = document.createRange()
+  range.selectNodeContents(jsonStringifyPre)
+  const sel = window.getSelection()
+  sel?.removeAllRanges()
+  sel?.addRange(range)
+})
 
 // Set URL params to the UI Elements
 const params = new URLSearchParams(location.search)
