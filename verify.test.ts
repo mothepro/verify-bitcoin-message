@@ -2,6 +2,8 @@ import { expect, test } from 'bun:test'
 import payloads from './payloads.json'
 import verify from './verify'
 
+test(`Test payloads available`, () => expect(payloads.length).not.toBeArrayOfSize(0))
+
 for (const { address, message, signature } of payloads) {
   test(`${address} signed "${message}"`, () =>
     expect(verify({ address, signature, message })).resolves.toBe(true))

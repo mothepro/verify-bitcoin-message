@@ -69,15 +69,23 @@
       background: var(--pico-del-background-color);
     }
 
+    a.no-line {
+      text-decoration: none;
+      color: var(--pico-primary-color);
+    }
+
     .address-link {
       color: var(--pico-primary-color);
-      text-decoration: none;
       font-family: monospace;
       font-weight: bold;
     }
 
     .address-link:hover {
-      text-decoration: underline;
+      text-decoration: dotted;
+    }
+
+    .align-start {
+      text-align: start;
     }
 
     .hidden {
@@ -112,12 +120,14 @@
       margin-bottom: var(--pico-spacing)
     }
 
-    #valid-payloads a {
-      display: inline-block;
+    a.message {
+      display: block;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 100%;
+      text-align: start;
+      margin-bottom: var(--pico-spacing);
     }
 
     #verify-dialog footer {
@@ -157,12 +167,18 @@
     </div>
 
     <div class="verified-display hidden hero">
-      <h1>✅ Message Verified</h1>
+      <h1><a
+          href="/"
+          class="no-line"
+        >Message Verified ✅</a></h1>
     </div>
 
 
     <div class="error-display hidden hero">
-      <h1>❌ Message Verification Failed</h1>
+      <h1><a
+          href="/"
+          class="no-line"
+        >Message Verification Failed ❌</a></h1>
     </div>
 
     <article
@@ -183,7 +199,7 @@
             type="text"
             id="address"
             name="address"
-            placeholder="Bitcoin Address"
+            placeholder="Bitcoin Address (Legacy only)"
           />
           <textarea
             required
@@ -238,7 +254,8 @@ It's a good idea to include on of these
 
       <p class="hidden error-display">
         The message has been tampered with, or it was not signed by the provided address.
-        <br>
+      </p>
+      <p class="hidden error-display">
         When verified, digital signatures cryptographically prove
       </p>
 
@@ -344,7 +361,7 @@ It's a good idea to include on of these
           target="_blank"
           rel="noopener noreferrer"
           role="button"
-          class="one primary verified-display"
+          class="one secondary verify-attempted-display"
         >Messages from around the world 🌍</a>
 
         <button
@@ -355,7 +372,7 @@ It's a good idea to include on of these
       <details class="hidden verify-attempted-display">
         <summary
           role="button"
-          class="secondary"
+          class="outline"
         >
           <span class="verified-display">
             Publish this message
@@ -477,7 +494,7 @@ const isValid = await verifySafe({
           <summary
             role="button"
             class="outline"
-          >Websites</summary>
+          >Other Websites</summary>
 
           <ul>
             <li>
@@ -540,17 +557,24 @@ const isValid = await verifySafe({
           target="_blank"
           rel="noopener noreferrer"
           role="button"
-          class="outline primary block"
-        >Check out the source code</a>
+          class="outline primary block align-start"
+        >Source Code</a>
 
       </details>
 
       <!-- Eventually this and the published messages will be on the homescreen -->
-      <details class="completed-display">
-        <summary>
-          Messages
+      <details
+        class="verify-completed-display indent hidden"
+        open
+        data-threshold="2"
+      >
+        <summary
+          role="button"
+          class="outline"
+        >
+          More verified messages
         </summary>
-        <ol id="valid-payloads"></ol>
+        <div id="valid-payloads"></div>
       </details>
     </div>
   </main>
