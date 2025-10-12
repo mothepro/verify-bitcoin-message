@@ -3,25 +3,5 @@
     "address": "1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV",
     "message": "This is an example of a signed message.",
     "signature": "H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk="
-  },
-  {
-    "address": "1LibQo7teQYdcKetdeiWtM4RxrP1Ma6iKs",
-    "message": "pootis",
-    "signature": "IHYkFzb+orDSwiy9E0Pw4VRk4K8kdsD8btl+92YJvzhFDG3ktifdbRr1OE2GPtdXEce53wEgfuOYHeo0+8U0lR0="
-  },
-  {
-    "address": "1Kr4AtifHViXZayp1HY97JV2GngXABk4go",
-    "signature": "H6VXqFjjqnL8T+N7/0IDJJxJ6DuX4xjR+vrakgAT7hr6Eam4JyKK9+jNs2gCL0PZGsp8/w9PbVcZvxPlKPV7b2w=",
-    "message": "1"
-  },
-  {
-    "address": "1Kr4AtifHViXZayp1HY97JV2GngXABk4go",
-    "signature": "IDhHkR8Zd4m/PqPEN+/4Zm6tuZQH8COL7ZHtMhXwwh6tNkYFE521M4Y8yuEDxMKM9jjQwtt3xPweIrWDUSWoeLw=",
-    "message": "1,2"
-  },
-  {
-    "address": "1Kr4AtifHViXZayp1HY97JV2GngXABk4go",
-    "signature": "H/M1zw3PhBKRGMlcioeHvNhSfIR8f8yngNWaERXbNHxNccc29ed0h1PdrxZg+XmpkoaWmctsP/jqyuS/H5LLkY8=",
-    "message": "1,2,3"
   }
 ]

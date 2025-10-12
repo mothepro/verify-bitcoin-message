@@ -10,7 +10,7 @@ Translations would be an incredible contribution now :)
 
 Any messages, from around the globe, can be added via [Pull Requests](../../pulls).
 
-However, verification process automatically hides invalid messages.
+The verification process automatically hides invalid messages.
 
 <!-- *Each fork is like its own "[community](../../forks)".* -->
 
@@ -86,12 +86,12 @@ const isValid = await verifySafe({
 
 ### Up Next
 
-- [ ] My idea to prevent fake screenshots
-- [ ] better error messages
-- [ ] better ui (i.e. the signed page should look nice and doesn't need to be a form)
+- [ ] My idea to prevent fake screenshots :lightbulb:
 - [ ] more support for address types
-- [ ] explainer what this is, how, and why (why cold storage >>> exchanges)
-- [ ] service worker?
+- [ ] explainer why cold storage >>> exchanges (you can use this)
+- [ ] service worker? for full PWA
+- [ ] **better example message**
+- [ ] allow markdown in message? :eyes:
 
 ### Web Alternatives
 
