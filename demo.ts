@@ -2,7 +2,7 @@ import validPayloads from './payloads.json'
 import verify, { assert, parsePayload } from './verify'
 
 const form = document.getElementById('verifyForm') as HTMLFormElement
-const heroDiv = document.getElementById('hero') as HTMLDivElement
+const nonAttemptedDisplay = document.querySelectorAll('.no-attempt-display')
 const attemptedDisplay = document.querySelectorAll('.verify-attempted-display')
 const verifiedDisplay = document.querySelectorAll('.verified-display')
 const errorDisplay = document.querySelectorAll('.error-display')
@@ -16,7 +16,9 @@ const messageInput = document.getElementById('message') as HTMLTextAreaElement
 const signatureInput = document.getElementById('signature') as HTMLInputElement
 const blueWalletLink = document.getElementById('blue-wallet-link') as HTMLAnchorElement
 const jsonStringifyPre = document.getElementById('json-stringify') as HTMLPreElement
-const jsonStringifySelectAll = document.getElementById('json-stringify-select-all') as HTMLButtonElement
+const jsonStringifySelectAll = document.getElementById(
+  'json-stringify-select-all'
+) as HTMLButtonElement
 const validPayloadsList = document.getElementById('valid-payloads') as HTMLOListElement
 
 // Nice
@@ -62,12 +64,16 @@ messageInput.addEventListener('paste', ({ clipboardData }) => {
   } catch (e) {}
 })
 
-jsonStringifySelectAll.addEventListener('click', () => {
-  const range = document.createRange()
-  range.selectNodeContents(jsonStringifyPre)
-  const sel = window.getSelection()
-  sel?.removeAllRanges()
-  sel?.addRange(range)
+jsonStringifySelectAll.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(jsonStringifyPre.textContent)
+  } catch (err) {
+    const range = document.createRange()
+    range.selectNodeContents(jsonStringifyPre)
+    const sel = getSelection()
+    sel?.removeAllRanges()
+    sel?.addRange(range)
+  }
 })
 
 // Set URL params to the UI Elements
@@ -121,7 +127,7 @@ async function verifySignature() {
     message: { bytes, utf8, hex },
   } = parsePayload(payload)
 
-  heroDiv.classList.add('hidden')
+  nonAttemptedDisplay.forEach(e => e.classList.add('hidden'))
   attemptedDisplay.forEach(e => e.classList.remove('hidden'))
   verifiedDisplay.forEach(e => e.classList.add('hidden'))
   errorDisplay.forEach(e => e.classList.add('hidden'))
