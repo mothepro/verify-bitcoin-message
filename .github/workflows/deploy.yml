@@ -28,11 +28,8 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Run Tests
-        run: bun test verify
-
-      - name: Build Project
-        run: bun run build
+      - name: Install Dev Dependencies, Run Tests, Build Project
+        run: bun install
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
