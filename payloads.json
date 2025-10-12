@@ -1,7 +1,7 @@
 [
   {
-  "address": "19Mz2o9RDABT74SA9njZqMtJXKEzj2qUoH",
-  "signature": "H9ed6z5RgdThRxXXqePmtJbaK1pGvoy6e+aiwUPD6pkrJ6d6TBchOu5OQLEbgq/15YRjcOUC+kMrGVfszUXV5Wc=",
-  "message": "@RogerVer lets make a deal, 1 for 1 trade. At least 60k, possibly up to 130k, my BTU for your BTC."
-}
+    "address": "1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV",
+    "message": "This is an example of a signed message.",
+    "signature": "H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk="
+  }
 ]
