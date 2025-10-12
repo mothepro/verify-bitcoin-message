@@ -16,7 +16,8 @@
     href="./css/pico.min.css"
   >
   <style>
-    html, body {
+    html,
+    body {
       min-height: 100vh;
     }
 
@@ -103,7 +104,6 @@
 
     .alternatives {
       margin-top: 2rem;
-      font-size: 0.9rem;
       color: var(--pico-muted-color);
     }
 
@@ -333,24 +333,25 @@ It's a good idea to include on of these
     <div class="alternatives">
       <div class="flex">
         <a
-          data-payload="0"
+          data-href-payload="0"
           target="_blank"
           rel="noopener noreferrer"
           role="button"
-          class="one secondary"
+          class="one secondary no-attempt-display"
         >See it in action</a>
+        <a
+          href="https://github.com/mothepro/verify-bitcoin-message/pulls"
+          target="_blank"
+          rel="noopener noreferrer"
+          role="button"
+          class="one primary verified-display"
+        >Messages from around the world 🌍</a>
 
         <button
           onclick="document.getElementById('verify-dialog').showModal()"
           class="one primary"
         >Verify any Message</button>
       </div>
-      <details class="hidden">
-        <summary>
-          Payloads
-        </summary>
-        <ol id="valid-payloads"></ol>
-      </details>
       <details class="hidden verify-attempted-display">
         <summary
           role="button"
@@ -542,6 +543,14 @@ const isValid = await verifySafe({
           class="outline primary block"
         >Check out the source code</a>
 
+      </details>
+
+      <!-- Eventually this and the published messages will be on the homescreen -->
+      <details class="completed-display">
+        <summary>
+          Messages
+        </summary>
+        <ol id="valid-payloads"></ol>
       </details>
     </div>
   </main>

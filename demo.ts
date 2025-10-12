@@ -63,7 +63,7 @@ for (const [index, { address, message, signature }] of validPayloads.entries()) 
   validPayloadsList.appendChild(li)
 
   // Get all elements that should link to this payload
-  const anchors = [...document.querySelectorAll(`[data-payload="${index}"]`)] as HTMLAnchorElement[]
+  const anchors = [...document.querySelectorAll(`[data-href-payload="${index}"]`)] as HTMLAnchorElement[]
   anchors.push(anchor)
 
   // Set the href to the current URL with the payload params
