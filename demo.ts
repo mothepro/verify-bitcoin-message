@@ -120,7 +120,6 @@ function handleSignedMessagePaste(maybeSignedMessage: string) {
 }
 
 document.body.classList.add('verify-attempted-display-false', 'verified-display-false', 'error-display-false')
-  nonAttemptedDisplay.forEach(e => e.classList.remove('hidden'))
 
 async function verifySignature() {
   const data = new FormData(form)
