@@ -16,12 +16,23 @@
     href="./css/pico.min.css"
   >
   <style>
-    #verified-message-content {
-      background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-      border: 1px solid #c3e6cb;
-      border-radius: var(--pico-border-radius);
-      padding: 1rem;
-      margin: 1rem 0;
+    html, body {
+      min-height: 100vh;
+    }
+
+    .verified-display-true {
+      background: linear-gradient(135deg, hsl(134.4deg 40.98% 88.04%) 0%, hsl(133.71deg 64.58% 69.3%) 100%);
+    }
+
+    .error-display-true {
+      background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    }
+
+    /* border: 1px solid #c3e6cb; */
+
+    .monospace {
+      font-family: monospace;
+      white-space: break-spaces;
     }
 
     pre {
@@ -137,7 +148,6 @@
 
 <body>
   <main class="container">
-    <!-- Hero Section (shown when no message) -->
     <div class="hero no-attempt-display">
       <h1>Message Verifier</h1>
       <p>Authenticate signed messages on your device &mdash; <i>even in airplane mode</i></p>
@@ -145,17 +155,20 @@
         Please enable JavaScript in your browser, cannot verify messages without it.
       </noscript>
     </div>
-    <!-- Verified Message Display (shown when message is verified) -->
-    <div class="verified-display hidden">
-      <h1>✅ Message Verified</h1>
 
-      <pre id="verified-message-content"></pre>
+    <div class="verified-display hidden hero">
+      <h1>✅ Message Verified</h1>
     </div>
 
-    <!-- Error Display (shown when verification fails) -->
-    <div class="error-display hidden">
+
+    <div class="error-display hidden hero">
       <h1>❌ Message Verification Failed</h1>
     </div>
+
+    <article
+      id="verified-message-content"
+      class="monospace verified-display hidden"
+    ></article>
 
     <!-- Verification Dialog -->
     <dialog id="verify-dialog">
@@ -214,14 +227,22 @@ It's a good idea to include on of these
     <article class="education">
       <!-- <h3>Message signed by a Bitcoin private key</h3> -->
 
-      <a
-        id="verified-address-link"
-        class="address-link"
-        target="_blank"
-        rel="noopener noreferrer"
-      ></a> digitally signed this message with their private key to cryptographically prove.
+      <p class="hidden verified-display">
+        <a
+          id="verified-address-link"
+          class="address-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        ></a> digitally signed this message with their private key
+      </p>
 
-      <p>Digital signatures cryptographically prove</p>
+      <p class="hidden error-display">
+        The message has been tampered with, or it was not signed by the provided address.
+        <br>
+        When verified, digital signatures cryptographically prove
+      </p>
+
+      <p class="hidden no-attempt-display">Digital signatures cryptographically prove</p>
 
       <ul>
         <li><strong>Authentication</strong> The signer can spend bitcoin from the address</li>
@@ -297,6 +318,15 @@ It's a good idea to include on of these
             >Base58Check encoding</a> for converting public keys to Bitcoin addresses</li>
         </ul>
         </p>
+
+        <p>
+          This website uses the <a
+            href="https://www.npmjs.com/package/verify-bitcoin-message"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-tooltip="This JavaScript library provides one line of code to verify signed messages"
+          >verify-bitcoin-message</a> library to verify signatures on device &mdash; without an internet connection.
+        </p>
       </details>
     </article>
 
@@ -315,12 +345,12 @@ It's a good idea to include on of these
           class="one primary"
         >Verify any Message</button>
       </div>
-        <details class="hidden">
-          <summary>
-            Payloads
-          </summary>
-          <ol id="valid-payloads"></ol>
-        </details>
+      <details class="hidden">
+        <summary>
+          Payloads
+        </summary>
+        <ol id="valid-payloads"></ol>
+      </details>
       <details class="hidden verify-attempted-display">
         <summary
           role="button"
@@ -336,18 +366,17 @@ It's a good idea to include on of these
         <p id="error-reason"></p>
         <pre id="json-stringify"></pre>
         <div class="flex">
-        <button
-          id="json-stringify-select-all"
-          class="secondary one"
-        >Copy</button>
-        <a
-          href="https://github.com/mothepro/verify-bitcoin-message/edit/main/payloads.json"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="primary verified-display one"
-          role="button"
-        >Publish via Github</a>
-
+          <button
+            id="json-stringify-select-all"
+            class="secondary one"
+          >Copy</button>
+          <a
+            href="https://github.com/mothepro/verify-bitcoin-message/edit/main/payloads.json"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="primary verified-display one"
+            role="button"
+          >Publish via Github</a>
         </div>
       </details>
 
@@ -359,12 +388,12 @@ It's a good idea to include on of these
           role="button"
           class="outline"
         >
-          <div class="no-attempt-display hidden">
+          <span class="no-attempt-display">
             Other ways to verify signed messages
-          </div>
-          <div class="completed-display hidden">
+          </span>
+          <span class="verify-attempted-display hidden">
             Verify this Verification
-          </div>
+          </span>
         </summary>
 
         <details>
@@ -393,14 +422,6 @@ curl
             role="button"
             class="outline"
           >JavaScript</summary>
-          <p>
-            The <a
-              href="https://www.npmjs.com/package/verify-bitcoin-message"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-tooltip="This JavaScript library provides one line of code to verify signed messages"
-            >verify-bitcoin-message</a> library, verifies signatures on device, without an internet connection.
-          </p>
 
           Command Line
           <pre><code>

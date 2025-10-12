@@ -119,6 +119,9 @@ function handleSignedMessagePaste(maybeSignedMessage: string) {
   } catch (e) {}
 }
 
+document.body.classList.add('verify-attempted-display-false', 'verified-display-false', 'error-display-false')
+  nonAttemptedDisplay.forEach(e => e.classList.remove('hidden'))
+
 async function verifySignature() {
   const data = new FormData(form)
   const payload = {
@@ -132,6 +135,8 @@ async function verifySignature() {
     message: { bytes, utf8, hex },
   } = parsePayload(payload)
 
+  document.body.classList.add('verify-attempted-display-true')
+  document.body.classList.remove('verify-attempted-display-false')
   nonAttemptedDisplay.forEach(e => e.classList.add('hidden'))
   attemptedDisplay.forEach(e => e.classList.remove('hidden'))
   verifiedDisplay.forEach(e => e.classList.add('hidden'))
@@ -145,14 +150,20 @@ async function verifySignature() {
     const isValid = await verify({ message: bytes, address, signature })
     assert(isValid, 'Signature is invalid')
 
+    document.body.classList.add('verified-display-true')
+    document.body.classList.remove('verified-display-false')
     verifiedAddressLink.textContent = address
     verifiedAddressLink.href += address
     verifiedMessageContent.textContent = utf8
     verifiedDisplay.forEach(e => e.classList.remove('hidden'))
   } catch (error: unknown) {
+    document.body.classList.add('error-display-true')
+    document.body.classList.remove('error-display-false')
     errorReason.textContent = error instanceof Error ? error.message : String(error)
     errorDisplay.forEach(e => e.classList.remove('hidden'))
   } finally {
+    document.body.classList.add('verify-completed-display-true')
+    document.body.classList.remove('verify-completed-display-false')
     completedDisplay.forEach(e => e.classList.remove('hidden'))
     document.querySelectorAll('[aria-busy]').forEach(e => e.setAttribute('aria-busy', 'false'))
 
