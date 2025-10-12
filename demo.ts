@@ -30,6 +30,12 @@ messageInput.addEventListener('paste', ({ clipboardData }) =>
 messageInput.addEventListener('paste', ({ clipboardData }) =>
   handleSignedMessagePaste(clipboardData?.getData('text/plain')?.trim() ?? '')
 )
+const hiddenLimits = document.querySelectorAll('[data-threshold].hidden')
+for (const el of hiddenLimits) {
+  const limit = parseInt(el.getAttribute('data-threshold') ?? '0')
+  if (validPayloads.length >= limit)
+    el.classList.remove('hidden')
+}
 
 jsonStringifySelectAll.addEventListener('click', async () => {
   try {
@@ -53,14 +59,12 @@ signatureInput.value = params.get('signature')?.trim() ?? ''
 
 for (const [index, { address, message, signature }] of validPayloads.entries()) {
   const anchor = document.createElement('a')
+  anchor.setAttribute('role', 'button')
+  anchor.classList.add('outline', 'contrast', 'message')
   anchor.textContent = message
   // anchor.target = '_blank'
   // anchor.rel = 'noopener noreferrer'
-
-  // Add to the list
-  const li = document.createElement('li')
-  li.appendChild(anchor)
-  validPayloadsList.appendChild(li)
+  validPayloadsList.appendChild(anchor)
 
   // Get all elements that should link to this payload
   const anchors = [...document.querySelectorAll(`[data-href-payload="${index}"]`)] as HTMLAnchorElement[]
