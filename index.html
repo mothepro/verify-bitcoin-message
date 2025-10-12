@@ -32,6 +32,10 @@
       white-space: break-spaces;
     }
 
+    .block {
+      display: block !important;
+    }
+
     .hero {
       text-align: center;
       padding: 2rem 0;
@@ -46,14 +50,6 @@
       font-size: 1.2rem;
       color: var(--pico-muted-color);
       margin-bottom: 2rem;
-    }
-
-    .signature-info {
-      background: var(--pico-card-background-color);
-      border: 1px solid var(--pico-card-border-color);
-      border-radius: var(--pico-border-radius);
-      padding: 1.5rem;
-      margin: 1rem 0;
     }
 
     .failed {
@@ -142,10 +138,7 @@
 <body>
   <main class="container">
     <!-- Hero Section (shown when no message) -->
-    <div
-      id="hero"
-      class="hero"
-    >
+    <div class="hero no-attempt-display">
       <h1>Message Verifier</h1>
       <p>Authenticate signed messages on your device &mdash; <i>even in airplane mode</i></p>
       <noscript>
@@ -154,26 +147,14 @@
     </div>
     <!-- Verified Message Display (shown when message is verified) -->
     <div class="verified-display hidden">
-      <div class="signature-info">
-        <h2>✅ Verified Message</h2>
-        <p>
-          <a
-            id="verified-address-link"
-            class="address-link"
-            target="_blank"
-            rel="noopener noreferrer"
-          ></a> signed this message with their private key
-        </p>
-      </div>
+      <h1>✅ Message Verified</h1>
 
       <pre id="verified-message-content"></pre>
     </div>
 
     <!-- Error Display (shown when verification fails) -->
     <div class="error-display hidden">
-      <div class="signature-info failed">
-        <h2>❌ Verification Failed</h2>
-      </div>
+      <h1>❌ Message Verification Failed</h1>
     </div>
 
     <!-- Verification Dialog -->
@@ -233,6 +214,13 @@ It's a good idea to include on of these
     <article class="education">
       <!-- <h3>Message signed by a Bitcoin private key</h3> -->
 
+      <a
+        id="verified-address-link"
+        class="address-link"
+        target="_blank"
+        rel="noopener noreferrer"
+      ></a> digitally signed this message with their private key to cryptographically prove.
+
       <p>Digital signatures cryptographically prove</p>
 
       <ul>
@@ -246,6 +234,9 @@ It's a good idea to include on of these
           role="button"
           class="outline"
         >How it works</summary>
+
+        <!-- Asymmetric cryptography is a powerful tool for secure communication. -->
+
 
         <p>
           <a
@@ -307,13 +298,6 @@ It's a good idea to include on of these
         </ul>
         </p>
       </details>
-
-      The <a
-        href="https://www.npmjs.com/package/verify-bitcoin-message"
-        target="_blank"
-        rel="noopener noreferrer"
-        data-tooltip="This JavaScript library provides one line of code to verify signed messages"
-      >verify-bitcoin-message</a> library, verifies signatures on device, without an internet connection.
     </article>
 
     <div class="alternatives">
@@ -324,19 +308,19 @@ It's a good idea to include on of these
           rel="noopener noreferrer"
           role="button"
           class="one secondary"
-        >Check out this message</a>
+        >See it in action</a>
 
         <button
           onclick="document.getElementById('verify-dialog').showModal()"
           class="one primary"
         >Verify any Message</button>
       </div>
-      <details class="hidden">
-        <summary>
-          Payloads
-        </summary>
-        <ol id="valid-payloads"></ol>
-      </details>
+        <details class="hidden">
+          <summary>
+            Payloads
+          </summary>
+          <ol id="valid-payloads"></ol>
+        </details>
       <details class="hidden verify-attempted-display">
         <summary
           role="button"
@@ -351,29 +335,42 @@ It's a good idea to include on of these
         </summary>
         <p id="error-reason"></p>
         <pre id="json-stringify"></pre>
+        <div class="flex">
+        <button
+          id="json-stringify-select-all"
+          class="secondary one"
+        >Copy</button>
         <a
           href="https://github.com/mothepro/verify-bitcoin-message/edit/main/payloads.json"
           target="_blank"
           rel="noopener noreferrer"
-          class="primary verified-display"
+          class="primary verified-display one"
           role="button"
-        >Paste &amp; Publish</a>
+        >Publish via Github</a>
+
+        </div>
       </details>
 
       <details
-        open
         class="indent"
         class="verify-completed-display-close"
       >
         <summary
           role="button"
           class="outline"
-        >Other ways to verify signed messages</summary>
+        >
+          <div class="no-attempt-display hidden">
+            Other ways to verify signed messages
+          </div>
+          <div class="completed-display hidden">
+            Verify this Verification
+          </div>
+        </summary>
 
         <details>
           <summary
             role="button"
-            class="secondary"
+            class="outline"
           >Bitcoin Node</summary>
 
           Command Line
@@ -394,8 +391,16 @@ curl
         <details>
           <summary
             role="button"
-            class="secondary"
+            class="outline"
           >JavaScript</summary>
+          <p>
+            The <a
+              href="https://www.npmjs.com/package/verify-bitcoin-message"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-tooltip="This JavaScript library provides one line of code to verify signed messages"
+            >verify-bitcoin-message</a> library, verifies signatures on device, without an internet connection.
+          </p>
 
           Command Line
           <pre><code>
@@ -449,7 +454,7 @@ const isValid = await verifySafe({
         <details>
           <summary
             role="button"
-            class="secondary"
+            class="outline"
           >Websites</summary>
 
           <ul>
@@ -513,8 +518,7 @@ const isValid = await verifySafe({
           target="_blank"
           rel="noopener noreferrer"
           role="button"
-          style="display: block"
-          class="outline primary"
+          class="outline primary block"
         >Check out the source code</a>
 
       </details>
