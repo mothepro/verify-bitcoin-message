@@ -16,6 +16,7 @@ const messageInput = document.getElementById('message') as HTMLTextAreaElement
 const signatureInput = document.getElementById('signature') as HTMLInputElement
 const blueWalletLink = document.getElementById('blue-wallet-link') as HTMLAnchorElement
 const jsonStringifyPre = document.getElementById('json-stringify') as HTMLPreElement
+const jsonStringifySelectAll = document.getElementById('json-stringify-select-all') as HTMLButtonElement
 const validPayloadsList = document.getElementById('valid-payloads') as HTMLOListElement
 
 // Nice
@@ -36,13 +37,11 @@ messageInput.addEventListener('paste', ({ clipboardData }) => {
 })
 
 messageInput.addEventListener('paste', ({ clipboardData }) => {
-  console.log('Pasting message')
   const maybeSignedMessage = clipboardData?.getData('text/plain')?.trim()
   const prefix = '-----BEGIN BITCOIN SIGNED MESSAGE-----'
   const signaturePrefix = '-----BEGIN BITCOIN SIGNATURE-----'
   const suffix = '-----END BITCOIN SIGNATURE-----'
   try {
-    debugger
     assert(maybeSignedMessage, 'Not a signed message')
     for (const line of [prefix, signaturePrefix, suffix]) {
       assert(maybeSignedMessage.includes(line), 'Not a signed message')
@@ -61,6 +60,14 @@ messageInput.addEventListener('paste', ({ clipboardData }) => {
     signatureInput.value = signature
     verifySignature()
   } catch (e) {}
+})
+
+jsonStringifySelectAll.addEventListener('click', () => {
+  const range = document.createRange()
+  range.selectNodeContents(jsonStringifyPre)
+  const sel = window.getSelection()
+  sel?.removeAllRanges()
+  sel?.addRange(range)
 })
 
 // Set URL params to the UI Elements
