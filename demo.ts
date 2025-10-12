@@ -22,9 +22,8 @@ const validPayloadsList = document.getElementById('valid-payloads') as HTMLOList
 addressInput.addEventListener('focus', addressInput.select)
 signatureInput.addEventListener('focus', signatureInput.select)
 messageInput.addEventListener('paste', ({ clipboardData }) => {
-  const maybeJson = clipboardData?.getData('text/plain')
+  const maybeJson = clipboardData?.getData('text/plain')?.trim()
   try {
-    console.log({ maybeJson })
     const { address, message, signature } = JSON.parse(maybeJson ?? '{}')
     console.log({ address, message, signature })
     if (address && message && signature) {
@@ -36,7 +35,33 @@ messageInput.addEventListener('paste', ({ clipboardData }) => {
   } catch (e) {}
 })
 
-//
+messageInput.addEventListener('paste', ({ clipboardData }) => {
+  console.log('Pasting message')
+  const maybeSignedMessage = clipboardData?.getData('text/plain')?.trim()
+  const prefix = '-----BEGIN BITCOIN SIGNED MESSAGE-----'
+  const signaturePrefix = '-----BEGIN BITCOIN SIGNATURE-----'
+  const suffix = '-----END BITCOIN SIGNATURE-----'
+  try {
+    debugger
+    assert(maybeSignedMessage, 'Not a signed message')
+    for (const line of [prefix, signaturePrefix, suffix]) {
+      assert(maybeSignedMessage.includes(line), 'Not a signed message')
+    }
+    const mStart = prefix.length + maybeSignedMessage.indexOf(prefix)
+    const mEnd = maybeSignedMessage.indexOf(signaturePrefix)
+    const message = maybeSignedMessage.slice(mStart, mEnd).trim()
+
+    const sStart = signaturePrefix.length + maybeSignedMessage.indexOf(signaturePrefix)
+    const sEnd = maybeSignedMessage.indexOf(suffix)
+    const addressAndSignature = maybeSignedMessage.slice(sStart, sEnd).trim()
+    const [address, signature] = addressAndSignature.split('\n').map(line => line.trim())
+
+    addressInput.value = address
+    messageInput.value = message
+    signatureInput.value = signature
+    verifySignature()
+  } catch (e) {}
+})
 
 // Set URL params to the UI Elements
 const params = new URLSearchParams(location.search)
