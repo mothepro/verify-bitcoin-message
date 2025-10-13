@@ -80,7 +80,6 @@ jobs:
             const limit = 75
             const { owner, repo } = context.repo
             const issue_number = context.issue.number
-            console.log({ owner, repo, issue_number, context })
             const existingComments = await github.rest.issues.listComments({ owner, repo, issue_number });
             for (const { address, message, signature } of payloads) {
               const hasComment = existingComments.data.find(comment => comment.body.includes(signature))
@@ -97,10 +96,10 @@ jobs:
 
               let body = `
             > [!IMPORTANT]
-            > [\`${address}\`](${mempool}) digitally signed this message.
-            > This does **not** mean that @${context.actor} is message signer.
+            > 🔏 [\`${address}\`](${mempool}) digitally signed this message
+            > 🕵 _@${context.actor} may **not** be the signer_
             >
-            > ## Proof [${homepage} 🔐](${proof})
+            > ### 🔐 Proof [${homepage.host}](${proof})
 
 
             ${message}`.trim()
