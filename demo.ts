@@ -83,6 +83,9 @@ for (const [index, { address, message, signature }] of validPayloads.entries()) 
   url.searchParams.set('message', message)
   url.searchParams.set('signature', signature)
   for (const a of anchors) a.href = url.toString()
+
+  // Make relative links work offline
+  for (const a of anchors) a.addEventListener('click', handlePayloadClick)
 }
 
 // Verify if we have a signature in the URL or whenever form is submitted
@@ -91,6 +94,16 @@ form.addEventListener('submit', e => {
   e.preventDefault()
   return verifySignature()
 })
+
+function handlePayloadClick(e: PointerEvent) {
+  const url = new URL((e.target as HTMLAnchorElement).href)
+  messageInput.value = url.searchParams.get('message') ?? ''
+  addressInput.value = url.searchParams.get('address') ?? ''
+  signatureInput.value = url.searchParams.get('signature') ?? ''
+  verifySignature()
+  e.preventDefault()
+  return false
+}
 
 function handleJsonPaste(maybeJson: string) {
   try {
@@ -226,7 +239,7 @@ async function verifySignature() {
     document.body.classList.remove('verify-completed-display-false')
     completedDisplay.forEach(e => e.classList.remove('hidden'))
     busyElements.forEach(e => e.setAttribute('aria-busy', 'false'))
-    durationElements.forEach(e => e.textContent = `${durationMs.toFixed(2)}ms`)
+    durationElements.forEach(e => (e.textContent = `${durationMs.toFixed(2)}ms`))
 
     verifyDialog.close()
     jsonStringifyPre.textContent = JSON.stringify({ address, signature, message: utf8 }, null, 2)
