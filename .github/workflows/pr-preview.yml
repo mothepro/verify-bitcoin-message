@@ -78,7 +78,9 @@ jobs:
                 console.warn(`Skipping comment already exists for signature ${signature.slice(0, 8)}...`)
                 continue;
               }
-              let body = comments[index]
+              let body = `> [!IMPORTANT]
+            > The author on Github may or may not be the message signer.
+            ${comments[index]}`
               await github.rest.issues.createComment({ owner, repo, issue_number, body });
               if (count++ >= limit) {
                 body = `All payloads have been verified. ☑️ \n\nPre commit payload limit reached.\nTry to upload messages in smaller batches.\n\nPayload limit reached per commit.`
