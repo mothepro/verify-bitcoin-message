@@ -97,9 +97,9 @@ jobs:
               let body = `
             > [!IMPORTANT]
             > 🔏 [\`${address}\`](${mempool}) digitally signed this message
-            > 🕵 _@${context.actor} may **not** be the signer_
+            > 🕵 @${context.actor} may **not** be the signer
             >
-            > ### 🔐 Proof [${homepage.host}](${proof})
+            > ### 🔐 Proof [${proof.host}](${proof})
 
 
             ${message}`.trim()
