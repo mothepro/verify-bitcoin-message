@@ -82,7 +82,7 @@ jobs:
             const issue_number = context.issue.number
             const existingComments = await github.rest.issues.listComments({ owner, repo, issue_number });
             for (const { address, message, signature } of payloads) {
-              const hasComment = existingComments.data.find(comment => {
+              const hasComment2 = existingComments.data.find(comment => {
               console.log('comment.body', comment.body)
               console.log('signature?', signature)
               return comment.body.includes(signature)
@@ -101,10 +101,7 @@ jobs:
 
               let body = `
             > [!IMPORTANT]
-            > 🔏 [\`${address}\`](${mempool}) digitally signed this message
-            > 🕵 @${context.actor} may **not** be the signer
-            >
-            > ### 🔐 Proof [${proof.host}](${proof})
+            > 🔏 Verified [digital signature](${proof}) by [\`${address}\`](${mempool}) 🕵 (@${context.actor} may **not** be signer)
 
 
             ${message}`.trim()
