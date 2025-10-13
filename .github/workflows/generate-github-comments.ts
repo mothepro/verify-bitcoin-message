@@ -9,12 +9,7 @@ import payloads from '../../payloads.json'
 // https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#about-secondary-rate-limits
 const limit = 75 // instead I should concat all the rest into the last comment
 
-const escapeMarkdown = (str: string) => str.replace(/[\\`*_{}[\]()#+-.!>]/g, '\\$&')
-
 for (const { address, message, signature } of payloads.slice(0, limit)) {
-  for (const line of message.split('\n')) console.log(`> ${escapeMarkdown(line)}`)
-  console.log()
-
   const mempoolUrl = new URL(`https://mempool.space`)
   mempoolUrl.pathname += `address/${address}`
 
@@ -22,8 +17,12 @@ for (const { address, message, signature } of payloads.slice(0, limit)) {
   proof.searchParams.set('address', address)
   proof.searchParams.set('message', message)
   proof.searchParams.set('signature', signature)
-  console.log(`[signed](${proof}) by [\\\`${address}\\\`](${mempoolUrl})`)
-  console.log(`*The author on Github may or may not be the message signer.*`)
+  console.log()
+  console.log(`[\\\`${address}\\\`](${mempoolUrl}) digitally [signed 🔐 this message](${proof}).`)
+  console.log()
+  console.log(`---`)
+
+  console.log(message)
   console.log()
   console.log()
   console.log()

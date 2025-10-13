@@ -20,6 +20,8 @@ const jsonStringifySelectAll = document.getElementById(
   'json-stringify-select-all'
 ) as HTMLButtonElement
 const validPayloadsList = document.getElementById('valid-payloads') as HTMLOListElement
+const busyElements = document.querySelectorAll('[aria-busy]')
+const durationElements = document.querySelectorAll('[data-duration]')
 
 // Nice
 addressInput.addEventListener('focus', addressInput.select)
@@ -193,14 +195,17 @@ async function verifySignature() {
   attemptedDisplay.forEach(e => e.classList.remove('hidden'))
   verifiedDisplay.forEach(e => e.classList.add('hidden'))
   errorDisplay.forEach(e => e.classList.add('hidden'))
-  document.querySelectorAll('[aria-busy]').forEach(e => e.setAttribute('aria-busy', 'true'))
+  busyElements.forEach(e => e.setAttribute('aria-busy', 'true'))
   errorReason.textContent = ''
   verifiedAddressLink.textContent = ''
   verifiedMessageContent.textContent = ''
   verifiedAddressLink.href = 'https://mempool.space/address/'
+  const startTime = performance.now() ?? Date.now()
+  let endTime: number | undefined
   try {
     const isValid = await verify({ message: bytes, address, signature })
     assert(isValid, 'Signature is invalid')
+    endTime = performance.now() ?? Date.now()
 
     document.body.classList.add('verified-display-true')
     document.body.classList.remove('verified-display-false')
@@ -214,10 +219,14 @@ async function verifySignature() {
     errorReason.textContent = error instanceof Error ? error.message : String(error)
     errorDisplay.forEach(e => e.classList.remove('hidden'))
   } finally {
+    if (!endTime) endTime = performance.now() ?? Date.now()
+    const durationMs = endTime - startTime
+
     document.body.classList.add('verify-completed-display-true')
     document.body.classList.remove('verify-completed-display-false')
     completedDisplay.forEach(e => e.classList.remove('hidden'))
-    document.querySelectorAll('[aria-busy]').forEach(e => e.setAttribute('aria-busy', 'false'))
+    busyElements.forEach(e => e.setAttribute('aria-busy', 'false'))
+    durationElements.forEach(e => e.textContent = `${durationMs.toFixed(2)}ms`)
 
     verifyDialog.close()
     jsonStringifyPre.textContent = JSON.stringify({ address, signature, message: utf8 }, null, 2)
