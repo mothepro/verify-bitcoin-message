@@ -120,6 +120,10 @@
       margin-bottom: var(--pico-spacing)
     }
 
+    .bg-white {
+      background: white;
+    }
+
     a.message {
       display: block;
       white-space: nowrap;
@@ -255,7 +259,7 @@ It's a good idea to include on of these
           <details class="align-start">
             <summary
               role="button"
-              class="outline"
+              class="outline bg-white"
               type="button"
             >
               More options if you do not have access to signing a message
@@ -270,7 +274,7 @@ It's a good idea to include on of these
                 target="_blank"
                 rel="noopener noreferrer"
                 role="button"
-                class="outline contrast align-start"
+                class="outline bg-white contrast align-start"
               >via BrainWallet</a>
             </div>
           </details>
@@ -309,7 +313,7 @@ It's a good idea to include on of these
       <details>
         <summary
           role="button"
-          class="outline m-0"
+          class="outline bg-white m-0"
         >How it works</summary>
 
         <!-- Asymmetric cryptography is a powerful tool for secure communication. -->
@@ -395,7 +399,7 @@ It's a good idea to include on of these
           class="one secondary no-attempt-display"
         >See it in action</a>
         <a
-          href="https://github.com/mothepro/verify-bitcoin-message/pulls"
+          href="https://github.com/mothepro/verify-bitcoin-message/pulls?q=is%3Apr+is%3Aopen+-is%3Adraft"
           target="_blank"
           rel="noopener noreferrer"
           role="button"
@@ -410,7 +414,7 @@ It's a good idea to include on of these
       <details class="hidden verify-attempted-display">
         <summary
           role="button"
-          class="outline"
+          class="outline bg-white"
         >
           <span class="verified-display">
             Publish this message
@@ -443,7 +447,7 @@ It's a good idea to include on of these
       >
         <summary
           role="button"
-          class="outline"
+          class="outline bg-white"
         >
           <span class="no-attempt-display">
             Other ways to verify signed messages
@@ -456,7 +460,7 @@ It's a good idea to include on of these
         <details>
           <summary
             role="button"
-            class="outline"
+            class="outline bg-white"
           >Bitcoin Node</summary>
 
           Command Line
@@ -477,7 +481,7 @@ curl
         <details>
           <summary
             role="button"
-            class="outline"
+            class="outline bg-white"
           >JavaScript</summary>
 
           Command Line
@@ -532,7 +536,7 @@ const isValid = await verifySafe({
         <details>
           <summary
             role="button"
-            class="outline"
+            class="outline bg-white"
           >Other Websites</summary>
 
           <ul>
@@ -596,7 +600,7 @@ const isValid = await verifySafe({
           target="_blank"
           rel="noopener noreferrer"
           role="button"
-          class="outline primary block align-start"
+          class="outline bg-white primary block align-start"
         >Source Code</a>
 
       </details>
@@ -612,7 +616,7 @@ const isValid = await verifySafe({
         >
           <summary
             role="button"
-            class="outline"
+            class="outline bg-white"
           >
             More verified messages
           </summary>

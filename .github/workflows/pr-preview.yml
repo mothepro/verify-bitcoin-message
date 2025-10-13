@@ -72,14 +72,14 @@ jobs:
         with:
           # TODO maybe concat the rest of the comments into this one
           script: |
-            const payloads = ${{ steps.payloads_json.outputs.OUTPUT }}
-            const { homepage } = ${{ steps.package_json.outputs.OUTPUT }}
-            const proof = new URL(homepage)
-            const mempool = new URL('https://mempool.space')
             let count = 0
             const limit = 75
             const { owner, repo } = context.repo
             const issue_number = context.issue.number
+            const proof = new URL(homepage)
+            const mempool = new URL('https://mempool.space')
+            const { homepage } = ${{ steps.package_json.outputs.OUTPUT }}
+            const payloads = ${{ steps.payloads_json.outputs.OUTPUT }}
             const existingComments = await github.rest.issues.listComments({ owner, repo, issue_number });
             for (const { address, message, signature } of payloads) {
               const hasComment = existingComments.data.find(comment => comment.body.includes(encodeURIComponent(signature)))

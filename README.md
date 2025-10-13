@@ -8,7 +8,7 @@ Translations would be an incredible contribution now :)
 
 ## Published Messages
 
-Any messages, from around the globe, can be added via [Pull Requests](../../pulls).
+Any messages, from around the globe, can be added via [Pull Requests](../../pulls?q=is%3Apr+is%3Aopen+-is%3Adraft).
 
 The verification process automatically hides invalid messages.
 
