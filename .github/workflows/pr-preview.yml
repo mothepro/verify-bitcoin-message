@@ -65,22 +65,28 @@ jobs:
         with:
           # TODO maybe concat the rest of the comments into this one
           script: |
-            let count = 0;
-            const limit = 75;
-            const { owner, repo } = context.repo;
-            const issue_number = context.issue.number;
-            const comments = `${{ steps.run_output.outputs.OUTPUT }}`.split('\n\n\n').filter(Boolean);
-            const signatures = JSON.parse(comments.pop());
+            let count = 0
+            const limit = 75
+            const { owner, repo } = context.repo
+            const issue_number = context.issue.number
             const existingComments = await github.rest.issues.listComments({ owner, repo, issue_number });
-            for (const [index, signature] of signatures.entries()) {
+            const comments = JSON.parse(`${{ steps.run_output.outputs.OUTPUT }}`)
+            for (const {  address, message, signature, mempool, proof }] of comments) {
               const hasComment = existingComments.data.find(comment => comment.body.includes(signature))
               if (hasComment) {
                 console.warn(`Skipping comment already exists for signature ${signature.slice(0, 8)}...`)
                 continue;
               }
-              let body = `> [!IMPORTANT]
-            > The author on Github may or may not be the message signer.
-            ${comments[index]}`
+
+              let body = `
+            > [!IMPORTANT]
+            > The author on Github may **or** may not be the message signer.
+
+            [\\\`${address}\\\`](${mempool}) digitally [signed 🔐 this message](${proof}).
+
+            ---
+
+            ${message}`.trim()
               await github.rest.issues.createComment({ owner, repo, issue_number, body });
               if (count++ >= limit) {
                 body = `All payloads have been verified. ☑️ \n\nPre commit payload limit reached.\nTry to upload messages in smaller batches.\n\nPayload limit reached per commit.`

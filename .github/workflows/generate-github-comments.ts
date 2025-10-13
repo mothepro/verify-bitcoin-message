@@ -3,30 +3,27 @@ import payloads from '../../payloads.json'
 
 /** Generate GitHub Markdown comments for verified messages */
 
+const proof = new URL(homepage)
+const mempool = new URL(`https://mempool.space`)
+
+// https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#about-secondary-rate-limits
+
 // TODO: move this logic to the yml so it can be tested easier
 // and properly skip the signatures.
 
-// https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#about-secondary-rate-limits
-const limit = 75 // instead I should concat all the rest into the last comment
-
-for (const { address, message, signature } of payloads.slice(0, limit)) {
-  const mempoolUrl = new URL(`https://mempool.space`)
-  mempoolUrl.pathname += `address/${address}`
-
-  const proof = new URL(homepage)
+const data = []
+for (const { address, message, signature } of payloads) {
+  mempool.pathname = `address/${address}`
   proof.searchParams.set('address', address)
   proof.searchParams.set('message', message)
   proof.searchParams.set('signature', signature)
-  console.log()
-  console.log(`[\\\`${address}\\\`](${mempoolUrl}) digitally [signed 🔐 this message](${proof}).`)
-  console.log()
-  console.log(`---`)
-
-  console.log(message)
-  console.log()
-  console.log()
-  console.log()
+  data.push({
+    address,
+    message,
+    signature,
+    mempool,
+    proof,
+  })
 }
 
-const signatures = payloads.map(({ signature }) => signature)
-console.log(JSON.stringify(signatures));
+console.log(JSON.stringify(data))
