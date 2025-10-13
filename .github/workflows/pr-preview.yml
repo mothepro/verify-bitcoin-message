@@ -82,7 +82,7 @@ jobs:
             const issue_number = context.issue.number
             const existingComments = await github.rest.issues.listComments({ owner, repo, issue_number });
             for (const { address, message, signature } of payloads) {
-              const hasComment = existingComments.data.find(comment => comment.body.includes(signature))
+              const hasComment = existingComments.data.find(comment => comment.body.includes(encodeURIComponent(signature)))
               if (hasComment) {
                 console.warn(`Skipping comment already exists for signature ${signature.slice(0, 8)}...`)
                 continue;
@@ -96,10 +96,10 @@ jobs:
 
               let body = `
             > [!IMPORTANT]
-            > 🔏 [\`${address}\`](${mempool}) digitally signed this message
-            > 🕵 _@${context.actor} may **not** be the signer_
+            > 🔏 [\`${address}\`](${mempool}) digitally signed this message with their private key
+            > 🕵 @${context.actor} may **not** be signer
             >
-            > ### 🔐 Proof [${homepage.host}](${proof})
+            > ### Proof [${proof.host}](${proof})
 
 
             ${message}`.trim()
