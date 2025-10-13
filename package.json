@@ -2,6 +2,24 @@
   "name": "verify-bitcoin-message",
   "description": "A dependency-free Bitcoin message signature verifier that works in browsers",
   "homepage": "https://verify-bitcoin-message.js.org",
+  "repository": "https://github.com/mothepro/verify-bitcoin-message",
+  "author": "@mothepro",
+  "bugs": "https://github.com/mothepro/verify-bitcoin-message/issues",
+  "blockexplorerpage": "https://mempool.space",
+  "keywords": [
+    "bitcoin",
+    "message",
+    "signature",
+    "verify",
+    "browser",
+    "crypto",
+    "ecdsa",
+    "secp256k1",
+    "ripemd160",
+    "sha256",
+    "base58",
+    "base64"
+  ],
   "bin": {
     "verify-bitcoin-message": "./cli.ts"
   },
