@@ -70,7 +70,7 @@ jobs:
             const { owner, repo } = context.repo
             const issue_number = context.issue.number
             const existingComments = await github.rest.issues.listComments({ owner, repo, issue_number });
-            const comments = JSON.parse(`${{ steps.run_output.outputs.OUTPUT }}`)
+            const comments = ${{ steps.run_output.outputs.OUTPUT }}
             for (const {  address, message, signature, mempool, proof }] of comments) {
               const hasComment = existingComments.data.find(comment => comment.body.includes(signature))
               if (hasComment) {
