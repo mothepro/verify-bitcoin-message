@@ -1,7 +1,7 @@
 [
-  {
-    "address": "1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV",
-    "message": "This is an example of a signed message.",
-    "signature": "H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk="
-  }
+{
+  "address": "1HZwkjkeaoZfTSaJxDw6aKkxp45agDiEzN",
+  "signature": "G/Z8R4hlFog0lQDFNuZbs5mHVDmvMcqfueZRHDeO2zA/3XyDIU1Xw/JfRW032borWCtwnTL3kX0qTyJKlHwUipU=",
+  "message": "Hello world\n\nMaking a brainwallet takes seconds and can be done entirely offline as well.\n\n918910 - 00000000000000000000c6d71d47723539cd45b9264eeec5dda0c141668d56c2"
+}
 ]
