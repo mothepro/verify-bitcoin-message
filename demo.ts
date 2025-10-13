@@ -154,11 +154,15 @@ function handleSignedInputsIOMessagePaste(maybeSignedMessage: string) {
   } catch (e) {}
 }
 
-document.body.classList.add(
-  'verify-attempted-display-false',
-  'verified-display-false',
-  'error-display-false'
-)
+for (const key of [
+  'verify-attempted-display',
+  'verified-display',
+  'error-display',
+  'verify-completed-display',
+]) {
+  document.body.classList.add(`${key}-false`)
+  document.body.classList.remove(`${key}-true`)
+}
 
 async function verifySignature() {
   const data = new FormData(form)
@@ -172,6 +176,16 @@ async function verifySignature() {
     signature,
     message: { bytes, utf8, hex },
   } = parsePayload(payload)
+
+  for (const key of [
+    'verify-attempted-display',
+    'verified-display',
+    'error-display',
+    'verify-completed-display',
+  ]) {
+    document.body.classList.add(`${key}-false`)
+    document.body.classList.remove(`${key}-true`)
+  }
 
   document.body.classList.add('verify-attempted-display-true')
   document.body.classList.remove('verify-attempted-display-false')

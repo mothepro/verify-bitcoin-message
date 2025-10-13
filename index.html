@@ -157,9 +157,11 @@
     .inline-block {
       display: inline-block;
     }
+
     .m-0 {
       margin: 0;
     }
+
     .mt-2 {
       margin-top: 2rem;
     }
@@ -225,11 +227,12 @@ It's a good idea to include on of these
 - the top bitcoin blockchain hash"
           ></textarea>
           <input
+            required
             type="text"
             id="signature"
             name="signature"
-            required
             placeholder="Signature (Base64 encoded)"
+            autocomplete="off"
           />
         </form>
 
@@ -255,7 +258,7 @@ It's a good idea to include on of these
               class="outline"
               type="button"
             >
-              Don't have an access to an address at the moment?
+              More options if you do not have access to signing a message
             </summary>
 
             <div class="align-start">
