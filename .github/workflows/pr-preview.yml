@@ -82,6 +82,11 @@ jobs:
             const issue_number = context.issue.number
             const existingComments = await github.rest.issues.listComments({ owner, repo, issue_number });
             for (const { address, message, signature } of payloads) {
+              const hasComment = existingComments.data.find(comment => {
+              console.log('comment.body', comment.body)
+              console.log('signature?', signature)
+              return comment.body.includes(signature)
+              })
               const hasComment = existingComments.data.find(comment => comment.body.includes(signature))
               if (hasComment) {
                 console.warn(`Skipping comment already exists for signature ${signature.slice(0, 8)}...`)
