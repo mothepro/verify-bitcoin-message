@@ -21,3 +21,6 @@ node_modules/
 *.js
 css/*
 .vscode/*
+# Unix binary
+verify-bitcoin-message
+

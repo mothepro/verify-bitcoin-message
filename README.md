@@ -1,23 +1,18 @@
-# Bitcoin Signature Verifier
+# Verify Bitcoin Message
 
-![dependency-free](https://img.shields.io/badge/dependencies-none-success)
+[![free and open source](https://img.shields.io/badge/source-open-success")](https://github.com/mothepro/verify-bitcoin-message) [![External Dependencies](https://img.shields.io/badge/dependencies-None-success")](https://npmgraph.js.org/?q=verify-bitcoin-message) [![Offline First](https://img.shields.io/badge/Internet-Not_Required-success")](https://github.com/mothepro/verify-bitcoin-message?tab=readme-ov-file#offline) [![Bundle Size](https://img.shields.io/badge/Bundle_Size-14kb-success")](https://app.unpkg.com/verify-bitcoin-message/)
 
-A dependency-free Bitcoin message signature verifier that works in browsers and as a lightweight CLI.
+> A dependency-free Bitcoin message verifier that works in browsers and as a lightweight CLI.
 
-## Publish
+Translations would be an incredible contribution now :)
 
-1. [Add messages to `payloads.json`](/edit/main/payloads.json)
-2. Open a pull request
+## Published Messages
 
-Github Actions will automatically verify the messages and comment the proof on the PR.
+Any messages, from around the globe, can be added via [Pull Requests](../../pulls?q=is%3Apr+is%3Aopen+-is%3Adraft).
 
-## Features
+The verification process automatically hides invalid messages.
 
-- **Zero Dependencies**: Pure TypeScript implementation with no external dependencies
-- **Browser Compatible**: Works directly in modern browsers using ES modules
-- **Client-Side Verification**: Verifies signatures entirely in the browser
-- **Simple API**: Clean TypeScript interface for programmatic use
-- **Unit Tests**: Includes a test suite for the verification logic
+<!-- *Each fork is like its own "[community](../../forks)".* -->
 
 ## Things you can do
 
@@ -25,10 +20,9 @@ Github Actions will automatically verify the messages and comment the proof on t
 
 First visit the page by [Serving Locally](#serve-locally) or using our [GitHub Pages demo](https://mothepro.github.io/verify-bitcoin-message).
 
-Then you can test offline mode in Chrome (webkit browsers) by opening Developer Tools (F12)
+If you're on mobile, just turn on airplane mode.
 
-- Network
-- Change "No Throttling" -> "Offline"
+On desktop you can test offline mode in Chrome (webkit browsers) by opening Developer Tools (F12) > `Network` tab > Change `No Throttling` to `Offline`
 
 ### Clone the repository
 
@@ -37,8 +31,7 @@ Then you can test offline mode in Chrome (webkit browsers) by opening Developer 
    ```bash
    git clone https://github.com/mothepro/verify-bitcoin-message
    cd verify-bitcoin-message
-   bun install
-   bun test
+   bun install # Tests will be run automatically after installation
    ```
 
 ### Serve locally
@@ -91,58 +84,26 @@ const isValid = await verifySafe({
 })
 ```
 
-## Deployment
-
-This project uses GitHub Actions for automatic deployment:
-
-### Production Deployment (GitHub Pages)
-
-- **Automatic**: Deploys on every push to `main` branch
-- **Tested**: Runs `bun test` before deployment
-- **Built**: Runs `bun run build:browser` to create `verify.js`
-- **Complete**: Includes both source files and built JavaScript in deployment
-
-### PR Output Comments
-
-- **Automatic**: Runs TypeScript code for every pull request
-- **Immediate**: Executes `bun run verify.ts` and captures all output
-- **Commented**: GitHub bot automatically comments on PRs with the complete output
-- **Updated**: Output comment updates automatically when new commits are pushed to the PR
-- **Transparent**: Shows both successful runs and error messages
-
-#### Output System Features
-
-- ✅ **Automatic execution** on PR open/update
-- 📝 **Complete output capture** (stdout and stderr)
-- 🤖 **Bot comments** with formatted output
-- 🔄 **Live updates** with each commit
-- 🐛 **Error visibility** for debugging
-
-The workflow provides immediate feedback to contributors and reviewers by running the verification code and showing the results.
-
-## Implementation Notes
-
-This is a **complete, production-ready implementation** of Bitcoin message signature verification:
-
-1. **Full secp256k1 implementation**: Complete elliptic curve operations from scratch
-2. **Complete RIPEMD-160**: Pure TypeScript implementation following RFC 1320
-3. **Complete signature recovery**: Handles all Bitcoin signature formats and recovery IDs
-4. **Zero dependencies**: Works in browsers without any external dependencies
-
-All cryptographic functions are implemented from publicly available specifications in pure TypeScript.
-
 ### Up Next
 
-- [ ] My idea to prevent fake screenshots
-- [ ] better error messages
-- [ ] better ui (i.e. the signed page should look nice and doesn't need to be a form)
+- [ ] My idea to prevent fake screenshots :lightbulb:
 - [ ] more support for address types
-- [ ] explainer what this is, how, and why (why cold storage >>> exchanges)
-- [ ] service worker?
-- [ ] allow invalid messages in prs?
+- [ ] explainer why cold storage >>> exchanges (you can use this)
+- [ ] service worker? for full PWA
+- [ ] **better example message**
+- [ ] allow markdown in message? :eyes:
+- [ ] wrap github gpg signatue with one of these
+  - then we could have a nicer message in action with a verified signature, kinda like a blue checkmark on twitter
 
-### Alternatives
+### Web Alternatives
 
-<https://www.bitcoin.com/tools/verify-message/>
-<https://www.verifybitcoinmessage.com/>
-<https://bluewallet.github.io/VerifySignature>
+- [Bitcoin.com](https://www.bitcoin.com/tools/verify-message/)
+  ![Closed Source](https://img.shields.io/badge/source-closed-red)
+
+- [Verify Bitcoin Message](https://www.verifybitcoinmessage.com/)
+  ![Closed Source](https://img.shields.io/badge/source-closed-red)
+
+- [BlueWallet's VerifySignature](https://bluewallet.github.io/VerifySignature?a=&m=&s=)
+  ![Open Source](https://img.shields.io/badge/source-Open-success)
+  ![Offline First](https://img.shields.io/badge/Internet-Not_Required-success)
+  [![68 Dependencies](https://img.shields.io/badge/dependencies-68-yellow)](https://npmgraph.js.org/?q=bitcoinjs-message)

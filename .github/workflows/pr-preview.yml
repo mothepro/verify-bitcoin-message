@@ -6,6 +6,7 @@ on:
 
 permissions:
   pull-requests: write
+  issues: write
 
 jobs:
   run-and-comment:
@@ -19,26 +20,95 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Install dependencies, (postinstall runs build and test)
-        run: bun install
+      - name: Run Tests
+        id: test
+        run: |
+          if ! bun test verify; then
+            echo "INSTALL_FAILED=true" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+        continue-on-error: true
 
-      - name: Run CLI and capture output
-        id: run_output
-        # Save output to environment variable, handling multiline
+      - name: Close PR if install failed
+        if: steps.test.outputs.INSTALL_FAILED == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `❌ **PR Automatically Closed**
+              See the output of the previous \`test\` step to see the error.`
+            });
+
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              state: 'closed'
+            });
+
+      - name: Exit if install failed
+        if: steps.test.outputs.INSTALL_FAILED == 'true'
+        run: exit 1
+
+      - name: payloads.json
+        id: payloads_json
         run: |
           echo "OUTPUT<<EOF" >> $GITHUB_OUTPUT
-          bun run .github/workflows/generate-github-comments.ts >> $GITHUB_OUTPUT
+          cat payloads.json >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: package.json
+        id: package_json
+        run: |
+          echo "OUTPUT<<EOF" >> $GITHUB_OUTPUT
+          cat package.json >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Comment PR with output
         uses: actions/github-script@v7
         with:
+          # TODO maybe concat the rest of the comments into this one
           script: |
-            const comments = `${{ steps.run_output.outputs.OUTPUT }}`.split('\n\n\n').filter(Boolean)
-            for (const body of comments)
-              github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body
-              })
+            let count = 0
+            const limit = 75
+            const { owner, repo } = context.repo
+            const { number: issue_number } = context.issue
+            const { homepage, blockexplorerpage } = ${{ steps.package_json.outputs.OUTPUT }}
+            const payloads = ${{ steps.payloads_json.outputs.OUTPUT }}
+            const proofUrl = new URL(homepage)
+            const explorerUrl = new URL(blockexplorerpage)
+            const existingComments = await github.rest.issues.listComments({ owner, repo, issue_number });
+            for (const { address, message, signature } of payloads) {
+              const hasComment = existingComments.data.find(comment => comment.body.includes(encodeURIComponent(signature)))
+              if (hasComment) {
+                console.warn(`Skipping comment already exists for signature ${signature.slice(0, 8)}...`)
+                continue;
+              }
+
+              explorerUrl.pathname = `address/${address}`
+
+              proofUrl.searchParams.set('address', address)
+              proofUrl.searchParams.set('message', message)
+              proofUrl.searchParams.set('signature', signature)
+
+              let body = `
+            > [!IMPORTANT]
+            > 🔏 [\`${address}\`](${explorerUrl}) digitally signed this message with their private key
+            > 🕵 @${context.actor} may **not** be signer
+            >
+            > ### Proof [${proofUrl.host}](${proofUrl})
+
+
+            ${message}`.trim()
+
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+
+              if (count++ >= limit) {
+                body = `All payloads have been verified. ☑️ \n\nPre commit payload limit reached.\nTry to upload messages in smaller batches.\n\nPayload limit reached per commit.`
+                await github.rest.issues.createComment({ owner, repo, issue_number, body });
+                break;
+              }
+            }
