@@ -98,7 +98,7 @@ jobs:
             > [!IMPORTANT]
             > The author on Github may **or** may not be the message signer.
 
-            [\\\`${address}\\\`](${mempool}) digitally [signed 🔐 this message](${proof}).
+            [\`${address}\`](${mempool}) digitally [signed 🔐 this message](${proof}).
 
             ---
 
