@@ -86,6 +86,10 @@ const isValid = await verifySafe({
 
 ### Up Next
 
+- [ ] Fill out cli info with active values
+- [ ] Nice way to show multiple messages at once
+- [ ] Automatically sync all open `publish` PRs back to `main` branch
+- [ ] Add `publish` tag to PRs with only payload changes
 - [ ] My idea to prevent fake screenshots :lightbulb:
 - [ ] more support for address types
 - [ ] explainer why cold storage >>> exchanges (you can use this)
