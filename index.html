@@ -130,10 +130,6 @@
       margin-bottom: var(--pico-spacing);
     }
 
-    #verify-dialog footer {
-      display: flex;
-    }
-
     details.indent[open]>* {
       margin-inline-start: 3rem;
     }
@@ -152,6 +148,20 @@
 
     .flex .one {
       flex: 1 1 10rem;
+    }
+
+    .flex-only {
+      display: flex;
+    }
+
+    .inline-block {
+      display: inline-block;
+    }
+    .m-0 {
+      margin: 0;
+    }
+    .mt-2 {
+      margin-top: 2rem;
     }
   </style>
 </head>
@@ -224,17 +234,43 @@ It's a good idea to include on of these
         </form>
 
         <footer>
-          <button
-            type="button"
-            aria-label="Close"
-            class="secondary"
-            onclick="document.getElementById('verify-dialog').close()"
-          >Cancel</button>
-          <button
-            type="submit"
-            form="verifyForm"
-            class="primary"
-          >Verify</button>
+          <div class="flex-only">
+            <button
+              type="button"
+              aria-label="Close"
+              class="secondary"
+              onclick="document.getElementById('verify-dialog').close()"
+            >Cancel</button>
+            <button
+              type="submit"
+              form="verifyForm"
+              class="primary"
+            >Verify</button>
+          </div>
+          <hr>
+
+          <details class="align-start">
+            <summary
+              role="button"
+              class="outline"
+              type="button"
+            >
+              Don't have an access to an address at the moment?
+            </summary>
+
+            <div class="align-start">
+              <p class="inline-block mt-2">
+                Sign your own messages
+              </p>
+              <a
+                href="https://brainwalletx.github.io/#sign"
+                target="_blank"
+                rel="noopener noreferrer"
+                role="button"
+                class="outline contrast align-start"
+              >via BrainWallet</a>
+            </div>
+          </details>
         </footer>
       </article>
     </dialog>
@@ -270,7 +306,7 @@ It's a good idea to include on of these
       <details>
         <summary
           role="button"
-          class="outline"
+          class="outline m-0"
         >How it works</summary>
 
         <!-- Asymmetric cryptography is a powerful tool for secure communication. -->

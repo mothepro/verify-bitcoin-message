@@ -92,6 +92,7 @@ const isValid = await verifySafe({
 - [ ] service worker? for full PWA
 - [ ] **better example message**
 - [ ] allow markdown in message? :eyes:
+- [ ] wrap github gpg signatue with one of these
 
 ### Web Alternatives
 

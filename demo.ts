@@ -30,11 +30,14 @@ messageInput.addEventListener('paste', ({ clipboardData }) =>
 messageInput.addEventListener('paste', ({ clipboardData }) =>
   handleSignedMessagePaste(clipboardData?.getData('text/plain')?.trim() ?? '')
 )
+messageInput.addEventListener('paste', ({ clipboardData }) =>
+  handleSignedInputsIOMessagePaste(clipboardData?.getData('text/plain')?.trim() ?? '')
+)
+
 const hiddenLimits = document.querySelectorAll('[data-threshold].hidden')
 for (const el of hiddenLimits) {
   const limit = parseInt(el.getAttribute('data-threshold') ?? '0')
-  if (validPayloads.length >= limit)
-    el.classList.remove('hidden')
+  if (validPayloads.length >= limit) el.classList.remove('hidden')
 }
 
 jsonStringifySelectAll.addEventListener('click', async () => {
@@ -67,7 +70,9 @@ for (const [index, { address, message, signature }] of validPayloads.entries()) 
   validPayloadsList.appendChild(anchor)
 
   // Get all elements that should link to this payload
-  const anchors = [...document.querySelectorAll(`[data-href-payload="${index}"]`)] as HTMLAnchorElement[]
+  const anchors = [
+    ...document.querySelectorAll(`[data-href-payload="${index}"]`),
+  ] as HTMLAnchorElement[]
   anchors.push(anchor)
 
   // Set the href to the current URL with the payload params
@@ -123,7 +128,37 @@ function handleSignedMessagePaste(maybeSignedMessage: string) {
   } catch (e) {}
 }
 
-document.body.classList.add('verify-attempted-display-false', 'verified-display-false', 'error-display-false')
+// https://brainwalletx.github.io/#sign
+function handleSignedInputsIOMessagePaste(maybeSignedMessage: string) {
+  const prefix = '-----BEGIN BITCOIN SIGNED MESSAGE-----'
+  const signaturePrefix = '-----BEGIN SIGNATURE-----'
+  const suffix = '-----END BITCOIN SIGNED MESSAGE-----'
+  try {
+    assert(maybeSignedMessage, 'Not a signed message')
+    for (const line of [prefix, signaturePrefix, suffix]) {
+      assert(maybeSignedMessage.includes(line), 'Not a signed message')
+    }
+    const mStart = prefix.length + maybeSignedMessage.indexOf(prefix)
+    const mEnd = maybeSignedMessage.indexOf(signaturePrefix)
+    const message = maybeSignedMessage.slice(mStart, mEnd).trim()
+
+    const sStart = signaturePrefix.length + maybeSignedMessage.indexOf(signaturePrefix)
+    const sEnd = maybeSignedMessage.indexOf(suffix)
+    const addressAndSignature = maybeSignedMessage.slice(sStart, sEnd).trim()
+    const [address, signature] = addressAndSignature.split('\n').map(line => line.trim())
+
+    addressInput.value = address
+    messageInput.value = message
+    signatureInput.value = signature
+    verifySignature()
+  } catch (e) {}
+}
+
+document.body.classList.add(
+  'verify-attempted-display-false',
+  'verified-display-false',
+  'error-display-false'
+)
 
 async function verifySignature() {
   const data = new FormData(form)
