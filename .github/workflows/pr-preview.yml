@@ -75,11 +75,11 @@ jobs:
             let count = 0
             const limit = 75
             const { owner, repo } = context.repo
-            const issue_number = context.issue.number
-            const proof = new URL(homepage)
-            const mempool = new URL('https://mempool.space')
-            const { homepage } = ${{ steps.package_json.outputs.OUTPUT }}
+            const { number: issue_number } = context.issue
+            const { homepage, blockexplorerpage } = ${{ steps.package_json.outputs.OUTPUT }}
             const payloads = ${{ steps.payloads_json.outputs.OUTPUT }}
+            const proofUrl = new URL(homepage)
+            const explorerUrl = new URL(blockexplorerpage)
             const existingComments = await github.rest.issues.listComments({ owner, repo, issue_number });
             for (const { address, message, signature } of payloads) {
               const hasComment = existingComments.data.find(comment => comment.body.includes(encodeURIComponent(signature)))
@@ -88,18 +88,18 @@ jobs:
                 continue;
               }
 
-              mempool.pathname = `address/${address}`
+              explorerUrl.pathname = `address/${address}`
 
-              proof.searchParams.set('address', address)
-              proof.searchParams.set('message', message)
-              proof.searchParams.set('signature', signature)
+              proofUrl.searchParams.set('address', address)
+              proofUrl.searchParams.set('message', message)
+              proofUrl.searchParams.set('signature', signature)
 
               let body = `
             > [!IMPORTANT]
-            > 🔏 [\`${address}\`](${mempool}) digitally signed this message with their private key
+            > 🔏 [\`${address}\`](${explorerUrl}) digitally signed this message with their private key
             > 🕵 @${context.actor} may **not** be signer
             >
-            > ### Proof [${proof.host}](${proof})
+            > ### Proof [${proofUrl.host}](${proofUrl})
 
 
             ${message}`.trim()
