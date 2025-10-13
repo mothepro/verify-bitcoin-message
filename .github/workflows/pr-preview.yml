@@ -96,11 +96,11 @@ jobs:
 
               let body = `
             > [!IMPORTANT]
-            > The author on Github may **or** may not be the message signer.
+            > [\`${address}\`](${mempool}) digitally signed this message.
+            > This does **not** mean that @${context.actor} is message signer.
+            >
+            > ## Proof [${homepage} 🔐](${proof})
 
-            [\`${address}\`](${mempool}) digitally [signed 🔐 this message](${proof}).
-
-            ---
 
             ${message}`.trim()
 

@@ -93,6 +93,7 @@ const isValid = await verifySafe({
 - [ ] **better example message**
 - [ ] allow markdown in message? :eyes:
 - [ ] wrap github gpg signatue with one of these
+  - then we could have a nicer message in action with a verified signature, kinda like a blue checkmark on twitter
 
 ### Web Alternatives
 
