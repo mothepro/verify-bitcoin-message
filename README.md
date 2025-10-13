@@ -8,7 +8,7 @@ Translations would be an incredible contribution now :)
 
 ## Published Messages
 
-Any messages, from around the globe, can be added via [Pull Requests](../../pulls).
+Any messages, from around the globe, can be added via [Pull Requests](../../pulls?q=is%3Apr+is%3Aopen+-is%3Adraft).
 
 The verification process automatically hides invalid messages.
 
@@ -92,6 +92,8 @@ const isValid = await verifySafe({
 - [ ] service worker? for full PWA
 - [ ] **better example message**
 - [ ] allow markdown in message? :eyes:
+- [ ] wrap github gpg signatue with one of these
+  - then we could have a nicer message in action with a verified signature, kinda like a blue checkmark on twitter
 
 ### Web Alternatives
 

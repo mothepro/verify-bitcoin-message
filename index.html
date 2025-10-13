@@ -120,6 +120,10 @@
       margin-bottom: var(--pico-spacing)
     }
 
+    .bg-white {
+      background: white;
+    }
+
     a.message {
       display: block;
       white-space: nowrap;
@@ -128,10 +132,6 @@
       max-width: 100%;
       text-align: start;
       margin-bottom: var(--pico-spacing);
-    }
-
-    #verify-dialog footer {
-      display: flex;
     }
 
     details.indent[open]>* {
@@ -152,6 +152,22 @@
 
     .flex .one {
       flex: 1 1 10rem;
+    }
+
+    .flex-only {
+      display: flex;
+    }
+
+    .inline-block {
+      display: inline-block;
+    }
+
+    .m-0 {
+      margin: 0;
+    }
+
+    .mt-2 {
+      margin-top: 2rem;
     }
   </style>
 </head>
@@ -215,26 +231,53 @@ It's a good idea to include on of these
 - the top bitcoin blockchain hash"
           ></textarea>
           <input
+            required
             type="text"
             id="signature"
             name="signature"
-            required
             placeholder="Signature (Base64 encoded)"
+            autocomplete="off"
           />
         </form>
 
         <footer>
-          <button
-            type="button"
-            aria-label="Close"
-            class="secondary"
-            onclick="document.getElementById('verify-dialog').close()"
-          >Cancel</button>
-          <button
-            type="submit"
-            form="verifyForm"
-            class="primary"
-          >Verify</button>
+          <div class="flex-only">
+            <button
+              type="button"
+              aria-label="Close"
+              class="secondary"
+              onclick="document.getElementById('verify-dialog').close()"
+            >Cancel</button>
+            <button
+              type="submit"
+              form="verifyForm"
+              class="primary"
+            >Verify</button>
+          </div>
+          <hr>
+
+          <details class="align-start">
+            <summary
+              role="button"
+              class="outline bg-white"
+              type="button"
+            >
+              More options if you do not have access to signing a message
+            </summary>
+
+            <div class="align-start">
+              <p class="inline-block mt-2">
+                Sign your own messages
+              </p>
+              <a
+                href="https://brainwalletx.github.io/#sign"
+                target="_blank"
+                rel="noopener noreferrer"
+                role="button"
+                class="outline bg-white contrast align-start"
+              >via BrainWallet</a>
+            </div>
+          </details>
         </footer>
       </article>
     </dialog>
@@ -270,7 +313,7 @@ It's a good idea to include on of these
       <details>
         <summary
           role="button"
-          class="outline"
+          class="outline bg-white m-0"
         >How it works</summary>
 
         <!-- Asymmetric cryptography is a powerful tool for secure communication. -->
@@ -351,13 +394,12 @@ It's a good idea to include on of these
       <div class="flex">
         <a
           data-href-payload="0"
-          target="_blank"
           rel="noopener noreferrer"
           role="button"
           class="one secondary no-attempt-display"
         >See it in action</a>
         <a
-          href="https://github.com/mothepro/verify-bitcoin-message/pulls"
+          href="https://github.com/mothepro/verify-bitcoin-message/pulls?q=is%3Apr+is%3Aopen+-is%3Adraft"
           target="_blank"
           rel="noopener noreferrer"
           role="button"
@@ -372,7 +414,7 @@ It's a good idea to include on of these
       <details class="hidden verify-attempted-display">
         <summary
           role="button"
-          class="outline"
+          class="outline bg-white"
         >
           <span class="verified-display">
             Publish this message
@@ -381,6 +423,7 @@ It's a good idea to include on of these
             Reason for failure
           </span>
         </summary>
+        Verification finished in <span data-duration></span>.
         <p id="error-reason"></p>
         <pre id="json-stringify"></pre>
         <div class="flex">
@@ -404,7 +447,7 @@ It's a good idea to include on of these
       >
         <summary
           role="button"
-          class="outline"
+          class="outline bg-white"
         >
           <span class="no-attempt-display">
             Other ways to verify signed messages
@@ -417,7 +460,7 @@ It's a good idea to include on of these
         <details>
           <summary
             role="button"
-            class="outline"
+            class="outline bg-white"
           >Bitcoin Node</summary>
 
           Command Line
@@ -438,7 +481,7 @@ curl
         <details>
           <summary
             role="button"
-            class="outline"
+            class="outline bg-white"
           >JavaScript</summary>
 
           Command Line
@@ -493,7 +536,7 @@ const isValid = await verifySafe({
         <details>
           <summary
             role="button"
-            class="outline"
+            class="outline bg-white"
           >Other Websites</summary>
 
           <ul>
@@ -557,7 +600,7 @@ const isValid = await verifySafe({
           target="_blank"
           rel="noopener noreferrer"
           role="button"
-          class="outline primary block align-start"
+          class="outline bg-white primary block align-start"
         >Source Code</a>
 
       </details>
@@ -573,7 +616,7 @@ const isValid = await verifySafe({
         >
           <summary
             role="button"
-            class="outline"
+            class="outline bg-white"
           >
             More verified messages
           </summary>

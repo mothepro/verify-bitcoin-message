@@ -53,11 +53,18 @@ jobs:
         if: steps.test.outputs.INSTALL_FAILED == 'true'
         run: exit 1
 
-      - name: Run CLI and capture output
-        id: run_output
+      - name: payloads.json
+        id: payloads_json
         run: |
           echo "OUTPUT<<EOF" >> $GITHUB_OUTPUT
-          bun run .github/workflows/generate-github-comments.ts >> $GITHUB_OUTPUT
+          cat payloads.json >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: package.json
+        id: package_json
+        run: |
+          echo "OUTPUT<<EOF" >> $GITHUB_OUTPUT
+          cat package.json >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Comment PR with output
@@ -65,21 +72,40 @@ jobs:
         with:
           # TODO maybe concat the rest of the comments into this one
           script: |
-            let count = 0;
-            const limit = 75;
-            const { owner, repo } = context.repo;
-            const issue_number = context.issue.number;
-            const comments = `${{ steps.run_output.outputs.OUTPUT }}`.split('\n\n\n').filter(Boolean);
-            const signatures = JSON.parse(comments.pop());
+            let count = 0
+            const limit = 75
+            const { owner, repo } = context.repo
+            const issue_number = context.issue.number
+            const proof = new URL(homepage)
+            const mempool = new URL('https://mempool.space')
+            const { homepage } = ${{ steps.package_json.outputs.OUTPUT }}
+            const payloads = ${{ steps.payloads_json.outputs.OUTPUT }}
             const existingComments = await github.rest.issues.listComments({ owner, repo, issue_number });
-            for (const [index, signature] of signatures.entries()) {
-              const hasComment = existingComments.data.find(comment => comment.body.includes(signature))
+            for (const { address, message, signature } of payloads) {
+              const hasComment = existingComments.data.find(comment => comment.body.includes(encodeURIComponent(signature)))
               if (hasComment) {
                 console.warn(`Skipping comment already exists for signature ${signature.slice(0, 8)}...`)
                 continue;
               }
-              let body = comments[index]
+
+              mempool.pathname = `address/${address}`
+
+              proof.searchParams.set('address', address)
+              proof.searchParams.set('message', message)
+              proof.searchParams.set('signature', signature)
+
+              let body = `
+            > [!IMPORTANT]
+            > 🔏 [\`${address}\`](${mempool}) digitally signed this message with their private key
+            > 🕵 @${context.actor} may **not** be signer
+            >
+            > ### Proof [${proof.host}](${proof})
+
+
+            ${message}`.trim()
+
               await github.rest.issues.createComment({ owner, repo, issue_number, body });
+
               if (count++ >= limit) {
                 body = `All payloads have been verified. ☑️ \n\nPre commit payload limit reached.\nTry to upload messages in smaller batches.\n\nPayload limit reached per commit.`
                 await github.rest.issues.createComment({ owner, repo, issue_number, body });

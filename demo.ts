@@ -20,6 +20,8 @@ const jsonStringifySelectAll = document.getElementById(
   'json-stringify-select-all'
 ) as HTMLButtonElement
 const validPayloadsList = document.getElementById('valid-payloads') as HTMLOListElement
+const busyElements = document.querySelectorAll('[aria-busy]')
+const durationElements = document.querySelectorAll('[data-duration]')
 
 // Nice
 addressInput.addEventListener('focus', addressInput.select)
@@ -30,11 +32,14 @@ messageInput.addEventListener('paste', ({ clipboardData }) =>
 messageInput.addEventListener('paste', ({ clipboardData }) =>
   handleSignedMessagePaste(clipboardData?.getData('text/plain')?.trim() ?? '')
 )
+messageInput.addEventListener('paste', ({ clipboardData }) =>
+  handleSignedInputsIOMessagePaste(clipboardData?.getData('text/plain')?.trim() ?? '')
+)
+
 const hiddenLimits = document.querySelectorAll('[data-threshold].hidden')
 for (const el of hiddenLimits) {
   const limit = parseInt(el.getAttribute('data-threshold') ?? '0')
-  if (validPayloads.length >= limit)
-    el.classList.remove('hidden')
+  if (validPayloads.length >= limit) el.classList.remove('hidden')
 }
 
 jsonStringifySelectAll.addEventListener('click', async () => {
@@ -67,7 +72,9 @@ for (const [index, { address, message, signature }] of validPayloads.entries()) 
   validPayloadsList.appendChild(anchor)
 
   // Get all elements that should link to this payload
-  const anchors = [...document.querySelectorAll(`[data-href-payload="${index}"]`)] as HTMLAnchorElement[]
+  const anchors = [
+    ...document.querySelectorAll(`[data-href-payload="${index}"]`),
+  ] as HTMLAnchorElement[]
   anchors.push(anchor)
 
   // Set the href to the current URL with the payload params
@@ -76,6 +83,9 @@ for (const [index, { address, message, signature }] of validPayloads.entries()) 
   url.searchParams.set('message', message)
   url.searchParams.set('signature', signature)
   for (const a of anchors) a.href = url.toString()
+
+  // Make relative links work offline
+  for (const a of anchors) a.addEventListener('click', handlePayloadClick)
 }
 
 // Verify if we have a signature in the URL or whenever form is submitted
@@ -84,6 +94,16 @@ form.addEventListener('submit', e => {
   e.preventDefault()
   return verifySignature()
 })
+
+function handlePayloadClick(e: PointerEvent) {
+  const url = new URL((e.target as HTMLAnchorElement).href)
+  messageInput.value = url.searchParams.get('message') ?? ''
+  addressInput.value = url.searchParams.get('address') ?? ''
+  signatureInput.value = url.searchParams.get('signature') ?? ''
+  verifySignature()
+  e.preventDefault()
+  return false
+}
 
 function handleJsonPaste(maybeJson: string) {
   try {
@@ -123,7 +143,41 @@ function handleSignedMessagePaste(maybeSignedMessage: string) {
   } catch (e) {}
 }
 
-document.body.classList.add('verify-attempted-display-false', 'verified-display-false', 'error-display-false')
+// https://brainwalletx.github.io/#sign
+function handleSignedInputsIOMessagePaste(maybeSignedMessage: string) {
+  const prefix = '-----BEGIN BITCOIN SIGNED MESSAGE-----'
+  const signaturePrefix = '-----BEGIN SIGNATURE-----'
+  const suffix = '-----END BITCOIN SIGNED MESSAGE-----'
+  try {
+    assert(maybeSignedMessage, 'Not a signed message')
+    for (const line of [prefix, signaturePrefix, suffix]) {
+      assert(maybeSignedMessage.includes(line), 'Not a signed message')
+    }
+    const mStart = prefix.length + maybeSignedMessage.indexOf(prefix)
+    const mEnd = maybeSignedMessage.indexOf(signaturePrefix)
+    const message = maybeSignedMessage.slice(mStart, mEnd).trim()
+
+    const sStart = signaturePrefix.length + maybeSignedMessage.indexOf(signaturePrefix)
+    const sEnd = maybeSignedMessage.indexOf(suffix)
+    const addressAndSignature = maybeSignedMessage.slice(sStart, sEnd).trim()
+    const [address, signature] = addressAndSignature.split('\n').map(line => line.trim())
+
+    addressInput.value = address
+    messageInput.value = message
+    signatureInput.value = signature
+    verifySignature()
+  } catch (e) {}
+}
+
+for (const key of [
+  'verify-attempted-display',
+  'verified-display',
+  'error-display',
+  'verify-completed-display',
+]) {
+  document.body.classList.add(`${key}-false`)
+  document.body.classList.remove(`${key}-true`)
+}
 
 async function verifySignature() {
   const data = new FormData(form)
@@ -138,20 +192,33 @@ async function verifySignature() {
     message: { bytes, utf8, hex },
   } = parsePayload(payload)
 
+  for (const key of [
+    'verify-attempted-display',
+    'verified-display',
+    'error-display',
+    'verify-completed-display',
+  ]) {
+    document.body.classList.add(`${key}-false`)
+    document.body.classList.remove(`${key}-true`)
+  }
+
   document.body.classList.add('verify-attempted-display-true')
   document.body.classList.remove('verify-attempted-display-false')
   nonAttemptedDisplay.forEach(e => e.classList.add('hidden'))
   attemptedDisplay.forEach(e => e.classList.remove('hidden'))
   verifiedDisplay.forEach(e => e.classList.add('hidden'))
   errorDisplay.forEach(e => e.classList.add('hidden'))
-  document.querySelectorAll('[aria-busy]').forEach(e => e.setAttribute('aria-busy', 'true'))
+  busyElements.forEach(e => e.setAttribute('aria-busy', 'true'))
   errorReason.textContent = ''
   verifiedAddressLink.textContent = ''
   verifiedMessageContent.textContent = ''
   verifiedAddressLink.href = 'https://mempool.space/address/'
+  const startTime = performance.now() ?? Date.now()
+  let endTime: number | undefined
   try {
     const isValid = await verify({ message: bytes, address, signature })
     assert(isValid, 'Signature is invalid')
+    endTime = performance.now() ?? Date.now()
 
     document.body.classList.add('verified-display-true')
     document.body.classList.remove('verified-display-false')
@@ -165,10 +232,14 @@ async function verifySignature() {
     errorReason.textContent = error instanceof Error ? error.message : String(error)
     errorDisplay.forEach(e => e.classList.remove('hidden'))
   } finally {
+    if (!endTime) endTime = performance.now() ?? Date.now()
+    const durationMs = endTime - startTime
+
     document.body.classList.add('verify-completed-display-true')
     document.body.classList.remove('verify-completed-display-false')
     completedDisplay.forEach(e => e.classList.remove('hidden'))
-    document.querySelectorAll('[aria-busy]').forEach(e => e.setAttribute('aria-busy', 'false'))
+    busyElements.forEach(e => e.setAttribute('aria-busy', 'false'))
+    durationElements.forEach(e => (e.textContent = `${durationMs.toFixed(2)}ms`))
 
     verifyDialog.close()
     jsonStringifyPre.textContent = JSON.stringify({ address, signature, message: utf8 }, null, 2)

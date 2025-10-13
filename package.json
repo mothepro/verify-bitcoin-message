@@ -1,7 +1,7 @@
 {
   "name": "verify-bitcoin-message",
   "description": "A dependency-free Bitcoin message signature verifier that works in browsers",
-  "homepage": "https://mothepro.github.io/verify-bitcoin-message/",
+  "homepage": "https://verify-bitcoin-message.js.org",
   "bin": {
     "verify-bitcoin-message": "./cli.ts"
   },
