@@ -94,20 +94,35 @@ jobs:
               proofUrl.searchParams.set('message', message)
               proofUrl.searchParams.set('signature', signature)
 
+              let proofInfo = ''
+              if (String(proofUrl).length < 2000) {
+                proofInfo = '[digitally signed 🔏](${proofUrl}) this message.'
+                console.warn('Proof is too long for the CDN:', proofUrl)
+              } else proofInfo = `digitally sign this message.
+
+            Proof can be found in the \`Checks\` tab. 🔏`
+
               let body = `
+            > [!WARNING]
+            > @${context.actor} is the publisher, **not** the signer, unless stated otherwise 🕵
+
             > [!IMPORTANT]
-            > 🔏 [\`${address}\`](${explorerUrl}) digitally signed this message with their private key
-            > 🕵 @${context.actor} may **not** be signer
-            >
-            > ### Proof [${proofUrl.host}](${proofUrl})
+            > [\`${address}\`](${explorerUrl}) used their private key to ${proofInfo}
 
-
-            ${message}`.trim()
+            ${message}
+              `.trim()
 
               await github.rest.issues.createComment({ owner, repo, issue_number, body });
 
               if (count++ >= limit) {
-                body = `All payloads have been verified. ☑️ \n\nPre commit payload limit reached.\nTry to upload messages in smaller batches.\n\nPayload limit reached per commit.`
+                body = `
+            All payloads have been verified. ☑️
+
+            Pre commit payload limit reached.
+            Try to upload messages in smaller batches.
+
+            Payload limit reached per commit.
+                `.trim()
                 await github.rest.issues.createComment({ owner, repo, issue_number, body });
                 break;
               }
