@@ -78,36 +78,77 @@ jobs:
             const { number: issue_number } = context.issue
             const { homepage, blockexplorerpage } = ${{ steps.package_json.outputs.OUTPUT }}
             const payloads = ${{ steps.payloads_json.outputs.OUTPUT }}
-            const proofUrl = new URL(homepage)
+            const proof = { url: new URL(homepage) }
             const explorerUrl = new URL(blockexplorerpage)
             const existingComments = await github.rest.issues.listComments({ owner, repo, issue_number });
             for (const { address, message, signature } of payloads) {
-              const hasComment = existingComments.data.find(comment => comment.body.includes(encodeURIComponent(signature)))
+              const hasComment = existingComments.data.find(comment => [
+                encodeURIComponent(signature),
+                signature,
+              ].some(x => comment.body.includes(x)))
               if (hasComment) {
                 console.warn(`Skipping comment already exists for signature ${signature.slice(0, 8)}...`)
                 continue;
               }
 
               explorerUrl.pathname = `address/${address}`
+              proof.title = `[\`${address}\`](${explorerUrl}) used their private key to`
+              proof.details = ''
 
-              proofUrl.searchParams.set('address', address)
-              proofUrl.searchParams.set('message', message)
-              proofUrl.searchParams.set('signature', signature)
+              proof.url.searchParams.set('address', address)
+              proof.url.searchParams.set('message', message)
+              proof.url.searchParams.set('signature', signature)
+
+              if (String(proof.url).length < 2000) {
+                proof.title += `[digitally signed 🔏](${proof.url}) this message`
+              } else {
+                console.warn('Proof is too long for the CDN:', proof.url)
+                proof.title += `digitally sign this message.`
+                proof.details = `
+            > <details>
+            > <summary>
+            >   ${proof.title}
+            > </summary>
+            >
+            > Proof is too long to be a clickable link, but you can verify either way
+            >
+            > ## ${proof.url.host}
+            >
+            > You can verify it yourself at ${homepage}
+            > Copy and paste the following into the "Verify any Message" dialog:
+            >
+            > \`\`\`json
+            > ${JSON.stringify({ address, message, signature })}
+            > \`\`\`
+            >
+            > ## Github Checks
+            >
+            > Proof can be found in the Checks tab 🔏
+            > </details>
+                `.trim()
+              }
 
               let body = `
+            > [!WARNING]
+            > @${context.actor} is the publisher, **not** the signer, unless stated otherwise 🕵
+
             > [!IMPORTANT]
-            > 🔏 [\`${address}\`](${explorerUrl}) digitally signed this message with their private key
-            > 🕵 @${context.actor} may **not** be signer
-            >
-            > ### Proof [${proofUrl.host}](${proofUrl})
+            > ${proof.details || proof.title}
 
-
-            ${message}`.trim()
+            ${message}
+              `.trim()
 
               await github.rest.issues.createComment({ owner, repo, issue_number, body });
 
               if (count++ >= limit) {
-                body = `All payloads have been verified. ☑️ \n\nPre commit payload limit reached.\nTry to upload messages in smaller batches.\n\nPayload limit reached per commit.`
+                body = `
+            All payloads have been verified. ☑️
+
+            Pre commit payload limit reached.
+            Try to upload messages in smaller batches.
+
+            Payload limit reached per commit.
+                `.trim()
                 await github.rest.issues.createComment({ owner, repo, issue_number, body });
                 break;
               }
