@@ -92,7 +92,7 @@ jobs:
               }
 
               explorerUrl.pathname = `address/${address}`
-              proof.title = `[\`${address}\`](${explorerUrl}) used their private key to`
+              proof.title = `[\`${address}\`](${explorerUrl}) used their private key to `
               proof.details = ''
 
               proof.url.searchParams.set('address', address)
@@ -102,28 +102,27 @@ jobs:
               if (String(proof.url).length < 2000) {
                 proof.title += `[digitally signed 🔏](${proof.url}) this message`
               } else {
-                console.warn('Proof is too long for the CDN:', proof.url)
-                proof.title += `digitally sign this message.`
-                proof.details = `
+                console.warn('Proof is too long for the CDN (cloudflare):', proof.url)
+                proof.title += `digitally sign this message`
+                proof.details = `>
             > <details>
             > <summary>
-            >   ${proof.title}
+            >   Verify this verification
             > </summary>
             >
-            > Proof is too long to be a clickable link, but you can verify either way
+            > Unfortunately, the proof is too long to be a clickable link. (over 2000 characters)
             >
-            > ## ${proof.url.host}
+            > ## Directly with ${proof.url.host}
             >
-            > You can verify it yourself at ${homepage}
-            > Copy and paste the following into the "Verify any Message" dialog:
+            > Visit ${homepage}, then copy and paste the following into the "Verify any Message" dialog:
             >
             > \`\`\`json
             > ${JSON.stringify({ address, message, signature })}
             > \`\`\`
             >
-            > ## Github Checks
+            > ## Github
             >
-            > Proof can be found in the Checks tab 🔏
+            > Proof can be found in the \`Checks\` tab 🔏
             > </details>
                 `.trim()
               }
@@ -133,7 +132,8 @@ jobs:
             > @${context.actor} is the publisher, **not** the signer, unless stated otherwise 🕵
 
             > [!IMPORTANT]
-            > ${proof.details || proof.title}
+            > ${proof.title}
+            ${proof.details}
 
             ${message}
               `.trim()
