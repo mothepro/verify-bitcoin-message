@@ -95,7 +95,7 @@ jobs:
               proofUrl.searchParams.set('signature', signature)
 
               let proofInfo = ''
-              if (String(proofUrl).length < 2000) {
+              if (String(proofUrl).length > 2000) {
                 proofInfo = '[digitally signed 🔏](${proofUrl}) this message.'
                 console.warn('Proof is too long for the CDN:', proofUrl)
               } else proofInfo = `digitally sign this message.
