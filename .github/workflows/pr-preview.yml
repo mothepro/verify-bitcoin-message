@@ -78,7 +78,7 @@ jobs:
             const { number: issue_number } = context.issue
             const { homepage, blockexplorerpage } = ${{ steps.package_json.outputs.OUTPUT }}
             const payloads = ${{ steps.payloads_json.outputs.OUTPUT }}
-            const proofUrl = new URL(homepage)
+            const proof = { url: new URL(homepage) }
             const explorerUrl = new URL(blockexplorerpage)
             const existingComments = await github.rest.issues.listComments({ owner, repo, issue_number });
             for (const { address, message, signature } of payloads) {
@@ -92,44 +92,48 @@ jobs:
               }
 
               explorerUrl.pathname = `address/${address}`
+              proof.title = `[\`${address}\`](${explorerUrl}) used their private key to`
+              proof.details = ''
 
-              proofUrl.searchParams.set('address', address)
-              proofUrl.searchParams.set('message', message)
-              proofUrl.searchParams.set('signature', signature)
+              proof.url.searchParams.set('address', address)
+              proof.url.searchParams.set('message', message)
+              proof.url.searchParams.set('signature', signature)
 
-              let proofInfo = ''
-              if (String(proofUrl).length < 2000) {
-                proofInfo = `[digitally signed 🔏](${proofUrl}) this message`
-                console.warn('Proof is too long for the CDN:', proofUrl)
-              } else proofInfo = `digitally sign this message.
-            >
+              if (String(proof.url).length < 2000) {
+                proof.title += `[digitally signed 🔏](${proof.url}) this message`
+              } else {
+                console.warn('Proof is too long for the CDN:', proof.url)
+                proof.title += `digitally sign this message.`
+                proof.details = `
             > <details>
             > <summary>
-            >   Proof can be found in the Checks tab 🔏
+            >   ${proof.title}
             > </summary>
             >
-            > Proof is too long to be a clickable link.
+            > Proof is too long to be a clickable link, but you can verify either way
             >
-            > ## ${proofUrl.host}
+            > ## ${proof.url.host}
             >
             > You can verify it yourself at ${homepage}
-            > Copy and paste the following into the "Verify any Message":
+            > Copy and paste the following into the `Verify any Message` dialog:
             >
-            > \`\`\`
-            > ${JSON.stringify({ address, message, signature }, null, 2)}
+            > \`\`\`json
+            > ${JSON.stringify({ address, message, signature })}
             > \`\`\`
             >
             > ## Github Checks
             >
             > Proof can be found in the Checks tab 🔏
-            > </details>`
+            > </details>
+                `.trim()
+              }
 
               let body = `
             > [!WARNING]
             > @${context.actor} is the publisher, **not** the signer, unless stated otherwise 🕵
 
             > [!IMPORTANT]
-            > [\`${address}\`](${explorerUrl}) used their private key to ${proofInfo}
+            > ${proof.details || proof.title}
 
             ${message}
               `.trim()
