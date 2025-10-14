@@ -99,8 +99,8 @@ jobs:
                 proofInfo = `[digitally signed 🔏](${proofUrl}) this message`
                 console.warn('Proof is too long for the CDN:', proofUrl)
               } else proofInfo = `digitally sign this message.
-
-            Proof can be found in the \`Checks\` tab. 🔏`
+            >
+            > Proof can be found in the \`Checks\` tab. 🔏`
 
               let body = `
             > [!WARNING]
