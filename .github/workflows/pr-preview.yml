@@ -115,7 +115,7 @@ jobs:
             > ## ${proof.url.host}
             >
             > You can verify it yourself at ${homepage}
-            > Copy and paste the following into the `Verify any Message` dialog:
+            > Copy and paste the following into the "Verify any Message" dialog:
             >
             > \`\`\`json
             > ${JSON.stringify({ address, message, signature })}
