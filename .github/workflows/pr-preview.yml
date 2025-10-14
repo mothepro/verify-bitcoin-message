@@ -82,7 +82,10 @@ jobs:
             const explorerUrl = new URL(blockexplorerpage)
             const existingComments = await github.rest.issues.listComments({ owner, repo, issue_number });
             for (const { address, message, signature } of payloads) {
-              const hasComment = existingComments.data.find(comment => comment.body.includes(encodeURIComponent(signature)))
+              const hasComment = existingComments.data.find(comment => [
+                encodeURIComponent(signature),
+                signature,
+              ].some(x => comment.body.includes(x)))
               if (hasComment) {
                 console.warn(`Skipping comment already exists for signature ${signature.slice(0, 8)}...`)
                 continue;
@@ -100,7 +103,26 @@ jobs:
                 console.warn('Proof is too long for the CDN:', proofUrl)
               } else proofInfo = `digitally sign this message.
             >
-            > Proof can be found in the \`Checks\` tab. 🔏`
+            > <details>
+            > <summary>
+            >   Proof can be found in the Checks tab 🔏
+            > </summary>
+            >
+            > Proof is too long to be a clickable link.
+            >
+            > ## ${proofUrl.host}
+            >
+            > You can verify it yourself at ${homepage}
+            > Copy and paste the following into the "Verify any Message":
+            >
+            > \`\`\`
+            > ${JSON.stringify({ address, message, signature }, null, 2)}
+            > \`\`\`
+            >
+            > ## Github Checks
+            >
+            > Proof can be found in the Checks tab 🔏
+            > </details>`
 
               let body = `
             > [!WARNING]
