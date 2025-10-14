@@ -86,6 +86,11 @@ const isValid = await verifySafe({
 
 ### Up Next
 
+- [ ] Fill out cli info with active values
+- [ ] Nice way to show multiple messages at once
+- [x] Allow files as messages (just put the commit you added them in your message and github will auto format it as well :D)
+- [ ] Automatically sync all open `publish` PRs back to `main` branch
+- [ ] Add `publish` tag to PRs with only payload changes
 - [ ] My idea to prevent fake screenshots :lightbulb:
 - [ ] more support for address types
 - [ ] explainer why cold storage >>> exchanges (you can use this)
@@ -94,6 +99,7 @@ const isValid = await verifySafe({
 - [ ] allow markdown in message? :eyes:
 - [ ] wrap github gpg signatue with one of these
   - then we could have a nicer message in action with a verified signature, kinda like a blue checkmark on twitter
+  - We ca remove the `[!WARNING]` and replace the `[!IMPORTANT]` with a `> [!TIP]` and a nicer message :D
 
 ### Web Alternatives
 

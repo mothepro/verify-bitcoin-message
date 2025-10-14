@@ -5,7 +5,7 @@ import verify from './verify'
 test(`Test payloads available`, () => expect(payloads.length).not.toBeArrayOfSize(0))
 
 for (const { address, message, signature } of payloads) {
-  test(`${address} signed "${message}"`, () =>
+  test(`\n${message}\nthe above message was signed by ${address}`, () =>
     expect(verify({ address, signature, message })).resolves.toBe(true))
 
   // TODO add more!!
