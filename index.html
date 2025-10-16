@@ -120,6 +120,10 @@
       margin-bottom: var(--pico-spacing)
     }
 
+    .bg-white {
+      background: white;
+    }
+
     a.message {
       display: block;
       white-space: nowrap;
@@ -164,6 +168,11 @@
 
     .mt-2 {
       margin-top: 2rem;
+    }
+
+    span.newline::before {
+      content: '\\\A';
+      white-space: pre;
     }
   </style>
 </head>
@@ -250,12 +259,12 @@ It's a good idea to include on of these
               class="primary"
             >Verify</button>
           </div>
-          <hr>
 
-          <details class="align-start">
+          <!-- <hr> -->
+          <details class="align-start hidden">
             <summary
               role="button"
-              class="outline"
+              class="outline bg-white"
               type="button"
             >
               More options if you do not have access to signing a message
@@ -263,14 +272,14 @@ It's a good idea to include on of these
 
             <div class="align-start">
               <p class="inline-block mt-2">
-                Sign your own messages
+                Sign your own messages online for free
               </p>
               <a
                 href="https://brainwalletx.github.io/#sign"
                 target="_blank"
                 rel="noopener noreferrer"
                 role="button"
-                class="outline contrast align-start"
+                class="outline bg-white contrast align-start"
               >via BrainWallet</a>
             </div>
           </details>
@@ -309,7 +318,7 @@ It's a good idea to include on of these
       <details>
         <summary
           role="button"
-          class="outline m-0"
+          class="outline bg-white m-0"
         >How it works</summary>
 
         <!-- Asymmetric cryptography is a powerful tool for secure communication. -->
@@ -395,7 +404,7 @@ It's a good idea to include on of these
           class="one secondary no-attempt-display"
         >See it in action</a>
         <a
-          href="https://github.com/mothepro/verify-bitcoin-message/pulls"
+          href="https://github.com/mothepro/verify-bitcoin-message/pulls?q=is%3Apr+is%3Aopen+-is%3Adraft"
           target="_blank"
           rel="noopener noreferrer"
           role="button"
@@ -410,7 +419,7 @@ It's a good idea to include on of these
       <details class="hidden verify-attempted-display">
         <summary
           role="button"
-          class="outline"
+          class="outline bg-white"
         >
           <span class="verified-display">
             Publish this message
@@ -443,7 +452,7 @@ It's a good idea to include on of these
       >
         <summary
           role="button"
-          class="outline"
+          class="outline bg-white"
         >
           <span class="no-attempt-display">
             Other ways to verify signed messages
@@ -456,7 +465,7 @@ It's a good idea to include on of these
         <details>
           <summary
             role="button"
-            class="outline"
+            class="outline bg-white"
           >Bitcoin Node</summary>
 
           Command Line
@@ -466,29 +475,22 @@ bitcoin-cli verifymessage &lt;address&gt; &lt;signature&gt; &lt;message&gt;
 
           RPC
           <pre><code>
-curl
-  --user &lt;rpcuser&gt;:&lt;rpcpassword&gt; \
-  --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifymessage", "params": [&lt;address&gt;, &lt;signature&gt;, &lt;message&gt;] }' \
-  -H 'content-type: text/plain;' \
-  http://127.0.0.1:8332/
+curl --user &lt;rpcuser&gt;:&lt;rpcpassword&gt; <span class="newline"></span> --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifymessage", "params": [&lt;address&gt;, &lt;signature&gt;, &lt;message&gt;] }' <span class="newline"></span> -H 'content-type: text/plain;' <span class="newline"></span> http://127.0.0.1:8332/
           </code></pre>
         </details>
 
         <details>
           <summary
             role="button"
-            class="outline"
+            class="outline bg-white"
           >JavaScript</summary>
 
           Command Line
           <pre><code>
-npx verify-bitcoin-message --json \
-  --address 1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV \
-  --message "This is an example of a signed message." \
-  --signature "H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk="
+npx verify-bitcoin-message --json <span class="newline"></span> --address 1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV <span class="newline"></span> --message "This is an example of a signed message." <span class="newline"></span> --signature "H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk="
             </code></pre>
 
-          Browser
+          Install in Browser
           <pre><code>
 &lt;script type="module"&gt;
   import verify, { verifySafe } from 'https://unpkg.com/verify-bitcoin-message';
@@ -500,12 +502,12 @@ npx verify-bitcoin-message --json \
 &lt;/script&gt;
             </code></pre>
 
-          Node
+          Install via Node
           <pre><code>
-npm install verify-bitcoin-message
+npm i verify-bitcoin-message
             </code></pre>
 
-          Bun
+          Install via Bun
           <pre><code>
 bun add verify-bitcoin-message
             </code></pre>
@@ -532,7 +534,7 @@ const isValid = await verifySafe({
         <details>
           <summary
             role="button"
-            class="outline"
+            class="outline bg-white"
           >Other Websites</summary>
 
           <ul>
@@ -596,7 +598,7 @@ const isValid = await verifySafe({
           target="_blank"
           rel="noopener noreferrer"
           role="button"
-          class="outline primary block align-start"
+          class="outline bg-white primary block align-start"
         >Source Code</a>
 
       </details>
@@ -612,7 +614,7 @@ const isValid = await verifySafe({
         >
           <summary
             role="button"
-            class="outline"
+            class="outline bg-white"
           >
             More verified messages
           </summary>
