@@ -27,13 +27,13 @@ const durationElements = document.querySelectorAll('[data-duration]')
 addressInput.addEventListener('focus', addressInput.select)
 signatureInput.addEventListener('focus', signatureInput.select)
 messageInput.addEventListener('paste', ({ clipboardData }) =>
-  handleJsonPaste(clipboardData?.getData('text/plain')?.trim() ?? '')
+  handleJsonPaste(clipboardData?.getData('text/plain')?.trim())
 )
 messageInput.addEventListener('paste', ({ clipboardData }) =>
-  handleSignedMessagePaste(clipboardData?.getData('text/plain')?.trim() ?? '')
+  handleSignedMessagePaste(clipboardData?.getData('text/plain')?.trim())
 )
 messageInput.addEventListener('paste', ({ clipboardData }) =>
-  handleSignedInputsIOMessagePaste(clipboardData?.getData('text/plain')?.trim() ?? '')
+  handleSignedInputsIOMessagePaste(clipboardData?.getData('text/plain')?.trim())
 )
 
 const hiddenLimits = document.querySelectorAll('[data-threshold].hidden')
@@ -105,7 +105,7 @@ function handlePayloadClick(e: PointerEvent) {
   return false
 }
 
-function handleJsonPaste(maybeJson: string) {
+function handleJsonPaste(maybeJson = '') {
   try {
     const { address, message, signature } = JSON.parse(maybeJson ?? '{}')
     console.log({ address, message, signature })
@@ -118,7 +118,7 @@ function handleJsonPaste(maybeJson: string) {
   } catch (e) {}
 }
 
-function handleSignedMessagePaste(maybeSignedMessage: string) {
+function handleSignedMessagePaste(maybeSignedMessage = '') {
   const prefix = '-----BEGIN BITCOIN SIGNED MESSAGE-----'
   const signaturePrefix = '-----BEGIN BITCOIN SIGNATURE-----'
   const suffix = '-----END BITCOIN SIGNATURE-----'
@@ -144,7 +144,7 @@ function handleSignedMessagePaste(maybeSignedMessage: string) {
 }
 
 // https://brainwalletx.github.io/#sign
-function handleSignedInputsIOMessagePaste(maybeSignedMessage: string) {
+function handleSignedInputsIOMessagePaste(maybeSignedMessage = '') {
   const prefix = '-----BEGIN BITCOIN SIGNED MESSAGE-----'
   const signaturePrefix = '-----BEGIN SIGNATURE-----'
   const suffix = '-----END BITCOIN SIGNED MESSAGE-----'
