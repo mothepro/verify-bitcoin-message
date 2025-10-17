@@ -19,6 +19,7 @@
     html,
     body {
       min-height: 100vh;
+      scrollbar-gutter: stable both-edges
     }
 
     .verified-display-true {
@@ -100,13 +101,13 @@
       margin: 2rem 0;
     }
 
-    .education {
+    article {
       margin: 3rem 0;
       padding: 2rem;
       /* border-top: 1px solid var(--pico-muted-border-color); */
     }
 
-    .education h2 {
+    article h2 {
       color: var(--pico-primary-color);
     }
 
@@ -148,6 +149,14 @@
       justify-content: center;
       flex-wrap: wrap;
       margin-bottom: var(--pico-spacing);
+    }
+
+    .space {
+      margin-bottom: var(--pico-spacing);
+    }
+
+    .w-full {
+      width: 100%;
     }
 
     .flex .one {
@@ -287,8 +296,7 @@ It's a good idea to include on of these
       </article>
     </dialog>
 
-    <!-- Educational Content -->
-    <article class="education">
+    <article>
       <!-- <h3>Message signed by a Bitcoin private key</h3> -->
 
       <p class="hidden verified-display">
@@ -315,11 +323,20 @@ It's a good idea to include on of these
         <li><strong>Non-repudiation</strong> The signer cannot deny having signed the message</li>
       </ul>
 
+      </article>
+      <hr>
+      <article>
+
+      <button
+        onclick="document.getElementById('verify-dialog').showModal()"
+        class="one primary block space w-full"
+      >Verify any Message</button>
+
       <details>
         <summary
           role="button"
           class="outline bg-white m-0"
-        >How it works</summary>
+        >🎓 How it works</summary>
 
         <!-- Asymmetric cryptography is a powerful tool for secure communication. -->
 
@@ -391,41 +408,36 @@ It's a good idea to include on of these
             rel="noopener noreferrer"
             data-tooltip="This JavaScript library provides one line of code to verify signed messages"
           >verify-bitcoin-message</a> library to verify signatures on device &mdash; without an internet connection.
+
+          [verify.js](https://github.com/mothepro/verify-bitcoin-message/blob/main/verify.ts)
         </p>
       </details>
-    </article>
 
-    <div class="alternatives">
-      <div class="flex">
-        <a
-          data-href-payload="0"
-          rel="noopener noreferrer"
-          role="button"
-          class="one secondary no-attempt-display"
-        >See it in action</a>
-        <a
-          href="https://github.com/mothepro/verify-bitcoin-message/pulls?q=is%3Apr+is%3Aopen+-is%3Adraft"
-          target="_blank"
-          rel="noopener noreferrer"
-          role="button"
-          class="one secondary verify-attempted-display"
-        >Messages from around the world 🌍</a>
+      <a
+        data-href-payload="0"
+        rel="noopener noreferrer"
+        role="button"
+        class="one align-start outline no-attempt-display block space onzzz"
+      >See it in action</a>
 
-        <button
-          onclick="document.getElementById('verify-dialog').showModal()"
-          class="one primary"
-        >Verify any Message</button>
-      </div>
+      <a
+        href="https://github.com/mothepro/verify-bitcoin-message/pulls?q=is%3Apr+is%3Aopen+-is%3Adraft"
+        target="_blank"
+        rel="noopener noreferrer"
+        role="button"
+        class="one align-start outline verified-display block space"
+      >🌍 Messages from around the world </a>
+
       <details class="hidden verify-attempted-display">
         <summary
           role="button"
           class="outline bg-white"
         >
           <span class="verified-display">
-            Publish this message
+            📢 Publish this message
           </span>
           <span class="error-display">
-            Reason for failure
+            ⛔ Reason for failure
           </span>
         </summary>
         Verification finished in <span data-duration></span>.
@@ -455,10 +467,10 @@ It's a good idea to include on of these
           class="outline bg-white"
         >
           <span class="no-attempt-display">
-            Other ways to verify signed messages
+            📜 Other ways to verify signed messages
           </span>
           <span class="verify-attempted-display hidden">
-            Verify this Verification
+            🔍 Verify this Verification
           </span>
         </summary>
 
@@ -599,7 +611,7 @@ const isValid = await verifySafe({
           rel="noopener noreferrer"
           role="button"
           class="outline bg-white primary block align-start"
-        >Source Code</a>
+        >👨🏿‍💻 Source Code</a>
 
       </details>
 
@@ -621,7 +633,8 @@ const isValid = await verifySafe({
           <div id="valid-payloads"></div>
         </details>
       </div>
-    </div>
+      </div>
+    </article>
   </main>
 
   <script

@@ -100,19 +100,20 @@ jobs:
               proof.url.searchParams.set('signature', signature)
 
               if (String(proof.url).length < 2000) {
-                proof.title += `[digitally signed 🔏](${proof.url}) this message`
+                proof.title += `[digitally sign 🔏](${proof.url}) this message`
               } else {
                 console.warn('Proof is too long for the CDN (cloudflare):', proof.url)
                 proof.title += `digitally sign this message`
                 proof.details = `>
             > <details>
             > <summary>
-            >   Verify this verification
+            >   Verify this verification 🔏
             > </summary>
             >
-            > Unfortunately, the proof is too long to be a clickable link. (over 2000 characters)
             >
-            > ## Directly with ${proof.url.host}
+            > Unfortunately, [the automatic proof via ${proof.url.host}](${proof.url}) may be over the 2000 character limit to be routed by cloudflare.
+            >
+            > ## Manually ${proof.url.host}
             >
             > Visit ${homepage}, then copy and paste the following into the "Verify any Message" dialog:
             >
@@ -122,7 +123,7 @@ jobs:
             >
             > ## Github
             >
-            > Proof can be found in the \`Checks\` tab 🔏
+            > Proof can be found in the \`Checks\` tab
             > </details>
                 `.trim()
               }
