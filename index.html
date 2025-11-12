@@ -180,7 +180,7 @@
     }
 
     span.newline::before {
-      content: '\\\A';
+      content: '\\';
       white-space: pre;
     }
   </style>
@@ -200,7 +200,7 @@
       <h1><a
           href="/"
           class="no-line"
-        >Message Verified ✅</a></h1>
+        >Verified ✅</a></h1>
     </div>
 
 
@@ -208,7 +208,7 @@
       <h1><a
           href="/"
           class="no-line"
-        >Message Verification Failed ❌</a></h1>
+        >Verification Failed ❌</a></h1>
     </div>
 
     <article
@@ -323,9 +323,7 @@ It's a good idea to include on of these
         <li><strong>Non-repudiation</strong> The signer cannot deny having signed the message</li>
       </ul>
 
-      </article>
-      <hr>
-      <article>
+      <hr />
 
       <button
         onclick="document.getElementById('verify-dialog').showModal()"
@@ -415,10 +413,11 @@ It's a good idea to include on of these
 
       <a
         data-href-payload="0"
+        data-inner-message="0"
         rel="noopener noreferrer"
         role="button"
-        class="one align-start outline no-attempt-display block space onzzz"
-      >See it in action</a>
+        class="one align-start outline no-attempt-display block space"
+      >See this message</a>
 
       <a
         href="https://github.com/mothepro/verify-bitcoin-message/pulls?q=is%3Apr+is%3Aopen+-is%3Adraft"
@@ -487,7 +486,10 @@ bitcoin-cli verifymessage &lt;address&gt; &lt;signature&gt; &lt;message&gt;
 
           RPC
           <pre><code>
-curl --user &lt;rpcuser&gt;:&lt;rpcpassword&gt; <span class="newline"></span> --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifymessage", "params": [&lt;address&gt;, &lt;signature&gt;, &lt;message&gt;] }' <span class="newline"></span> -H 'content-type: text/plain;' <span class="newline"></span> http://127.0.0.1:8332/
+curl --user &lt;rpcuser&gt;:&lt;rpcpassword&gt; <span class="newline"></span>
+--data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifymessage", "params": [&lt;address&gt;, &lt;signature&gt;, &lt;message&gt;] }' <span class="newline"></span>
+-H 'content-type: text/plain;' <span class="newline"></span>
+http://127.0.0.1:8332/
           </code></pre>
         </details>
 
@@ -499,7 +501,10 @@ curl --user &lt;rpcuser&gt;:&lt;rpcpassword&gt; <span class="newline"></span> --
 
           Command Line
           <pre><code>
-npx verify-bitcoin-message --json <span class="newline"></span> --address 1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV <span class="newline"></span> --message "This is an example of a signed message." <span class="newline"></span> --signature "H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk="
+npx verify-bitcoin-message --json <span class="newline"></span>
+--address 1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV <span class="newline"></span>
+--message "This is an example of a signed message." <span class="newline"></span>
+--signature "H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk="
             </code></pre>
 
           Install in Browser

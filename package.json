@@ -11,8 +11,6 @@
     "message",
     "signature",
     "verify",
-    "browser",
-    "crypto",
     "ecdsa",
     "secp256k1",
     "ripemd160",

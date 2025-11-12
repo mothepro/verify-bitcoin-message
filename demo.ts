@@ -22,6 +22,7 @@ const jsonStringifySelectAll = document.getElementById(
 const validPayloadsList = document.getElementById('valid-payloads') as HTMLOListElement
 const busyElements = document.querySelectorAll('[aria-busy]')
 const durationElements = document.querySelectorAll('[data-duration]')
+const messageElements = document.querySelectorAll('[data-inner-message]')
 
 // Nice
 addressInput.addEventListener('focus', addressInput.select)
@@ -61,7 +62,6 @@ messageInput.value = params.get('message')?.trim() ?? ''
 signatureInput.value = params.get('signature')?.trim() ?? ''
 
 // Add valid payloads to the list
-
 for (const [index, { address, message, signature }] of validPayloads.entries()) {
   const anchor = document.createElement('a')
   anchor.setAttribute('role', 'button')
@@ -86,6 +86,9 @@ for (const [index, { address, message, signature }] of validPayloads.entries()) 
 
   // Make relative links work offline
   for (const a of anchors) a.addEventListener('click', handlePayloadClick)
+
+  for (const el of messageElements)
+    if (Number(el.getAttribute('data-inner-message')) === index)  el.textContent = message
 }
 
 // Verify if we have a signature in the URL or whenever form is submitted
