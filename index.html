@@ -181,6 +181,10 @@
       content: '\\';
       white-space: pre;
     }
+
+    hr {
+      margin: 2rem 0;
+    }
   </style>
 </head>
 
@@ -328,86 +332,140 @@ It's a good idea to include on of these
         class="one primary block space w-full"
       >Verify any Message</button>
 
-      <details>
+      <details class="indent">
         <summary
           role="button"
           class="outline bg-white m-0"
-        >🎓 How it works</summary>
+        >🎓 How it works <i>(3 mins)</i></summary>
 
-        <!-- Asymmetric cryptography is a powerful tool for secure communication. -->
-
-
-        <p>
-          <a
-            href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Elliptic curve cryptography</a> makes it possible for
-        <ul>
-          <li>A private key to sign messages</li>
-          <li>Its corresponding <a
+        <details>
+          <summary
+            role="button"
+            class="outline bg-white"
+          >Asymmetric cryptography</summary>
+          <p>
+            Also known as <a
               href="https://en.wikipedia.org/wiki/Public-key_cryptography"
               target="_blank"
               rel="noopener noreferrer"
-            >public key</a>s to verify the signatures</li>
-          <li>The <a
+            >public-key cryptography</a>, allows for secure communication between two parties.
+          </p>
+
+          <p>
+            Each party creating <i data-tooltip="Hence the asymmetrical naming">a pair of unique</i> keys, a
+            public key and a private key.
+          </p>
+
+          <p>
+            Private keys are used to <a
               href="https://en.wikipedia.org/wiki/Digital_signature"
               target="_blank"
               rel="noopener noreferrer"
-            >signatures</a> never leak the private key</li>
-        </ul>
-        </p>
+            >digitally sign</a> messages, then the corresponding public keys are used to verify those message
+            signatures.
+          </p>
+        </details>
 
-        <p>
-          Not only does <abbr
-            title="Elliptic Curve Digital Signature Algorithm"
-            data-tooltip="Elliptic Curve Digital Signature Algorithm"
-          >ECDSA</abbr> provide security for every
-          day internet communication, it's also used to secure Bitcoin.
-        </p>
-
-        <p>
-          Bitcoin uses the following cryptographic primitives
-        <ul>
-          <li>
+        <details>
+          <summary
+            role="button"
+            class="outline bg-white"
+          >Elliptic curves</summary>
+          <p>
             <a
-              href="https://en.bitcoin.it/wiki/Secp256k1"
+              href="https://en.wikipedia.org/wiki/Elliptic_curve_cryptography"
               target="_blank"
               rel="noopener noreferrer"
-            >secp256k1</a> as the elliptic curve
-          </li>
-          <li>
-            <a
-              href="https://en.wikipedia.org/wiki/RIPEMD"
-              target="_blank"
-              rel="noopener noreferrer"
-            >RIPEMD-160</a>
-            and
-            <a
-              href="https://en.wikipedia.org/wiki/SHA-2"
-              target="_blank"
-              rel="noopener noreferrer"
-            >SHA-256</a> hash functions
-          </li>
-          <li><a
-              href="https://en.bitcoin.it/wiki/Base58Check_encoding"
-              target="_blank"
-              rel="noopener noreferrer"
-            >Base58Check encoding</a> for converting public keys to Bitcoin addresses</li>
-        </ul>
-        </p>
+            >Elliptic curve cryptography</a> is a very common implementation of asymmetric cryptography.
+          </p>
 
-        <p>
-          This website uses the <a
-            href="https://www.npmjs.com/package/verify-bitcoin-message"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-tooltip="This JavaScript library provides one line of code to verify signed messages"
-          >verify-bitcoin-message</a> library to verify signatures on device &mdash; without an internet connection.
+          <p>
+            It&apos;s used to secure every day internet communication, peer-to-peer messaging (whatsapp, signal, etc.)
+            and even bitcoin.
+          </p>
 
-          [verify.js](https://github.com/mothepro/verify-bitcoin-message/blob/main/verify.ts)
-        </p>
+          <p>
+            <a
+              href="https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-tooltip="ECDSA"
+            >Elliptic Curve Digital Signature Algorithm</a> ensures that the digital signatures cannot be forged and do
+            not leak the private key.
+          </p>
+
+          <p>
+            What makes this so secure is the difficulty of solving the <a
+              href="https://en.wikipedia.org/wiki/Elliptic_curve_discrete_logarithm_problem"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-tooltip="ECDLP"
+            >Elliptic Curve Discrete Logarithm Problem</a>.
+          </p>
+        </details>
+
+        <details>
+          <summary
+            role="button"
+            class="outline bg-white"
+          >Bitcoin</summary>
+          <p>
+            Bitcoin uses the following cryptographic primitives
+          <ul>
+            <li>
+              <a
+                href="https://en.bitcoin.it/wiki/Secp256k1"
+                target="_blank"
+                rel="noopener noreferrer"
+              >secp256k1</a> as the elliptic curve
+            </li>
+            <li>
+              <a
+                href="https://en.wikipedia.org/wiki/RIPEMD"
+                target="_blank"
+                rel="noopener noreferrer"
+              >RIPEMD-160</a>
+              and
+              <a
+                href="https://en.wikipedia.org/wiki/SHA-2"
+                target="_blank"
+                rel="noopener noreferrer"
+              >SHA-256</a> hash functions
+            </li>
+            <li><a
+                href="https://en.bitcoin.it/wiki/Base58Check_encoding"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Base58Check encoding</a> for converting public keys to Bitcoin addresses</li>
+          </ul>
+          </p>
+        </details>
+
+        <details>
+          <summary
+            role="button"
+            class="outline bg-white"
+          >Message Verifier</summary>
+          <p>
+            This website uses the <a
+              href="https://www.npmjs.com/package/verify-bitcoin-message"
+              target="_blank"
+              rel="noopener noreferrer"
+              XXXdata-tooltip="This JavaScript library provides one line of code to verify signed messages"
+            >verify-bitcoin-message</a> library to verify signatures on device &mdash; without an internet connection.
+
+          </p>
+
+          <p>
+            All the core logic can be found in a single file, <a
+              href="https://github.com/mothepro/verify-bitcoin-message/blob/main/verify.ts"
+              target="_blank"
+              rel="noopener noreferrer"
+            >verify.ts</a>.
+          </p>
+        </details>
       </details>
+
 
       <a
         data-href-payload="0"
