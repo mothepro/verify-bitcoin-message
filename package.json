@@ -37,7 +37,8 @@
     "build": "bun run build:js && bun run build:cli && bun run build:exe",
     "prebuild:js": "bun run build:copy-css",
     "prepublish": "bun test && bun run build:js",
-    "postinstall": "bun test verify && bun run build"
+    "postinstall": "bun test verify && bun run build",
+    "start": "bun run build -- --watch"
   },
   "main": "verify.js",
   "module": "verify.js",
