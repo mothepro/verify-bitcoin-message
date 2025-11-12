@@ -27,15 +27,17 @@ const messageElements = document.querySelectorAll('[data-inner-message]')
 // Nice
 addressInput.addEventListener('focus', addressInput.select)
 signatureInput.addEventListener('focus', signatureInput.select)
-messageInput.addEventListener('paste', ({ clipboardData }) =>
-  handleJsonPaste(clipboardData?.getData('text/plain')?.trim())
-)
-messageInput.addEventListener('paste', ({ clipboardData }) =>
-  handleSignedMessagePaste(clipboardData?.getData('text/plain')?.trim())
-)
-messageInput.addEventListener('paste', ({ clipboardData }) =>
-  handleSignedInputsIOMessagePaste(clipboardData?.getData('text/plain')?.trim())
-)
+messageInput.addEventListener('paste', event => {
+  const maybe = event.clipboardData?.getData('text/plain')?.trim()
+
+  let handled =
+    handleJsonPaste(maybe) ||
+    handleSignedMessagePaste(maybe) ||
+    handleSignedInputsIOMessagePaste(maybe)
+
+  console.log({ event, maybe, handled })
+  if (handled) event.preventDefault()
+})
 
 const hiddenLimits = document.querySelectorAll('[data-threshold].hidden')
 for (const el of hiddenLimits) {
@@ -88,7 +90,7 @@ for (const [index, { address, message, signature }] of validPayloads.entries()) 
   for (const a of anchors) a.addEventListener('click', handlePayloadClick)
 
   for (const el of messageElements)
-    if (Number(el.getAttribute('data-inner-message')) === index)  el.textContent = message
+    if (Number(el.getAttribute('data-inner-message')) === index) el.textContent = message
 }
 
 // Verify if we have a signature in the URL or whenever form is submitted
@@ -117,6 +119,7 @@ function handleJsonPaste(maybeJson = '') {
       messageInput.value = message
       signatureInput.value = signature
       verifySignature()
+      return true
     }
   } catch (e) {}
 }
@@ -143,6 +146,7 @@ function handleSignedMessagePaste(maybeSignedMessage = '') {
     messageInput.value = message
     signatureInput.value = signature
     verifySignature()
+    return true
   } catch (e) {}
 }
 
@@ -169,6 +173,7 @@ function handleSignedInputsIOMessagePaste(maybeSignedMessage = '') {
     messageInput.value = message
     signatureInput.value = signature
     verifySignature()
+    return true
   } catch (e) {}
 }
 
