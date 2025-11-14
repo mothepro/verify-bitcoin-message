@@ -92,7 +92,7 @@ jobs:
               }
 
               explorerUrl.pathname = `address/${address}`
-              proof.title = `[\`${address}\`](${explorerUrl}) used their private key to `
+              proof.title = `[\`${address}\`](${explorerUrl}) has `
               proof.details = ''
 
               proof.url.searchParams.set('address', address)
@@ -100,10 +100,10 @@ jobs:
               proof.url.searchParams.set('signature', signature)
 
               if (String(proof.url).length < 2000) {
-                proof.title += `[digitally sign 🔏](${proof.url}) this message`
+                proof.title += `[digitally signed 🔏](${proof.url}) this message`
               } else {
                 console.warn('Proof is too long for the CDN (cloudflare):', proof.url)
-                proof.title += `digitally sign this message`
+                proof.title += `digitally signed this message`
                 proof.details = `>
             > <details>
             > <summary>
