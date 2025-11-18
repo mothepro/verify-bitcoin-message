@@ -1,7 +1,7 @@
 [
   {
-    "address": "1F3sAm6ZtwLAUnj7d38pGFxtP3RVEvtsbV",
-    "message": "This is an example of a signed message.",
-    "signature": "H9L5yLFjti0QTHhPyFrZCT1V/MMnBtXKmoiKDZ78NDBjERki6ZTQZdSMCtkgoNmp17By9ItJr8o7ChX0XxY91nk="
+    "address": "1C3PfWNp2n9jbABu9rK4j8ZLzsAzGF4dq3",
+    "signature": "HzJmS2ZUm3/mi33N6/SYlK1K/Ppgz6fOPA98K/6xZ0YwP9TDYCTtFR7zYSUj4mksZWfGdI617X0x0vgewyEWWGE=",
+    "message": "🎬 See it in action\n\nThanks for checking out my message verifier.\n\nIf you like what you see, please contribute to this address or this repository. 😎\n\nhttps://github.com/mothepro/verify-bitcoin-message\n\nThanks,\n- @mothepro"
   }
 ]
