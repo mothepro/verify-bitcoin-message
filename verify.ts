@@ -41,8 +41,7 @@ export function assert(condition: unknown, error: unknown = 'Assertion failed'):
  * 4. Comparing with the claimed address
  */
 export default async function verify({ message, address, signature }: Payload) {
-  // Decode the base64 signature into raw bytes
-  const sigBytes = base64ToBytes(signature)
+  const sigBytes = Uint8Array.fromBase64(signature)
   assert(sigBytes.length === 65, `Invalid signature length: ${sigBytes.length}, expected 65`)
 
   // Bitcoin message signatures use recovery flags 27-34 to indicate:
@@ -300,18 +299,6 @@ function ripemd160(data: Uint8Array): Uint8Array {
 // ============================================================================
 // BASE64 AND SECP256K1 ELLIPTIC CURVE FUNCTIONS
 // ============================================================================
-
-/**
- * Decode base64 string to byte array
- * Used for decoding Bitcoin message signatures
- */
-function base64ToBytes(base64: string) {
-  const binaryString = atob(base64)
-  const bytes = new Uint8Array(binaryString.length)
-  for (let i = 0; i < binaryString.length; i++)
-    bytes[i] = binaryString.charCodeAt(i)
-  return bytes
-}
 
 // secp256k1 elliptic curve constants (Bitcoin uses this curve)
 const SECP256K1_P = 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2fn // Field prime
