@@ -20,6 +20,8 @@
     body {
       min-height: 100vh;
       scrollbar-gutter: stable;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
 
     .verified-display-true {
@@ -47,8 +49,11 @@
       display: block !important;
     }
 
-    .hero {
+    .text-center {
       text-align: center;
+    }
+
+    .hero {
       padding-top: 2rem;
     }
 
@@ -190,7 +195,7 @@
 
 <body>
   <main class="container">
-    <div class="hero no-attempt-display">
+    <div class="hero no-attempt-display text-center">
       <h1>Message Verifier</h1>
       <p>Authenticate signed messages on your device &mdash; <i>even in airplane mode</i></p>
       <noscript>
@@ -198,7 +203,7 @@
       </noscript>
     </div>
 
-    <div class="verified-display hidden hero">
+    <div class="verified-display hidden hero text-center">
       <h1><a
           href="/"
           class="no-line"
@@ -206,7 +211,7 @@
     </div>
 
 
-    <div class="error-display hidden hero">
+    <div class="error-display hidden hero text-center">
       <h1><a
           href="/"
           class="no-line"
@@ -315,9 +320,9 @@ It's a good idea to include on of these
         When verified, digital signatures cryptographically prove
       </p>
 
-      <p class="no-attempt-display">
-        When a message is signed with a digital signature, which are
-        <abbr data-tooltip="It is mathematically infeasible to forge a valid signature">
+      <p class="center no-attempt-display">
+        Digitally signed messages are
+        <abbr data-tooltip="It is cryptographically impossible to forge a valid signature">
           tamper-resistant
         </abbr>
         and
@@ -333,11 +338,60 @@ It's a good idea to include on of these
         class="one primary block space w-full"
       >Verify any Message</button>
 
+      <a
+        data-href-payload="0"
+        data-inner-message="0"
+        data-message="oneline"
+        rel="noopener noreferrer"
+        role="button"
+        class="one align-start outline no-attempt-display block space"
+      >Message from Mo</a>
+
+      <a
+        href="https://github.com/mothepro/verify-bitcoin-message/pulls?q=is%3Apr+is%3Aopen+-is%3Adraft"
+        target="_blank"
+        rel="noopener noreferrer"
+        role="button"
+        class="one align-start outline verified-display block space"
+      >🌍 Messages from around the world </a>
+
+      <details class="hidden verify-attempted-display">
+        <summary
+          role="button"
+          class="outline bg-white"
+        >
+          <span class="verified-display">
+            📢 Details &amp; Publish
+          </span>
+          <span class="error-display">
+            ⛔ Reason for failure
+          </span>
+        </summary>
+        <p id="error-reason"></p>
+        <pre id="json-stringify"></pre>
+        <p class="text-center">
+          Verification finished in <span data-duration></span>ms.
+        </p>
+        <div class="flex">
+          <button
+            id="json-stringify-select-all"
+            class="secondary one"
+          >Copy</button>
+          <a
+            href="https://github.com/mothepro/verify-bitcoin-message/edit/main/payloads.json"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="primary verified-display one"
+            role="button"
+          >Publish via Github</a>
+        </div>
+      </details>
       <details class="indent">
         <summary
           role="button"
           class="outline bg-white m-0"
-        >🎓 How it works <i>(3 mins)</i></summary>
+          data-tooltip="Learn how it works in only 3 minutes"
+        >🎓 How it works</summary>
 
         <details>
           <summary
@@ -465,53 +519,6 @@ It's a good idea to include on of these
             >verify.ts</a>.
           </p>
         </details>
-      </details>
-
-
-      <a
-        data-href-payload="0"
-        data-inner-message="0"
-        rel="noopener noreferrer"
-        role="button"
-        class="one align-start outline no-attempt-display block space"
-      >See this message</a>
-
-      <a
-        href="https://github.com/mothepro/verify-bitcoin-message/pulls?q=is%3Apr+is%3Aopen+-is%3Adraft"
-        target="_blank"
-        rel="noopener noreferrer"
-        role="button"
-        class="one align-start outline verified-display block space"
-      >🌍 Messages from around the world </a>
-
-      <details class="hidden verify-attempted-display">
-        <summary
-          role="button"
-          class="outline bg-white"
-        >
-          <span class="verified-display">
-            📢 View Details &amp; Publish
-          </span>
-          <span class="error-display">
-            ⛔ Reason for failure
-          </span>
-        </summary>
-        Verification finished in <span data-duration></span>.
-        <p id="error-reason"></p>
-        <pre id="json-stringify"></pre>
-        <div class="flex">
-          <button
-            id="json-stringify-select-all"
-            class="secondary one"
-          >Copy</button>
-          <a
-            href="https://github.com/mothepro/verify-bitcoin-message/edit/main/payloads.json"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="primary verified-display one"
-            role="button"
-          >Publish via Github</a>
-        </div>
       </details>
 
       <details

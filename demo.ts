@@ -89,8 +89,11 @@ for (const [index, { address, message, signature }] of validPayloads.entries()) 
   // Make relative links work offline
   for (const a of anchors) a.addEventListener('click', handlePayloadClick)
 
-  for (const el of messageElements)
-    if (Number(el.getAttribute('data-inner-message')) === index) el.textContent = message
+  for (const el of messageElements) {
+    let content = message
+    if (el.getAttribute('data-message') === 'oneline') [content] = content.split('\n', 1)
+    if (Number(el.getAttribute('data-inner-message')) === index) el.textContent = content
+  }
 }
 
 // Verify if we have a signature in the URL or whenever form is submitted
@@ -247,7 +250,7 @@ async function verifySignature() {
     document.body.classList.remove('verify-completed-display-false')
     completedDisplay.forEach(e => e.classList.remove('hidden'))
     busyElements.forEach(e => e.setAttribute('aria-busy', 'false'))
-    durationElements.forEach(e => (e.textContent = `${durationMs.toFixed(2)}ms`))
+    durationElements.forEach(e => e.textContent = durationMs.toFixed(2))
 
     verifyDialog.close()
     jsonStringifyPre.textContent = JSON.stringify({ address, signature, message: utf8 }, null, 2)
