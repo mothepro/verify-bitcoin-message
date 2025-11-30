@@ -15,7 +15,27 @@ The verification process automatically hides invalid messages.
 <!-- *Each fork is like its own "[community](../../forks)".* -->
 It's like github is a registry of messages
 
+## Getting Started
+
+  Download [Bun](https://bun.sh), my new favorite JS runtime, then clone the repository
+
+```bash
+git clone https://github.com/mothepro/verify-bitcoin-message
+cd verify-bitcoin-message
+bun install # Tests will be run automatically after installation
+```
+
 ## Things you can do
+
+### Serve locally
+
+```bash
+bun start
+python -m http.server 8000 static # Any "server" is fine, doesn't have to be python
+```
+
+Unfortunately, opening the html file directly from the file system will not work.
+The browser's [built-in `crypto` libraries](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto) are [not available](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts) when running from the file system.
 
 ### Offline
 
@@ -25,33 +45,13 @@ If you're on mobile, just turn on airplane mode.
 
 On desktop you can test offline mode in Chrome (webkit browsers) by opening Developer Tools (F12) > `Network` tab > Change `No Throttling` to `Offline`
 
-### Clone the repository
-
-   Download [Bun](https://bun.sh), JS runtime
-
-   ```bash
-   git clone https://github.com/mothepro/verify-bitcoin-message
-   cd verify-bitcoin-message
-   bun install # Tests will be run automatically after installation
-   ```
-
-### Serve locally
-
-   ```bash
-   bun run build:browser
-   python -m http.server 8000 static # Any "server" is fine, doesn't have to be python
-   ```
-
-   Unfortunately, opening the html file directly from the file system will not work.
-   The browser's [built-in `crypto` libraries](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto) are [not available](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts) when running from the file system.
-
 ### CDN
 
-   ```html
-   <script type="module">
-     import verify, { verifySafe } from 'https://unpkg.com/verify-bitcoin-message';
-   </script>
-   ```
+```html
+<script type="module">
+  import verify, { verifySafe } from 'https://unpkg.com/verify-bitcoin-message';
+</script>
+```
 
 ### Command Line Interface
 
@@ -85,7 +85,7 @@ const isValid = await verifySafe({
 })
 ```
 
-### Up Next
+## Up Next
 
 - [ ] Fill out cli info with active values
 - [ ] Nice way to show multiple messages at once
@@ -105,7 +105,7 @@ const isValid = await verifySafe({
   - We can remove the `[!WARNING]` and replace the `[!IMPORTANT]` with a `> [!TIP]` and a nicer message :D
   - maybe we can read the message as an MVP version
 
-### Web Alternatives
+## Web Alternatives
 
 - [Bitcoin.com](https://www.bitcoin.com/tools/verify-message/)
   ![Closed Source](https://img.shields.io/badge/source-closed-red)
@@ -118,9 +118,8 @@ const isValid = await verifySafe({
   ![Offline First](https://img.shields.io/badge/Internet-Not_Required-success)
   [![68 Dependencies](https://img.shields.io/badge/dependencies-68-yellow)](https://npmgraph.js.org/?q=bitcoinjs-message)
 
-
-### Trust layers
+## Trust layers
 
 Cloudflare for cdn
-js.org mainteriners
+js.org maintainers
 github
