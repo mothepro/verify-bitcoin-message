@@ -304,7 +304,7 @@ It's a good idea to include on of these
     </dialog>
 
     <article>
-      <p class="hidden verified-display">
+      <p class="hidden text-center verified-display">
         <a
           id="verified-address-link"
           class="address-link"
@@ -313,14 +313,21 @@ It's a good idea to include on of these
         ></a> digitally signed this message
       </p>
 
-      <p class="hidden error-display">
+      <p class="hidden text-center error-display">
         The message has been tampered with, or it was not signed by the provided address.
       </p>
-      <p class="hidden error-display">
-        When verified, digital signatures cryptographically prove
+      <p class="hidden text-center error-display">
+        When verification passes, digital signatures cryptographically prove
+        <abbr data-tooltip="It is cryptographically impossible to forge a valid signature">
+          tamper-resistance
+        </abbr>
+        and
+        <abbr data-tooltip="The signer, or owner of the address, cannot deny having signed the message">
+          non-repudiablity
+        </abbr>
       </p>
 
-      <p class="center no-attempt-display">
+      <p class="text-center no-attempt-display">
         Digitally signed messages are
         <abbr data-tooltip="It is cryptographically impossible to forge a valid signature">
           tamper-resistant
@@ -364,7 +371,7 @@ It's a good idea to include on of these
             📢 Details &amp; Publish
           </span>
           <span class="error-display">
-            ⛔ Reason for failure
+            ⛔ Reason for failure &amp; Details
           </span>
         </summary>
         <p id="error-reason"></p>

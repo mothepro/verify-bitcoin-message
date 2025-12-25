@@ -31,7 +31,7 @@ bun install # Tests will be run automatically after installation
 
 ```bash
 bun start
-python -m http.server 8000 static # Any "server" is fine, doesn't have to be python
+python -m http.server 8000 # Any "server" is fine, doesn't have to be python
 ```
 
 Unfortunately, opening the html file directly from the file system will not work.
