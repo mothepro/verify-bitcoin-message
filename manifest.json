@@ -1,0 +1,56 @@
+{
+  "name": "Bitcoin Message Verifier",
+  "short_name": "Verify",
+  "description": "A dependency-free Bitcoin message signature verifier that works offline",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f97316",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTIwJz48cGF0aCBkPSdNMTAgMjBRNTAgMCA5MCAyMHY0NWMwIDI1LTIwIDQwLTQwIDU1QzMwIDEwNSAxMCA5MCAxMCA2NVonIGZpbGw9JyMyZjVmOWYnIHN0cm9rZT0nIzMzMycgc3Ryb2tlLXdpZHRoPSc0Jy8+PC9zdmc+",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTIwJz48cGF0aCBkPSdNMTAgMjBRNTAgMCA5MCAyMHY0NWMwIDI1LTIwIDQwLTQwIDU1QzMwIDEwNSAxMCA5MCAxMCA2NVonIGZpbGw9JyMyZjVmOWYnIHN0cm9rZT0nIzMzMycgc3Ryb2tlLXdpZHRoPSc0Jy8+PC9zdmc+",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "enctype": "multipart/form-data",
+    "params": {
+      "files": [
+        {
+          "name": "files",
+          "accept": [".txt", ".json", "text/plain", "application/json"]
+        }
+      ]
+    }
+  },
+  "file_handlers": [
+    {
+      "action": "/",
+      "method": "GET",
+      "accept": {
+        "text/plain": [".txt"],
+        "application/json": [".json"]
+      }
+    }
+  ]
+}

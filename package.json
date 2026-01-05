@@ -1,6 +1,6 @@
 {
   "name": "verify-bitcoin-message",
-  "description": "A dependency-free Bitcoin message signature verifier that works in browsers",
+  "description": "A dependency-free Bitcoin message signature verifier that works offline",
   "homepage": "https://verify-bitcoin-message.js.org",
   "repository": "https://github.com/mothepro/verify-bitcoin-message",
   "author": "@mothepro",
@@ -31,7 +31,7 @@
   },
   "scripts": {
     "build:copy-css": "cp -R node_modules/@picocss/pico/css .",
-    "build:js": "bun build verify.ts demo.ts --outdir .",
+    "build:js": "bun build verify.ts demo.ts sw.ts --outdir .",
     "build:cli": "bun build cli.ts --target=node --outdir .",
     "build:exe": "bun build cli.ts --compile --outfile verify-bitcoin-message",
     "build": "bun run build:js && bun run build:cli && bun run build:exe",

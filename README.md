@@ -37,13 +37,16 @@ python -m http.server 8000 # Any "server" is fine, doesn't have to be python
 Unfortunately, opening the html file directly from the file system will not work.
 The browser's [built-in `crypto` libraries](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto) are [not available](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts) when running from the file system.
 
-### Offline
+### Progressive Web App Features
 
-First visit the page by [Serving Locally](#serve-locally) or using our [GitHub Pages demo](https://mothepro.github.io/verify-bitcoin-message).
-
-If you're on mobile, just turn on airplane mode.
-
-On desktop you can test offline mode in Chrome (webkit browsers) by opening Developer Tools (F12) > `Network` tab > Change `No Throttling` to `Offline`
+- **File Sharing**
+  - Share `.txt` and `.json` files directly to the app for automatic verification
+- **Auto-Install Prompt**
+  - Automatically prompts for installation after 2 minutes of usage
+- **Offline-First**
+  - Works completely offline after first visit
+  - **Mobile**: Turn on airplane mode
+  - **Desktop**: Chrome Developer Tools (F12) > `Network` tab > Change `No Throttling` to `Offline`
 
 ### CDN
 

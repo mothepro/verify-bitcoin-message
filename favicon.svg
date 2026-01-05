@@ -1,0 +1,11 @@
+<svg
+  xmlns='http://www.w3.org/2000/svg'
+  viewBox='0 0 100 120'
+>
+  <path
+    d='M10 20Q50 0 90 20v45c0 25-20 40-40 55C30 105 10 90 10 65Z'
+    fill='#2f5f9f'
+    stroke='#333'
+    stroke-width='4'
+  />
+</svg>

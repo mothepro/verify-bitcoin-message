@@ -25,6 +25,9 @@ const durationElements = document.querySelectorAll('[data-duration]')
 const messageElements = document.querySelectorAll('[data-inner-message]')
 
 // Nice
+window.addEventListener('load', registerServiceWorker)
+window.addEventListener('beforeinstallprompt', showInstallPrompt)
+window.addEventListener('error', console.error)
 addressInput.addEventListener('focus', addressInput.select)
 signatureInput.addEventListener('focus', signatureInput.select)
 messageInput.addEventListener('paste', event => {
@@ -270,7 +273,41 @@ async function verifySignature() {
     if (hex) url.searchParams.set('isHex', 'on')
 
     // TODO update the "Other ways to verify"
+  }
+}
 
-    history.pushState('', '@mothepro', url.toString())
+// Service Worker stuff
+let installPromptShown = false
+
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[]
+  readonly userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed'
+    platform: string
+  }>
+  prompt(): Promise<void>
+}
+
+declare global {
+  interface WindowEventMap {
+    beforeinstallprompt: BeforeInstallPromptEvent
+  }
+}
+
+async function registerServiceWorker(): Promise<void> {
+  if ('serviceWorker' in navigator) {
+    const registration = await navigator.serviceWorker.register('/sw.js')
+    console.log('Service Worker registered successfully:', registration.scope)
+  }
+}
+
+async function showInstallPrompt(deferredPrompt: BeforeInstallPromptEvent) {
+  deferredPrompt.preventDefault()
+
+  if (!installPromptShown) {
+    installPromptShown = true
+    await deferredPrompt.prompt()
+    const { outcome } = await deferredPrompt.userChoice
+    console.log(`PWA install prompt outcome: ${outcome}`)
   }
 }
