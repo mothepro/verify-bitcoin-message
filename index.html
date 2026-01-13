@@ -54,6 +54,36 @@
     href="./css/pico.min.css"
   >
   <style>
+    /* Dark theme overrides */
+    :host(:not([data-theme="light"])),
+    :root:not([data-theme="light"]),
+    [data-theme="dark"] {
+      --pico-primary: #f97316;
+      --pico-primary-background: #f97316;
+      --pico-primary-border: #f97316;
+      --pico-primary-underline: #f97316;
+      --pico-primary-hover: #fb923c;
+      --pico-primary-hover-background: #fb923c;
+      --pico-primary-hover-border: #fb923c;
+      --pico-primary-focus: #f97316;
+      --pico-primary-inverse: #ffffff;
+    }
+
+    /* Light theme overrides */
+    :host(:not([data-theme="dark"])),
+    :root:not([data-theme="dark"]),
+    [data-theme="light"] {
+      --pico-primary: #f97316;
+      --pico-primary-background: #f97316;
+      --pico-primary-border: #f97316;
+      --pico-primary-underline: #f97316;
+      --pico-primary-hover: #ea580c;
+      --pico-primary-hover-background: #ea580c;
+      --pico-primary-hover-border: #ea580c;
+      --pico-primary-focus: #f97316;
+      --pico-primary-inverse: #ffffff;
+    }
+
     html,
     body {
       min-height: 100vh;

@@ -18,13 +18,13 @@
       "purpose": "any maskable"
     },
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTIwJz48cGF0aCBkPSdNMTAgMjBRNTAgMCA5MCAyMHY0NWMwIDI1LTIwIDQwLTQwIDU1QzMwIDEwNSAxMCA5MCAxMCA2NVonIGZpbGw9JyMyZjVmOWYnIHN0cm9rZT0nIzMzMycgc3Ryb2tlLXdpZHRoPSc0Jy8+PC9zdmc+",
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA4MCA5Nic+PHBhdGggZD0nTTggMTZRNDAgMCA3MiAxNnYzNmMwIDIwLTE2IDMyLTMyIDQ0QzI0IDg0IDggNzIgOCA1MlonIGZpbGw9JyNmOTczMTYnIHN0cm9rZT0nIzMzMycgc3Ryb2tlLXdpZHRoPSczJy8+PC9zdmc+",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTIwJz48cGF0aCBkPSdNMTAgMjBRNTAgMCA5MCAyMHY0NWMwIDI1LTIwIDQwLTQwIDU1QzMwIDEwNSAxMCA5MCAxMCA2NVonIGZpbGw9JyMyZjVmOWYnIHN0cm9rZT0nIzMzMycgc3Ryb2tlLXdpZHRoPSc0Jy8+PC9zdmc+",
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA4MCA5Nic+PHBhdGggZD0nTTggMTZRNDAgMCA3MiAxNnYzNmMwIDIwLTE2IDMyLTMyIDQ0QzI0IDg0IDggNzIgOCA1MlonIGZpbGw9JyNmOTczMTYnIHN0cm9rZT0nIzMzMycgc3Ryb2tlLXdpZHRoPSczJy8+PC9zdmc+",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any"
@@ -32,7 +32,7 @@
   ],
   "share_target": {
     "action": "/",
-    "method": "GET",
+    "method": "POST",
     "enctype": "multipart/form-data",
     "params": {
       "files": [
