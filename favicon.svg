@@ -1,9 +1,9 @@
 <svg
   xmlns='http://www.w3.org/2000/svg'
-  viewBox='0 0 80 96'
+  viewBox='0 0 115 138'
 >
   <path
-    d='M8 16Q40 0 72 16v36c0 20-16 32-32 44C24 84 8 72 8 52Z'
+    d='M26 34Q57.5 18 89 34v36c0 20-16 32-32 44C41 102 26 90 26 70Z'
     fill='#f97316'
     stroke='#333'
     stroke-width='3'

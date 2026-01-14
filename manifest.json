@@ -1,6 +1,6 @@
 {
-  "name": "Bitcoin Message Verifier",
-  "short_name": "Verify",
+  "name": "Verify Bitcoin Message",
+  "short_name": "Message Verifier",
   "description": "A dependency-free Bitcoin message signature verifier that works offline",
   "start_url": "/",
   "display": "standalone",
@@ -18,16 +18,22 @@
       "purpose": "any maskable"
     },
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA4MCA5Nic+PHBhdGggZD0nTTggMTZRNDAgMCA3MiAxNnYzNmMwIDIwLTE2IDMyLTMyIDQ0QzI0IDg0IDggNzIgOCA1MlonIGZpbGw9JyNmOTczMTYnIHN0cm9rZT0nIzMzMycgc3Ryb2tlLXdpZHRoPSczJy8+PC9zdmc+",
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMTUgMTM4Jz48cGF0aCBkPSdNMjYgMzRRNTcuNSAxOCA4OSAzNHYzNmMwIDIwLTE2IDMyLTMyIDQ0QzQxIDEwMiAyNiA5MCAyNiA3MFonIGZpbGw9JyNmOTczMTYnIHN0cm9rZT0nIzMzMycgc3Ryb2tlLXdpZHRoPSczJy8+PC9zdmc+",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA4MCA5Nic+PHBhdGggZD0nTTggMTZRNDAgMCA3MiAxNnYzNmMwIDIwLTE2IDMyLTMyIDQ0QzI0IDg0IDggNzIgOCA1MlonIGZpbGw9JyNmOTczMTYnIHN0cm9rZT0nIzMzMycgc3Ryb2tlLXdpZHRoPSczJy8+PC9zdmc+",
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMTUgMTM4Jz48cGF0aCBkPSdNMjYgMzRRNTcuNSAxOCA4OSAzNHYzNmMwIDIwLTE2IDMyLTMyIDQ0QzQxIDEwMiAyNiA5MCAyNiA3MFonIGZpbGw9JyNmOTczMTYnIHN0cm9rZT0nIzMzMycgc3Ryb2tlLXdpZHRoPSczJy8+PC9zdmc+",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMTUgMTM4Jz48cGF0aCBkPSdNMjYgMzRRNTcuNSAxOCA4OSAzNHYzNmMwIDIwLTE2IDMyLTMyIDQ0QzQxIDEwMiAyNiA9MCAyNiA3MFonIGZpbGw9JyMwMDAwMDAnIHN0cm9rZT0nIzAwMDAwMCcgc3Ryb2tlLXdpZHRoPSczJy8+PC9zdmc+",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "monochrome"
     }
   ],
   "share_target": {

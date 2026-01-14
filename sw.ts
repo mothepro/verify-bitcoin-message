@@ -72,7 +72,7 @@ async function handleInstall() {
 }
 
 // Activate event - clean up old caches with async/await
-async function handleActivate(): Promise<void> {
+async function handleActivate() {
   console.log('Service Worker: Activating...')
 
   try {
@@ -163,7 +163,7 @@ function handleFetch(event: FetchEvent) {
   const url = new URL(event.request.url)
 
   // Handle shared files first
-  if (url.pathname === BASE_PATH && event.request.method === 'POST') {
+  if (event.request.method === 'POST') {
     event.respondWith(handleSharedFiles(event.request))
     return
   }
