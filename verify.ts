@@ -49,7 +49,10 @@ export default async function verify({ message, address, signature }: Payload) {
   // - Whether the address uses compressed format (31-34)
   const recoveryFlag = sigBytes[0]
   assert(recoveryFlag >= 27, 'Invalid recovery flag')
-  assert(recoveryFlag <= 34, 'Invalid recovery flag')
+  // assert(recoveryFlag <= 34, 'Invalid recovery flag')
+
+  // TODO https://en.bitcoin.it/wiki/Message_signing#Message_verification_method
+  assert(recoveryFlag <= 46, 'Invalid recovery flag')
 
   // Extract the actual signature data (64 bytes: 32-byte r + 32-byte s)
   const signatureData = sigBytes.slice(1)

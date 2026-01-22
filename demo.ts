@@ -17,7 +17,7 @@ const signatureInput = document.getElementById('signature') as HTMLInputElement
 const blueWalletLink = document.getElementById('blue-wallet-link') as HTMLAnchorElement
 const jsonStringifyPre = document.getElementById('json-stringify') as HTMLPreElement
 const jsonStringifySelectAll = document.getElementById(
-  'json-stringify-select-all'
+  'json-stringify-select-all',
 ) as HTMLButtonElement
 const validPayloadsList = document.getElementById('valid-payloads') as HTMLOListElement
 const busyElements = document.querySelectorAll('[aria-busy]')
@@ -32,13 +32,7 @@ addressInput.addEventListener('focus', addressInput.select)
 signatureInput.addEventListener('focus', signatureInput.select)
 messageInput.addEventListener('paste', event => {
   const maybe = event.clipboardData?.getData('text/plain')?.trim()
-
-  let handled =
-    handleJsonPaste(maybe) ||
-    handleSignedMessagePaste(maybe) ||
-    handleSignedInputsIOMessagePaste(maybe)
-
-  console.log({ event, maybe, handled })
+  let handled = handleRawContent(maybe)
   if (handled) event.preventDefault()
 })
 
@@ -65,6 +59,8 @@ const params = new URLSearchParams(location.search)
 addressInput.value = params.get('address')?.trim() ?? ''
 messageInput.value = params.get('message')?.trim() ?? ''
 signatureInput.value = params.get('signature')?.trim() ?? ''
+
+handleRawContent(params.get('raw')?.trim())
 
 // Add valid payloads to the list
 for (const [index, { address, message, signature }] of validPayloads.entries()) {
@@ -116,10 +112,17 @@ function handlePayloadClick(e: PointerEvent) {
   return false
 }
 
+function handleRawContent(maybe = '') {
+  return (
+    handleJsonPaste(maybe) ||
+    handleSignedMessagePaste(maybe) ||
+    handleDeprecatedSignedMessagePaste(maybe)
+  )
+}
+
 function handleJsonPaste(maybeJson = '') {
   try {
     const { address, message, signature } = JSON.parse(maybeJson ?? '{}')
-    console.log({ address, message, signature })
     if (address && message && signature) {
       addressInput.value = address
       messageInput.value = message
@@ -130,6 +133,10 @@ function handleJsonPaste(maybeJson = '') {
   } catch (e) {}
 }
 
+/**
+ * Format defined in RFC2440
+ * @see https://en.bitcoin.it/wiki/Message_signing
+ */
 function handleSignedMessagePaste(maybeSignedMessage = '') {
   const prefix = '-----BEGIN BITCOIN SIGNED MESSAGE-----'
   const signaturePrefix = '-----BEGIN BITCOIN SIGNATURE-----'
@@ -156,8 +163,12 @@ function handleSignedMessagePaste(maybeSignedMessage = '') {
   } catch (e) {}
 }
 
-// https://brainwalletx.github.io/#sign
-function handleSignedInputsIOMessagePaste(maybeSignedMessage = '') {
+/**
+ * Format defined in Bitcoin-QT
+ * @see https://en.bitcoin.it/wiki/Message_signing
+ * @see https://brainwalletx.github.io/#sign
+ */
+function handleDeprecatedSignedMessagePaste(maybeSignedMessage = '') {
   const prefix = '-----BEGIN BITCOIN SIGNED MESSAGE-----'
   const signaturePrefix = '-----BEGIN SIGNATURE-----'
   const suffix = '-----END BITCOIN SIGNED MESSAGE-----'
@@ -253,7 +264,7 @@ async function verifySignature() {
     document.body.classList.remove('verify-completed-display-false')
     completedDisplay.forEach(e => e.classList.remove('hidden'))
     busyElements.forEach(e => e.setAttribute('aria-busy', 'false'))
-    durationElements.forEach(e => e.textContent = durationMs.toFixed(2))
+    durationElements.forEach(e => (e.textContent = durationMs.toFixed(2)))
 
     verifyDialog.close()
     jsonStringifyPre.textContent = JSON.stringify({ address, signature, message: utf8 }, null, 2)
@@ -271,6 +282,7 @@ async function verifySignature() {
     url.searchParams.set('message', utf8)
     url.searchParams.set('signature', signature)
     if (hex) url.searchParams.set('isHex', 'on')
+    history.pushState({}, '@mothepro', url.toString())
 
     // TODO update the "Other ways to verify"
   }
@@ -294,7 +306,7 @@ declare global {
   }
 }
 
-async function registerServiceWorker(): Promise<void> {
+async function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
     const registration = await navigator.serviceWorker.register('/sw.js')
     console.log('Service Worker registered successfully:', registration.scope)

@@ -253,33 +253,11 @@ async function handleSharedFiles(request: Request): Promise<Response> {
     const formData = await request.formData()
     const files = formData.getAll('files') as File[]
 
-    if (files.length === 0) {
-      return Response.redirect(`${BASE_PATH}/`)
-    }
+    if (files.length === 0) throw new Error('No files shared')
 
-    const file = files[0]
-    const text = await file.text()
-
-    // Try to parse as JSON first
-    try {
-      const data = JSON.parse(text)
-      if (data.address && data.message && data.signature) {
-        const params = new URLSearchParams({
-          address: data.address,
-          message: data.message,
-          signature: data.signature,
-        })
-        return Response.redirect(`${BASE_PATH}/?${params.toString()}`)
-      }
-    } catch {
-      // Not JSON, treat as plain text message
-      const params = new URLSearchParams({
-        message: text,
-      })
-      return Response.redirect(`${BASE_PATH}/?${params.toString()}`)
-    }
-
-    return Response.redirect(`${BASE_PATH}/`)
+    const raw = await files[0].text()
+    const params = new URLSearchParams({ raw })
+    return Response.redirect(`${BASE_PATH}/?${params.toString()}`)
   } catch (error) {
     console.error('Error handling shared files:', error)
     return Response.redirect(`${BASE_PATH}/`)

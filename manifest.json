@@ -44,7 +44,7 @@
       "files": [
         {
           "name": "files",
-          "accept": [".txt", ".json", "text/plain", "application/json"]
+          "accept": ["text/plain", "application/json", ".txt", ".json"]
         }
       ]
     }
