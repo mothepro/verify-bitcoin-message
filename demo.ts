@@ -1,6 +1,8 @@
 import validPayloads from './payloads.json'
 import verify, { assert, parsePayload } from './verify'
+import { blockexplorerpage } from './package.json'
 
+const blockExplorerUrl = new URL(blockexplorerpage)
 const form = document.getElementById('verifyForm') as HTMLFormElement
 const nonAttemptedDisplay = document.querySelectorAll('.no-attempt-display')
 const attemptedDisplay = document.querySelectorAll('.verify-attempted-display')
@@ -237,7 +239,7 @@ async function verifySignature() {
   errorReason.textContent = ''
   verifiedAddressLink.textContent = ''
   verifiedMessageContent.textContent = ''
-  verifiedAddressLink.href = 'https://mempool.space/address/'
+  verifiedAddressLink.href = blockExplorerUrl.toString()
   const startTime = performance.now() ?? Date.now()
   let endTime: number | undefined
   try {
@@ -247,8 +249,11 @@ async function verifySignature() {
 
     document.body.classList.add('verified-display-true')
     document.body.classList.remove('verified-display-false')
+    const addressUrl = new URL(blockExplorerUrl)
+    addressUrl.pathname = `address/${address}`
+
     verifiedAddressLink.textContent = address
-    verifiedAddressLink.href += address
+    verifiedAddressLink.href = addressUrl.toString()
     verifiedMessageContent.textContent = utf8
     verifiedDisplay.forEach(e => e.classList.remove('hidden'))
   } catch (error: unknown) {
