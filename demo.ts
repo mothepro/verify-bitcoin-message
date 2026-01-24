@@ -25,6 +25,9 @@ const validPayloadsList = document.getElementById('valid-payloads') as HTMLOList
 const busyElements = document.querySelectorAll('[aria-busy]')
 const durationElements = document.querySelectorAll('[data-duration]')
 const messageElements = document.querySelectorAll('[data-inner-message]')
+const innerMessageElements = document.querySelectorAll('.display.message')
+const innerSignatureElements = document.querySelectorAll('.display.signature')
+const innerAddressElements = document.querySelectorAll('.display.address')
 
 // Nice
 window.addEventListener('load', registerServiceWorker)
@@ -34,8 +37,7 @@ addressInput.addEventListener('focus', addressInput.select)
 signatureInput.addEventListener('focus', signatureInput.select)
 messageInput.addEventListener('paste', event => {
   const maybe = event.clipboardData?.getData('text/plain')?.trim()
-  let handled = handleRawContent(maybe)
-  if (handled) event.preventDefault()
+  if (handleRawContent(maybe)) event.preventDefault()
 })
 
 const hiddenLimits = document.querySelectorAll('[data-threshold].hidden')
@@ -283,11 +285,17 @@ async function verifySignature() {
 
     // Update the URL with the current values
     const url = new URL(location.href)
+    url.searchParams.delete('raw')
     url.searchParams.set('address', address)
     url.searchParams.set('message', utf8)
     url.searchParams.set('signature', signature)
     if (hex) url.searchParams.set('isHex', 'on')
     history.pushState({}, '@mothepro', url.toString())
+
+    // Update the inner elements
+    innerMessageElements.forEach(e => (e.textContent = utf8))
+    innerSignatureElements.forEach(e => (e.textContent = signature))
+    innerAddressElements.forEach(e => (e.textContent = address))
 
     // TODO update the "Other ways to verify"
   }
