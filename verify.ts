@@ -41,6 +41,9 @@ export function assert(condition: unknown, error: unknown = 'Assertion failed'):
  * 4. Comparing with the claimed address
  */
 export default async function verify({ message, address, signature }: Payload) {
+  // web safe to standard
+  signature.replaceAll('_', '/')
+  signature.replaceAll('-', '+')
   const sigBytes = Uint8Array.fromBase64(signature)
   assert(sigBytes.length === 65, `Invalid signature length: ${sigBytes.length}, expected 65`)
 
