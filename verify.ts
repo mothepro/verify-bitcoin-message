@@ -42,8 +42,7 @@ export function assert(condition: unknown, error: unknown = 'Assertion failed'):
  */
 export default async function verify({ message, address, signature }: Payload) {
   // web safe to standard
-  signature.replaceAll('_', '/')
-  signature.replaceAll('-', '+')
+  signature = signature.replaceAll('_', '/').replaceAll('-', '+')
   const sigBytes = Uint8Array.fromBase64(signature)
   assert(sigBytes.length === 65, `Invalid signature length: ${sigBytes.length}, expected 65`)
 
@@ -423,7 +422,7 @@ function modPow(base: bigint, exp: bigint, mod: bigint): bigint {
 function recoverPublicKey(
   messageHash: Uint8Array,
   signature: Uint8Array,
-  recoveryId: number
+  recoveryId: number,
 ): Point | null {
   if (signature.length !== 64) return null
 
@@ -504,7 +503,7 @@ async function createMessageHash(messageBytes: Uint8Array) {
 
   // Build complete message: varint(prefix_len) + prefix + varint(msg_len) + message
   const fullMessage = new Uint8Array(
-    prefixLength.length + prefixBytes.length + messageLength.length + messageBytes.length
+    prefixLength.length + prefixBytes.length + messageLength.length + messageBytes.length,
   )
 
   // Concatenate all parts in order
