@@ -622,13 +622,13 @@ It's a good idea to include on of these
 
           Command Line
           <pre><code>
-bitcoin-cli verifymessage <span class="display address">address</span> "<span class="display signature">signature</span>" "<span class="display message">message</span>"
+bitcoin-cli verifymessage <span class="display address">address</span> &quot;<span class="display signature">signature</span>&quot; &quot;<span class="display message">message</span>&quot;
 </code></pre>
 
           RPC
           <pre><code>
 curl --user &lt;rpcuser&gt;:&lt;rpcpassword&gt; <span class="newline"></span>
---data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifymessage", "params": ["<span class="display address">address</span>", "<span class="display signature">signature</span>", "<span class="display message">message</span>"] }' <span class="newline"></span>
+--data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifymessage", "params": [&quot;<span class="display address">address</span>&quot;, &quot;<span class="display signature">signature</span>&quot;, &quot;<span class="display message">message</span>&quot;] }' <span class="newline"></span>
 -H 'content-type: text/plain;' <span class="newline"></span>
 http://127.0.0.1:8332/
           </code></pre>
@@ -644,8 +644,8 @@ http://127.0.0.1:8332/
           <pre><code>
 npx verify-bitcoin-message --json <span class="newline"></span>
 --address <span class="display address">address</span> <span class="newline"></span>
---message "<span class="display message">message</span>" <span class="newline"></span>
---signature "<span class="display signature">signature</span>"
+--message &quot;<span class="display message">message</span>&quot; <span class="newline"></span>
+--signature &quot;<span class="display signature">signature</span>&quot;
             </code></pre>
 
           Install in Browser
