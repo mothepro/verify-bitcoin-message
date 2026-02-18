@@ -622,13 +622,13 @@ It's a good idea to include on of these
 
           Command Line
           <pre><code>
-bitcoin-cli verifymessage <span class="display address">address</span> <span class="display signature">signature</span> <span class="display message">message</span>
+bitcoin-cli verifymessage <span class="display address">address</span> "<span class="display signature">signature</span>" "<span class="display message">message</span>"
 </code></pre>
 
           RPC
           <pre><code>
 curl --user &lt;rpcuser&gt;:&lt;rpcpassword&gt; <span class="newline"></span>
---data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifymessage", "params": [<span class="display address">address</span>, <span class="display signature">signature</span>, <span class="display message">message</span>] }' <span class="newline"></span>
+--data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "verifymessage", "params": ["<span class="display address">address</span>", "<span class="display signature">signature</span>", "<span class="display message">message</span>"] }' <span class="newline"></span>
 -H 'content-type: text/plain;' <span class="newline"></span>
 http://127.0.0.1:8332/
           </code></pre>
